@@ -51,3 +51,10 @@ venv.bak/
 *.bak
 *.backup
 
+# Ignored parts files
+parts/conclusion.tex
+parts/introduction.tex
+parts/abbreviations.tex
+parts/abstract.tex
+parts/titlepage.tex
+
