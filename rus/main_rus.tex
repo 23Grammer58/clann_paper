@@ -1,0 +1,65 @@
+% !TeX program = pdflatex
+% Диссертация по ГОСТ. Русский язык, кириллица, класс report для глав
+\documentclass[12pt,a4paper]{report}
+
+% Кодировки и русский язык
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+
+% Поля по ГОСТ (примерно: 30/10/20/20 мм). Настройте при необходимости
+\usepackage{geometry}
+\geometry{left=30mm,right=20mm,top=20mm,bottom=20mm}
+
+% Межстрочный интервал 1.5
+\usepackage{setspace}
+\onehalfspacing
+
+% Абзацный отступ и выравнивание
+\usepackage{indentfirst}
+\setlength{\parindent}{12.5mm}
+\sloppy
+
+% Математика
+\usepackage{amsmath,amssymb,amsthm}
+\numberwithin{equation}{chapter}
+
+% Графика (на будущее)
+\usepackage{graphicx}
+\usepackage{float}
+
+% Содержание с точками
+\usepackage{tocloft}
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+
+% Оформление подписей
+\usepackage[labelsep=period]{caption}
+\captionsetup{justification=centering}
+
+% Список литературы (заготовка под ГОСТ ручной)
+\usepackage{cite}
+
+% Команды для обозначений
+\newcommand{\vect}[1]{\boldsymbol{#1}}
+\newcommand{\tr}{\operatorname{tr}}
+
+\begin{document}
+
+% \input{parts/titlepage}
+
+% \input{parts/abstract}
+
+% \input{parts/abbreviations}
+
+% \input{parts/introduction}
+
+\tableofcontents
+\newpage
+
+\input{parts/chapter_clann}
+
+% \input{parts/conclusion}
+
+\input{parts/bibliography}
+
+\end{document}
