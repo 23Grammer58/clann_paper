@@ -1,0 +1,28 @@
+# Конфигурация latexmk для автоматической компиляции
+$pdf_mode = 1;           # Генерировать PDF
+$postscript_mode = 0;    # Не генерировать PS
+$dvi_mode = 0;           # Не генерировать DVI
+
+# Папка для выходных файлов
+$out_dir = 'build';
+
+# Автоматическая очистка временных файлов
+$clean_ext = 'aux fdb_latexmk fls log out synctex.gz toc';
+
+# Настройки для pdflatex
+$pdflatex = 'pdflatex -interaction=nonstopmode -shell-escape %O %S';
+
+# Настройки для bibtex
+$bibtex = 'bibtex %O %B';
+
+# Настройки для makeindex
+$makeindex = 'makeindex %O -o %D %S';
+
+# Автоматическое определение зависимостей
+$recorder = 1;
+
+# Продолжать компиляцию при ошибках
+$force_mode = 1;
+
+# Максимальное количество итераций
+$max_repeat = 5;
