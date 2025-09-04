@@ -36,8 +36,9 @@
 \usepackage[labelsep=period]{caption}
 \captionsetup{justification=centering}
 
-% Список литературы (заготовка под ГОСТ ручной)
-\usepackage{cite}
+% Список литературы с BibTeX
+\usepackage[numbers,sort&compress]{natbib}
+\bibliographystyle{plain}
 
 % Команды для обозначений
 \newcommand{\vect}[1]{\boldsymbol{#1}}
@@ -60,6 +61,7 @@
 
 % \input{parts/conclusion}
 
-\input{parts/bibliography}
+\renewcommand{\bibname}{Список литературы}
+\bibliography{parts/bibliography}
 
 \end{document}
