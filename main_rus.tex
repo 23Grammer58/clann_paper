@@ -27,6 +27,7 @@
 % Графика (на будущее)
 \usepackage{graphicx}
 \usepackage{float}
+\usepackage{wrapfig}
 
 % Содержание с точками
 \usepackage{tocloft}
@@ -38,7 +39,9 @@
 
 % Список литературы с BibTeX
 \usepackage[numbers,sort&compress]{natbib}
-\bibliographystyle{plain}
+% Гиперссылки и поддержка \url в .bbl
+\usepackage[unicode]{hyperref}
+\bibliographystyle{unsrtnat}
 
 % Команды для обозначений
 \newcommand{\vect}[1]{\boldsymbol{#1}}

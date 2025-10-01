@@ -1,0 +1,66 @@
+\begin{thebibliography}{10}
+
+\bibitem{icnn2017}
+Brandon Amos, Lei Xu, and J~Zico Kolter.
+\newblock Input convex neural networks.
+\newblock In {\em International conference on machine learning}, pages
+  146--155. PMLR, 2017.
+
+\bibitem{antman2005nonlin}
+Stuart~S Antman.
+\newblock {\em Nonlinear problems of elasticity}.
+\newblock Springer, 2005.
+
+\bibitem{dugas2001incorporating}
+Charles Dugas, Yoshua Bengio, François Bélisle, Claude Nadeau, and René
+  Garcia.
+\newblock Incorporating second-order functional knowledge for better option
+  pricing.
+\newblock {\em Advances in neural information processing systems}, 13, 2001.
+
+\bibitem{green1839laws}
+George Green.
+\newblock On the laws of the reflection and refraction of light at the common
+  surface of two non-crystallized media.
+\newblock {\em Transactions of the Cambridge Philosophical Society}, 7:1--24,
+  1839.
+
+\bibitem{kingma2014adam}
+Diederik~P Kingma and Jimmy Ba.
+\newblock Adam: A method for stochastic optimization.
+\newblock {\em arXiv preprint arXiv:1412.6980}, 2014.
+
+\bibitem{kirchhoff1850gleichgewicht}
+Gustav Kirchhoff.
+\newblock Ueber das gleichgewicht und die bewegung einer elastischen scheibe.
+\newblock {\em Journal für die reine und angewandte Mathematik}, 40:51--88,
+  1850.
+
+\bibitem{ddaniso2024}
+Alexey Liogky and Victoria Salamatova.
+\newblock Data-driven anisotropic biomembrane simulation based on the laplace
+  stretch.
+\newblock {\em Computation}, 12(3):39, 2024.
+
+\bibitem{ogden1997nonlinear}
+R.W. Ogden.
+\newblock {\em Non-Linear Elastic Deformations}.
+\newblock Dover Publications, 1997.
+
+\bibitem{xi2023}
+Victoria Salamatova and Alexey Liogky.
+\newblock Interpretable data-driven modeling of hyperelastic membranes.
+\newblock {\em International Journal for Numerical Methods in Biomedical
+  Engineering}, 39(11):e3757, 2023.
+
+\bibitem{truesdell1984historical}
+Clifford Truesdell.
+\newblock Historical introit the origins of rational thermodynamics.
+\newblock In {\em Rational thermodynamics}, pages 1--48. Springer, 1984.
+
+\bibitem{truesdell2004nonlinear}
+Clifford Truesdell and Walter Noll.
+\newblock {\em The non-linear field theories of mechanics}.
+\newblock Springer Science \& Business Media, 2004.
+
+\end{thebibliography}
