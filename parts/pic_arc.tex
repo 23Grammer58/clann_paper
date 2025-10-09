@@ -4,6 +4,7 @@
   box/.style={draw, rounded corners, align=center, minimum height=7mm, inner sep=2mm},
   block/.style={box, fill=green!6, text width=44mm},
   pin/.style={circle, draw, minimum size=6mm, fill=white},
+  neur0/.style={circle, draw, minimum size=6mm, fill=white},
   neur/.style={circle, draw, minimum size=6mm, fill=white},
   title/.style={font=\bfseries},
   every fit/.style={draw, rounded corners, inner sep=3mm}
@@ -15,42 +16,52 @@
 \node[pin, below=6mm of x2] (x3) {$\xi_3$};
 
 % Аффинная проекция
-\node[block, right=16mm of x2] (aff) {$s = W_1\,\xi + b_1$};
-\node[neur0, right=14mm of aff, yshift=12mm] (h1) {};
-\node[neur0, right=14mm of aff] (h2) {};
-\node[neur0, right=14mm of aff, yshift=-12mm] (h3) {};
-\node[align=center, right=14mm of aff, yshift=-22mm] (vdots) {$\vdots$};
-\node[neur0, right=14mm of aff, yshift=-34mm] (h4) {};
-\draw[->] (x1) -- (neur0.west);
-\draw[->] (x2) -- (neur0.west);
-\draw[->] (x3) -- (neur0.west);
+\node[neur0, right=14mm of x1, yshift=12mm] (h11) {};
+\node[neur0, right=14mm of x1] (h12) {};
+\node[neur0, right=14mm of x1, yshift=-12mm] (h13) {};
+\node[align=center, right=14mm of x1, yshift=-22mm] (vdots0) {$\vdots$};
+\node[neur0, right=14mm of x1, yshift=-34mm] (h14) {};
+\draw[->] (x1) -- (h11.west);
+\draw[->] (x2) -- (h11.west);
+\draw[->] (x3) -- (h11.west);
+\draw[->] (x1) -- (h12.west);
+\draw[->] (x2) -- (h12.west);
+\draw[->] (x3) -- (h12.west);
+\draw[->] (x1) -- (h13.west);
+\draw[->] (x2) -- (h13.west);
+\draw[->] (x3) -- (h13.west);
+\draw[->] (x1) -- (h14.west);
+\draw[->] (x2) -- (h14.west);
+\draw[->] (x3) -- (h14.west);
+% \node[block, above=2mm of h11, text width=36mm] (aff) {$s = W_1\,\xi + b_1$};
+\node[block, above=2mm of h11, text width=60mm, inner sep=3mm] (soft) {$z_i = \mathrm{softplus}(\beta (W_1\,\xi + b_1))/\beta$};
 
-% Скрытый слой (softplus): три нейрона, троеточие и ещё один
-\node[neur, right=14mm of aff, yshift=12mm] (h1) {};
-\node[neur, right=14mm of aff] (h2) {};
-\node[neur, right=14mm of aff, yshift=-12mm] (h3) {};
-\node[align=center, right=14mm of aff, yshift=-22mm] (vdots) {$\vdots$};
-\node[neur, right=14mm of aff, yshift=-34mm] (h4) {};
-\draw[->] (aff.east) -- (h1.west);
-\draw[->] (aff.east) -- (h2.west);
-\draw[->] (aff.east) -- (h3.west);
-\draw[->] (aff.east) -- (h4.west);
-% Блок активации над нейронами
-\node[block, above=2mm of h1, text width=36mm] (soft) {$z_i = \mathrm{softplus}(\beta s_i)/\beta$};
+% % Скрытый слой (softplus): три нейрона, троеточие и ещё один
+% \node[neur, right=14mm of h12, yshift=12mm] (h1) {};
+% \node[neur, right=14mm of h12] (h2) {};
+% \node[neur, right=14mm of h12, yshift=-12mm] (h3) {};
+% \node[align=center, right=14mm of h12, yshift=-22mm] (vdots1) {$\vdots$};
+% \node[neur, right=14mm of h12, yshift=-34mm] (h4) {};
+% \draw[->] (h11.east) -- (h1.west);
+% \draw[->] (h12.east) -- (h2.west);
+% \draw[->] (h13.east) -- (h3.west);
+% \draw[->] (h14.east) -- (h4.west);
+% % Блок активации над нейронами
+% \node[block, above=2mm of h1, text width=36mm] (soft) {$z_i = \mathrm{softplus}(\beta (W_1\,\xi + b_1)/\beta$};
 
 % Линейный выход (неотрицательные веса)
-\node[block, right=22mm of h2, text width=42mm] (readout) {$\psi(\boldsymbol{\xi}) = \mathbf{W}_2^{\top}\big(z - z_0\big)$};
-\draw[->] (h1.east) -- (readout.west);
-\draw[->] (h2.east) -- (readout.west);
-\draw[->] (h3.east) -- (readout.west);
-\draw[->] (h4.east) -- (readout.west);
+\node[block, right=22mm of h12, text width=42mm] (readout) {$\psi(\boldsymbol{\xi}) = \mathbf{W}_2^{\top}\big(z - z_0\big) - \mathbf{r}_0^{\top}\boldsymbol{\xi}$};
+\draw[->] (h11.east) -- (readout.west);
+\draw[->] (h12.east) -- (readout.west);
+\draw[->] (h13.east) -- (readout.west);
+\draw[->] (h14.east) -- (readout.west);
 
-% Центрирование \to физическая энергия
-\node[block, below=10mm of readout] (psiphys) {$\psi_{\mathrm{phys}}(\boldsymbol{\xi}) = \psi(\boldsymbol{\xi}) - \mathbf{r}_0^{\top}\boldsymbol{\xi}$ \\
-  \scriptsize $r_0 = W_1^{\top}\!(w_2^{+}\!\odot\!\sigma(\beta b_1))$};
-\draw[->] (readout.south) -- (psiphys.north);
+% % Центрирование \to физическая энергия
+% \node[block, below=10mm of readout] (psiphys) {$\psi_{\mathrm{phys}}(\boldsymbol{\xi}) = \psi(\boldsymbol{\xi}) - \mathbf{r}_0^{\top}\boldsymbol{\xi}$ \\
+%   \scriptsize $r_0 = W_1^{\top}\!(w_2^{+}\!\odot\!\sigma(\beta b_1))$};
+% \draw[->] (readout.south) -- (psiphys.north);
 
 % Рамка и заголовок
-\node[fit=(x1)(x3)(aff)(h1)(h4)(soft)(readout)(psiphys), label={[title]above:{Архитектура CLaNN: однослойная ICNN}}] (archfit) {};
+\node[fit=(x1)(x3)(soft)(readout), label={[title]above:{Архитектура CLaNN: однослойная ICNN}}] (archfit) {};
 
 \end{tikzpicture}
