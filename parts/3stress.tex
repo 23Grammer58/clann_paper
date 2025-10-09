@@ -1,0 +1,67 @@
+\section{Напряжение и термодинамическая корректность}
+\textbf{Второй тензор напряжений Пиолы-Кирхгофа} вычисляется по цепному правилу дифференцированием энергии \(\psi\) 
+по правому тензору деформации Коши-Грина \(\vect C\):
+
+\begin{equation}
+  \mathbf{S} \;=\; 2\,\frac{\partial \psi}{\partial \mathbf{C}}
+  \;=\; 2\,\frac{\partial \psi}{\partial \boldsymbol\xi} \cdot \frac{\partial \boldsymbol\xi}{\partial \mathbf{C}}
+  \;=\; 2\,\mathbf{r}(\boldsymbol\xi)\cdot\frac{\partial \boldsymbol\xi}{\partial \mathbf{C}},
+  \qquad \mathbf{r}:=\frac{\partial \psi}{\partial \boldsymbol\xi}.
+  \label{eq:chain-rule}
+\end{equation}
+
+Такое построение имеет ключевые следствия:
+\begin{itemize}
+  \item \textbf{Объективность:} $\psi(\mathbf{C})=\psi(\mathbf{Q}^\top\mathbf{C}\mathbf{Q})$ для любой ортогональной $\mathbf{Q}$, а значит и $\mathbf{S}$ инвариантен к поворотам.
+  \item \textbf{Симметрия напряжений:} $\mathbf{S}=\mathbf{S}^\top$ вследствие симметрии $\mathbf{C}$ и корректного применения цепного правила.
+  \item \textbf{Термодинамическая корректность:} равенство \eqref{eq:chain-rule} является следствием неравенства Клаузиуса-Дюгема 
+  $\mathcal{D} = \mathbf{S} : \dot{\mathbf{C}} - \dot{\psi}(\mathbf{C}) \geq 0$, 
+  выражающее второе начало термодинамики для механических процессов \cite{truesdell1984historical,truesdell2004nonlinear}.
+\end{itemize}
+
+\textbf{Связь тензора Лапласа и второго тензора напряжений Пиолы-Кирхгофа}
+
+Применяя цепное правило дифференцирования к выражению \eqref{eq:chain-rule} и используя меру деформации Лапласа, 
+получаем аналитические выражения для компонент второго тензора напряжений Пиолы-Кирхгофа в двумерном случае:
+
+\begin{equation}
+\begin{aligned}
+  S_{11} &= e^{-2\xi_1}\big(r_1-2\xi_3 r_3\big) + e^{-2\xi_2} r_2\,\xi_3^2,\\
+  S_{22} &= e^{-2\xi_2} r_2,\\
+  S_{12} &= -e^{-2\xi_2} r_2\,\xi_3 + e^{-2\xi_1} r_3,
+\end{aligned}
+\label{eq:stress_components_2d}
+\end{equation}
+$r_1, r_2, r_3$ — компоненты функции отклика $\mathbf{r} = \frac{\partial \psi}{\partial \boldsymbol\xi}$.
+
+\textbf{Фундаментальные ограничения}
+
+В соответствии с принципами термодинамики и механики сплошных сред, 
+гиперупругая модель должна удовлетворять ряду фундаментальных ограничений, обеспечивающих физическую корректность и 
+материальную устойчивость.
+\begin{enumerate}
+  \item \textbf{Неотрицательность.}
+  \begin{equation}
+    \psi(\vect{\xi}) \ge 0\quad \forall\,\vect{\xi}\in\mathbb{R}^3.
+  \end{equation}
+  Это исключает отрицательную внутреннюю энергию и согласуется с трактовкой потенциальной энергии как накопленной работы упругих сил.
+  \item \textbf{Нулевые значения для $\psi$ и $\vect S$ в естественном состоянии.}
+  \begin{equation}
+    \psi(\vect 0)=0,\qquad \vect S(\vect I)=\vect 0,
+    \label{eq:natural_state_stress}
+  \end{equation}
+  Естественная (недеформированная) конфигурация является энергетическим минимумом и не порождает остаточных напряжений.
+  \item \textbf{Бесконечный рост (коэрцитивность).}
+  \begin{equation}
+    \psi(\vect{\xi}) \to \infty\ \text{при}\ \lVert\vect{\xi}\rVert\to\infty,\qquad
+    \vect{S} \to \infty\ \text{при}\ J\to\infty \text{ или } J\to 0^{+},\qquad
+    J=\det\vect F,
+    \label{eq:energy_constraints}
+  \end{equation}
+  Это обеспечивает коэрцивность: крайние объёмные деформации ($J\to\infty$, $J\to 0^{+}$) и неограниченный рост меры деформации физически недостижимы при конечной работе.
+\end{enumerate}
+
+Эти свойства принято записывать через градиент деформации \(\vect{F}\) и правый тензор деформации Коши-Грина \(\vect{C}\) 
+\cite{antman2005nonlin,green1839laws,kirchhoff1850gleichgewicht}, но они эквивалентны и для меры деформации Лапласа \(\vect{\xi}\).
+
+

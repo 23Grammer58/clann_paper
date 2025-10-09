@@ -1,0 +1,46 @@
+\appendix
+
+\chapter{\texorpdfstring{Эквивалентность QR-факторизации $\vect F$ и разложения Холецкого $\vect C=\vect F^{\top}\vect F$ для вычисления логарифмических координат $\boldsymbol{\xi}$}{Эквивалентность QR и Холецкого}}
+\label{app:cholesky}
+
+\section{Постановка и обозначения}
+
+Рассматривается двумерная гиперупругая кинематика. Пусть:
+\begin{itemize}
+  \item $\vect F \in \mathbb{R}^{2 \times 2}$ — градиент деформации, $\det \vect F > 0$,
+  \item $\vect C = \vect F^{\top}\vect F$ — правый тензор Коши–Грина (симметричный положительно определённый, SPD),
+  \item Холецкий: $\vect C = \vect U^{\top}\vect U$, где $\vect U$ — верхнетреугольная и $\text{diag}(\vect U) > 0$,
+  \item Логарифмические координаты:
+    $\boldsymbol{\xi} = (\xi_1, \xi_2, \xi_3) = (\ln u_{11}, \ln u_{22}, u_{12}/u_{11})$.
+\end{itemize}
+
+Цель: показать, что при наличии $\vect F$ можно заменить вычисление $\vect U = \text{chol}(\vect C)$ на $\vect U = \vect R$ из тонкого QR($\vect F$) = $\vect Q \vect R$ (с $\text{diag}(\vect R) > 0$), и получить те же $\boldsymbol{\xi}$.
+
+\section{Теорема (эквивалентность U и R)}
+
+Пусть $\vect F \in \mathbb{R}^{2 \times 2}$ невырождённая ($\det \vect F > 0$). Рассмотрим тонкую QR-факторизацию
+\begin{equation}
+\vect F = \vect Q \vect R,
+\end{equation}
+где $\vect Q \in \mathbb{R}^{2 \times 2}$ — ортогональная ($\vect Q^{\top}\vect Q = \vect I$), $\vect R \in \mathbb{R}^{2 \times 2}$ — верхнетреугольная. Выберем стандартную нормализацию $\text{diag}(\vect R) > 0$. Тогда $\vect R$ совпадает с фактором Холецкого для $\vect C$:
+\begin{equation}
+\vect R = \text{chol}(\vect C), \quad \text{с} \quad \vect C = \vect F^{\top}\vect F.
+\end{equation}
+
+\textbf{Доказательство.}
+\begin{equation}
+\vect C = \vect F^{\top}\vect F = (\vect Q \vect R)^{\top}(\vect Q \vect R) = \vect R^{\top} \vect Q^{\top} \vect Q \vect R = \vect R^{\top} \vect R.
+\end{equation}
+Так как $\vect C$ — SPD и $\vect R$ — верхнетреугольная с положительной диагональю, то представление $\vect C = \vect R^{\top}\vect R$ единственно. По единственности фактора Холецкого (с $\text{diag} > 0$) следует $\vect R = \text{chol}(\vect C)$. $\square$
+
+\textbf{Следствие.} Логарифмические координаты $\boldsymbol{\xi}$, определённые через $\vect U = \text{chol}(\vect C)$, можно эквивалентно вычислять из $\vect U = \vect R$ в QR($\vect F$), при условии $\text{diag}(\vect R) > 0$.
+
+\section{Координаты $\vect{\xi}$ через $\vect{U}$}
+
+Для $\vect U = \begin{bmatrix} u_{11} & u_{12} \\ 0 & u_{22} \end{bmatrix}$, $\text{diag}(\vect U) > 0$,
+\begin{equation}
+\boldsymbol{\xi} = (\xi_1, \xi_2, \xi_3) = (\ln u_{11}, \ln u_{22}, u_{12}/u_{11}).
+\end{equation}
+Тем самым, $\boldsymbol{\xi}(\vect F) := \boldsymbol{\xi}(\vect R(\vect F)) = \boldsymbol{\xi}(\vect U(\vect C))$.
+
+
