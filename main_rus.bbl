@@ -1,66 +1,182 @@
-\begin{thebibliography}{10}
+\begin{thebibliography}{26}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
 
-\bibitem{icnn2017}
-Brandon Amos, Lei Xu, and J~Zico Kolter.
-\newblock Input convex neural networks.
-\newblock In {\em International conference on machine learning}, pages
-  146--155. PMLR, 2017.
+\bibitem[Salamatova and Liogky(2023)]{xi2023}
+Victoria Salamatova and Alexey Liogky.
+\newblock Interpretable data-driven modeling of hyperelastic membranes.
+\newblock \emph{International Journal for Numerical Methods in Biomedical
+  Engineering}, 39\penalty0 (11):\penalty0 e3757, 2023.
 
-\bibitem{antman2005nonlin}
+\bibitem[Truesdell(1984)]{truesdell1984historical}
+Clifford Truesdell.
+\newblock Historical introit the origins of rational thermodynamics.
+\newblock In \emph{Rational thermodynamics}, pages 1--48. Springer, 1984.
+
+\bibitem[Truesdell and Noll(2004)]{truesdell2004nonlinear}
+Clifford Truesdell and Walter Noll.
+\newblock \emph{The non-linear field theories of mechanics}.
+\newblock Springer Science \& Business Media, 2004.
+
+\bibitem[Antman(2005)]{antman2005nonlin}
 Stuart~S Antman.
-\newblock {\em Nonlinear problems of elasticity}.
+\newblock \emph{Nonlinear problems of elasticity}.
 \newblock Springer, 2005.
 
-\bibitem{dugas2001incorporating}
+\bibitem[Green(1839)]{green1839laws}
+George Green.
+\newblock On the laws of the reflection and refraction of light at the common
+  surface of two non-crystallized media.
+\newblock \emph{Transactions of the Cambridge Philosophical Society},
+  7:\penalty0 1--24, 1839.
+
+\bibitem[Kirchhoff(1850)]{kirchhoff1850gleichgewicht}
+Gustav Kirchhoff.
+\newblock Ueber das gleichgewicht und die bewegung einer elastischen scheibe.
+\newblock \emph{Journal für die reine und angewandte Mathematik}, 40:\penalty0
+  51--88, 1850.
+
+\bibitem[Amos et~al.(2017)Amos, Xu, and Kolter]{icnn2017}
+Brandon Amos, Lei Xu, and J~Zico Kolter.
+\newblock Input convex neural networks.
+\newblock In \emph{International conference on machine learning}, pages
+  146--155. PMLR, 2017.
+
+\bibitem[Dugas et~al.(2001)Dugas, Bengio, Bélisle, Nadeau, and
+  Garcia]{dugas2001incorporating}
 Charles Dugas, Yoshua Bengio, François Bélisle, Claude Nadeau, and René
   Garcia.
 \newblock Incorporating second-order functional knowledge for better option
   pricing.
-\newblock {\em Advances in neural information processing systems}, 13, 2001.
+\newblock \emph{Advances in neural information processing systems}, 13, 2001.
 
-\bibitem{green1839laws}
-George Green.
-\newblock On the laws of the reflection and refraction of light at the common
-  surface of two non-crystallized media.
-\newblock {\em Transactions of the Cambridge Philosophical Society}, 7:1--24,
-  1839.
+\bibitem[Paszke et~al.(2019)Paszke, Gross, Massa, Lerer, Bradbury, Chanan,
+  Killeen, Lin, Gimelshein, Antiga, Desmaison, Kopf, Yang, DeVito, Raison,
+  Tejani, Chilamkurthy, Steiner, Fang, Bai, and Chintala]{pytorch2019}
+Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory
+  Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, Alban
+  Desmaison, Andreas Kopf, Edward Yang, Zachary DeVito, Martin Raison, Alykhan
+  Tejani, Sasank Chilamkurthy, Benoit Steiner, Lu~Fang, Junjie Bai, and Soumith
+  Chintala.
+\newblock Pytorch: An imperative style, high-performance deep learning library.
+\newblock In \emph{Advances in Neural Information Processing Systems 32}, 2019.
 
-\bibitem{kingma2014adam}
+\bibitem[Abadi et~al.(2016)Abadi, Barham, Chen, Chen, Davis, Dean, Devin,
+  Ghemawat, Irving, Isard, Kudlur, Levenberg, Monga, Moore, Murray, Steiner,
+  Tucker, Vasudevan, Warden, Wicke, Yu, and Zheng]{tensorflow2016}
+Mart\'{\i}n Abadi, Paul Barham, Jianmin Chen, Zhifeng Chen, Andy Davis, Jeffrey
+  Dean, Matthieu Devin, Sanjay Ghemawat, Geoffrey Irving, Michael Isard,
+  Manjunath Kudlur, Josh Levenberg, Rajat Monga, Sherry Moore, Derek~G Murray,
+  Benoit Steiner, Paul Tucker, Vijay Vasudevan, Pete Warden, Martin Wicke, Yuan
+  Yu, and Xiaoqiang Zheng.
+\newblock Tensorflow: A system for large-scale machine learning.
+\newblock In \emph{12th USENIX Symposium on Operating Systems Design and
+  Implementation (OSDI 16)}, pages 265--283. USENIX Association, 2016.
+
+\bibitem[Bradbury et~al.(2018)Bradbury, Frostig, Hawkins, Johnson, Leary,
+  Maclaurin, Necula, Paszke, VanderPlas, Wanderman-Milne, and Zhang]{jax2018}
+James Bradbury, Roy Frostig, Chris Hawkins, Matthew~James Johnson, Chris Leary,
+  Dougal Maclaurin, George Necula, Adam Paszke, Jake VanderPlas, Skye
+  Wanderman-Milne, and Qiao Zhang.
+\newblock Jax: composable transformations of python+numpy programs.
+\newblock \url{https://github.com/google/jax}, 2018.
+
+\bibitem[Kingma and Ba(2014)]{kingma2014adam}
 Diederik~P Kingma and Jimmy Ba.
 \newblock Adam: A method for stochastic optimization.
-\newblock {\em arXiv preprint arXiv:1412.6980}, 2014.
+\newblock \emph{arXiv preprint arXiv:1412.6980}, 2014.
 
-\bibitem{kirchhoff1850gleichgewicht}
-Gustav Kirchhoff.
-\newblock Ueber das gleichgewicht und die bewegung einer elastischen scheibe.
-\newblock {\em Journal für die reine und angewandte Mathematik}, 40:51--88,
-  1850.
+\bibitem[Ogden(1997)]{ogden1997nonlinear}
+R.W. Ogden.
+\newblock \emph{Non-Linear Elastic Deformations}.
+\newblock Dover Publications, 1997.
+\newblock ISBN 978-0486696481.
 
-\bibitem{ddaniso2024}
+\bibitem[Liogky and Salamatova(2024)]{ddaniso2024}
 Alexey Liogky and Victoria Salamatova.
 \newblock Data-driven anisotropic biomembrane simulation based on the laplace
   stretch.
-\newblock {\em Computation}, 12(3):39, 2024.
+\newblock \emph{Computation}, 12\penalty0 (3):\penalty0 39, 2024.
+\newblock \doi{10.3390/computation12030039}.
 
-\bibitem{ogden1997nonlinear}
-R.W. Ogden.
-\newblock {\em Non-Linear Elastic Deformations}.
-\newblock Dover Publications, 1997.
+\bibitem[Ciarlet(1988)]{ciarlet1988mathematical}
+Philippe~G Ciarlet.
+\newblock \emph{Mathematical elasticity: Three-dimensional elasticity},
+  volume~1.
+\newblock Elsevier, 1988.
 
-\bibitem{xi2023}
-Victoria Salamatova and Alexey Liogky.
-\newblock Interpretable data-driven modeling of hyperelastic membranes.
-\newblock {\em International Journal for Numerical Methods in Biomedical
-  Engineering}, 39(11):e3757, 2023.
+\bibitem[Holzapfel(2000)]{holzapfel2000nonlinear}
+Gerhard~A Holzapfel.
+\newblock \emph{Nonlinear solid mechanics: a continuum approach for
+  engineering}.
+\newblock John Wiley \& Sons, 2000.
 
-\bibitem{truesdell1984historical}
-Clifford Truesdell.
-\newblock Historical introit the origins of rational thermodynamics.
-\newblock In {\em Rational thermodynamics}, pages 1--48. Springer, 1984.
+\bibitem[Xie(2024)]{xie2024p1}
+Peichen Xie.
+\newblock P1 error: A combination of absolute and relative errors.
+\newblock \emph{CoRR}, 2024.
 
-\bibitem{truesdell2004nonlinear}
-Clifford Truesdell and Walter Noll.
-\newblock {\em The non-linear field theories of mechanics}.
-\newblock Springer Science \& Business Media, 2004.
+\bibitem[Brenner and Scott(2008)]{BrennerScott2008}
+Susanne~C. Brenner and L.~Ridgway Scott.
+\newblock \emph{The Mathematical Theory of Finite Element Methods}, volume~15
+  of \emph{Texts in Applied Mathematics}.
+\newblock Springer, 3 edition, 2008.
+\newblock ISBN 978-0-387-75933-3.
+
+\bibitem[Ainsworth and Oden(2000)]{AinsworthOden2000}
+Mark Ainsworth and J.~Tinsley Oden.
+\newblock \emph{A Posteriori Error Estimation in Finite Element Analysis}.
+\newblock Wiley, 2000.
+\newblock ISBN 978-0-471-29413-0.
+
+\bibitem[Verf{\"u}rth(2013)]{Verfurth2013}
+R{\"u}diger Verf{\"u}rth.
+\newblock \emph{A Posteriori Error Estimation Techniques for Finite Element
+  Methods}, volume~37 of \emph{Springer Series in Computational Mathematics}.
+\newblock Springer, 2 edition, 2013.
+\newblock ISBN 978-3-642-33133-5.
+
+\bibitem[Boyd and Vandenberghe(2004)]{BoydVandenberghe2004}
+Stephen Boyd and Lieven Vandenberghe.
+\newblock \emph{Convex Optimization}.
+\newblock Cambridge University Press, 2004.
+\newblock ISBN 978-0521833783.
+
+\bibitem[Nesterov(2004)]{Nesterov2004}
+Yurii Nesterov.
+\newblock \emph{Introductory Lectures on Convex Optimization: A Basic Course},
+  volume~87 of \emph{Applied Optimization}.
+\newblock Springer, 2004.
+\newblock ISBN 978-1402075537.
+
+\bibitem[Nocedal and Wright(2006)]{NocedalWright2006}
+Jorge Nocedal and Stephen~J. Wright.
+\newblock \emph{Numerical Optimization}.
+\newblock Springer Series in Operations Research and Financial Engineering.
+  Springer, 2 edition, 2006.
+\newblock ISBN 978-0387303031.
+
+\bibitem[Conn et~al.(2000)Conn, Gould, and Toint]{ConnGouldToint2000}
+A.~R. Conn, N.~I.~M. Gould, and Ph.~L. Toint.
+\newblock \emph{Trust-Region Methods}.
+\newblock SIAM, 2000.
+\newblock ISBN 978-0-89871-460-9.
+
+\bibitem[Kirchdoerfer and Ortiz(2016)]{KirchdoerferOrtiz2016}
+T.~Kirchdoerfer and M.~Ortiz.
+\newblock Data-driven computational mechanics.
+\newblock \emph{Proceedings of the National Academy of Sciences}, 113\penalty0
+  (32):\penalty0 8386--8391, 2016.
+\newblock \doi{10.1073/pnas.1609450113}.
+
+\bibitem[Kirchdoerfer and Ortiz(2017)]{KirchdoerferOrtiz2017}
+T.~Kirchdoerfer and M.~Ortiz.
+\newblock Data-driven computing in dynamics.
+\newblock \emph{International Journal for Numerical Methods in Engineering},
+  113\penalty0 (11):\penalty0 1697--1710, 2017.
+\newblock \doi{10.1002/nme.5716}.
 
 \end{thebibliography}

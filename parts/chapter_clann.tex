@@ -53,7 +53,6 @@
 конфигурациях поверхности мембраны соответственно. 
 Деформация определяется отображением \(\mathbf{x} = \mathbf{x}(\mathbf{X})\), 
 поверхностный градиент деформации \(\mathbf{F} = \vect{e}_{\alpha} \otimes \vect{E}^{\alpha}\),
-% поверхностный градиент деформации \(\vect F = \dfrac{\partial\mathbf{x}}{\partial\mathbf{X}}\),
 а правый тензор Коши—Грина \(\vect C = C_{\alpha\beta} \;\vect{e}_{\alpha} \otimes \vect{e}_{\beta} = \vect F^{\top} \vect F\). 
 Для определения меры деформации мы используем меру Лапласа \(\vect{\xi} = (\xi_1 , \xi_2 , \xi_3)^T\) \cite{xi2023},
 которая может быть вычислен двумя эквивалентными способами: 
@@ -86,12 +85,6 @@
 
 Такое построение имеет ключевые следствия:
 \begin{itemize}
-  % \item \textbf{Консервативность (гиперупругость):} $\exists\,\psi$ такая, что $\mathbf{S}=2\,\partial \psi/\partial \mathbf{C}$,
-  %  поэтому работа напряжений по любому замкнутому контуру деформаций равна нулю:
-  % \[
-  %   \oint \mathbf{S}:\mathrm{d}\mathbf{C} \;=\; 2\oint \frac{\partial \psi}{\partial \mathbf{C}}:\mathrm{d}\mathbf{C}
-  %   \;=\; 2\oint \mathrm{d}\psi \;=\; 0.
-  % \]
   \item \textbf{Объективность:} $\psi(\mathbf{C})=\psi(\mathbf{Q}^\top\mathbf{C}\mathbf{Q})$ для любой ортогональной $\mathbf{Q}$, а значит и $\mathbf{S}$ инвариантен к поворотам.
   \item \textbf{Симметрия напряжений:} $\mathbf{S}=\mathbf{S}^\top$ вследствие симметрии $\mathbf{C}$ и корректного применения цепного правила.
   \item \textbf{Термодинамическая корректность:} равенство \eqref{eq:chain-rule} является следствием неравенства Клаузиуса-Дюгема 
