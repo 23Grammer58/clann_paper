@@ -2,18 +2,29 @@
 \begin{tikzpicture}[
   font=\small, node distance=9mm and 14mm, >={Latex},
   box/.style={draw, rounded corners, align=center, minimum height=7mm, inner sep=2mm},
+  % цветовые стили
   block/.style={box, fill=green!6, text width=44mm},
-  pin/.style={circle, draw, minimum size=6mm, fill=white},
-  neur0/.style={circle, draw, minimum size=6mm, fill=white},
-  neur/.style={circle, draw, minimum size=6mm, fill=white},
+  pin/.style={circle, draw, minimum size=6mm, fill=blue!8},
+  neur0/.style={circle, draw, minimum size=6mm, fill=orange!20},
+  neur/.style={circle, draw, minimum size=6mm, fill=orange!20},
+  cblk/.style={box, fill=gray!15, text width=8mm},
+  actblk/.style={box, fill=orange!10, text width=60mm, inner sep=3mm},
+  readblk/.style={box, fill=red!8, text width=50mm},
+  gradblk/.style={box, fill=purple!10, text width=50mm},
   title/.style={font=\bfseries},
   every fit/.style={draw, rounded corners, inner sep=3mm}
 ]
+
 
 % Входы (лог‑лапласовы координаты)
 \node[pin] (x1) {$\xi_1$};
 \node[pin, below=6mm of x1] (x2) {$\xi_2$};
 \node[pin, below=6mm of x2] (x3) {$\xi_3$};
+% Блок правее Cauchy–Green тензора C
+\node[cblk, left=14mm of x2] (C) {$\mathbf{C}$};
+\draw[->] (C.east) -- (x1.west);
+\draw[->] (C.east) -- (x2.west);
+\draw[->] (C.east) -- (x3.west);
 
 % Аффинная проекция
 \node[neur0, right=14mm of x1, yshift=12mm] (h11) {};
@@ -34,7 +45,7 @@
 \draw[->] (x2) -- (h14.west);
 \draw[->] (x3) -- (h14.west);
 % \node[block, above=2mm of h11, text width=36mm] (aff) {$s = W_1\,\xi + b_1$};
-\node[block, above=2mm of h11, text width=60mm, inner sep=3mm] (soft) {$z_i = \mathrm{softplus}(\beta (W_1\,\xi + b_1))/\beta$};
+\node[actblk, above=2mm of h11] (soft) {$z_i = \mathrm{softplus}(\beta (W_1\,\xi + b_1))/\beta$};
 
 % % Скрытый слой (softplus): три нейрона, троеточие и ещё один
 % \node[neur, right=14mm of h12, yshift=12mm] (h1) {};
@@ -49,12 +60,16 @@
 % % Блок активации над нейронами
 % \node[block, above=2mm of h1, text width=36mm] (soft) {$z_i = \mathrm{softplus}(\beta (W_1\,\xi + b_1)/\beta$};
 
-% Линейный выход (неотрицательные веса)
-\node[block, right=22mm of h12, text width=42mm] (readout) {$\psi(\boldsymbol{\xi}) = \mathbf{W}_2^{\top}\big(z - z_0\big) - \mathbf{r}_0^{\top}\boldsymbol{\xi}$};
+% Линейный выход (неотрицательные веса), центрирован относительно столбца нейронов
+\node[readblk, right=22mm of h12, yshift=-11mm] (readout) {$\psi(\boldsymbol{\xi}) = \mathbf{W}_2^{\top}\big(z - z_0\big) - \mathbf{r}_0^{\top}\boldsymbol{\xi}$};
 \draw[->] (h11.east) -- (readout.west);
 \draw[->] (h12.east) -- (readout.west);
 \draw[->] (h13.east) -- (readout.west);
 \draw[->] (h14.east) -- (readout.west);
+
+% Производная: второй тензор Пиолы–Кирхгофа
+\node[gradblk, below=8mm of readout] (Sblock) {$\mathbf{S} = \partial\,\psi/\partial\,\boldsymbol{\xi} \cdot \partial\,\boldsymbol{\xi}/\partial\,\boldsymbol{\vect C}$};
+\draw[->] (readout.south) -- (Sblock.north);
 
 % % Центрирование \to физическая энергия
 % \node[block, below=10mm of readout] (psiphys) {$\psi_{\mathrm{phys}}(\boldsymbol{\xi}) = \psi(\boldsymbol{\xi}) - \mathbf{r}_0^{\top}\boldsymbol{\xi}$ \\
@@ -62,6 +77,6 @@
 % \draw[->] (readout.south) -- (psiphys.north);
 
 % Рамка и заголовок
-\node[fit=(x1)(x3)(soft)(readout), label={[title]above:{Архитектура CLaNN: однослойная ICNN}}] (archfit) {};
+\node[fit=(C)(x3)(soft)(readout)(Sblock), label={[title]above:{Архитектура CLaNN: однослойная ICNN}}] (archfit) {};
 
 \end{tikzpicture}
