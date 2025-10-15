@@ -68,7 +68,7 @@
 \draw[->] (h14.east) -- (readout.west);
 
 % Производная: второй тензор Пиолы–Кирхгофа
-\node[gradblk, below=8mm of readout] (Sblock) {$\mathbf{S} = \partial\,\psi/\partial\,\boldsymbol{\xi} \cdot \partial\,\boldsymbol{\xi}/\partial\,\boldsymbol{\vect C}$};
+\node[gradblk, below=8mm of readout] (Sblock) {$\mathbf{S} = \frac{\partial \psi}{\partial \boldsymbol{\xi}}\, \frac{\partial \boldsymbol{\xi}}{\partial \mathbf{C}}$};
 \draw[->] (readout.south) -- (Sblock.north);
 
 % % Центрирование \to физическая энергия
