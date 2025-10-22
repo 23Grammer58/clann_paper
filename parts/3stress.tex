@@ -1,25 +1,25 @@
 \section{Напряжение и термодинамическая корректность}
 
 В качестве меры напряжения образца мы используем \textbf{второй тензор напряжений Пиолы-Кирхгофа}, который вычисляется по цепному правилу дифференцированием энергии \(\psi\) 
-по правому тензору деформации Коши-Грина \(\vect C\):
+по правому тензору деформации Коши-Грина \(\mathbb C\):
 
 \begin{equation}
-  \mathbf{S} \;=\; 2\,\frac{\partial \psi}{\partial \mathbf{C}}
-  \;=\; 2\,\frac{\partial \psi}{\partial \boldsymbol\xi} \cdot \frac{\partial \boldsymbol\xi}{\partial \mathbf{C}}
-  \;=\; 2\,\mathbf{r}(\boldsymbol\xi)\cdot\frac{\partial \boldsymbol\xi}{\partial \mathbf{C}},
-  \qquad \mathbf{r}:=\frac{\partial \psi}{\partial \boldsymbol\xi}.
+  \mathbb{S} \;=\; 2\,\frac{\partial \psi}{\partial \mathbb{C}}
+  \;=\; 2\,\frac{\partial \psi}{\partial \vect{\xi}} \cdot \frac{\partial \vect{\xi}}{\partial \mathbb{C}}
+  \;=\; 2\,\vect{r}(\vect{\xi})\cdot\frac{\partial \vect{\xi}}{\partial \mathbb{C}},
+  \qquad \vect{r}:=\frac{\partial \psi}{\partial \vect{\xi}}.
   \label{eq:chain-rule}
 \end{equation}
-Вектор $\frac{\partial \boldsymbol\xi}{\partial \mathbf{C}}$ называют базисом, он является известным аналитическим выражением, зависящим от выбранной меры деформации; $\vect{r} = (r_1, r_2, r_3)$ -- функцией отклика, которая является итоговым \textit{искомым} в процессе обучения \textit{data-driven} определяющего соотношения.   
+Вектор $\frac{\partial \vect{\xi}}{\partial \mathbb{C}}$ называют базисом, он является известным аналитическим выражением, зависящим от выбранной меры деформации; $\vect{r} = (r_1, r_2, r_3)$ -- функцией отклика, которая является итоговым \textit{искомым} в процессе обучения \textit{data-driven} определяющего соотношения.   
 
 Такое построение имеет ключевые следствия:
 \newline
-\textit{Объективность:} $\psi(\mathbf{C})=\psi(\mathbf{Q}^\top\mathbf{C}\mathbf{Q})$ для любой ортогональной $\mathbf{Q}$, а значит и $\mathbf{S}$ инвариантен к поворотам.
+\textit{Объективность:} $\\psi(\\mathbb{C})=\\psi(\\mathbb{Q}^\\top\\mathbb{C}\\mathbb{Q})$ для любой ортогональной $\\mathbb{Q}$, а значит и $\\mathbb{S}$ инвариентен к поворотам.
 \newline
-\textit{Симметрия напряжений:} $\mathbf{S}=\mathbf{S}^\top$ вследствие симметрии $\mathbf{C}$ и корректного применения цепного правила.
+\textit{Симметрия напряжений:} $\\mathbb{S}=\\mathbb{S}^\\top$ вследствие симметрии $\\mathbb{C}$ и корректного применения цепного правила.
 \newline
 \textit{Термодинамическая корректность:} равенство \eqref{eq:chain-rule} является следствием неравенства Клаузиуса-Дюгема 
-$\mathcal{D} = \mathbf{S} : \dot{\mathbf{C}} - \dot{\psi}(\mathbf{C}) \geq 0$, 
+$\mathcal{D} = \mathbb{S} : \dot{\mathbb{C}} - \dot{\psi}(\mathbb{C}) \geq 0$, 
 выражающее второе начало термодинамики для механических процессов \cite{truesdell1984historical,truesdell2004nonlinear}.
 % \begin{itemize}
 %   \item \textbf{Объективность:} $\psi(\mathbf{C})=\psi(\mathbf{Q}^\top\mathbf{C}\mathbf{Q})$ для любой ортогональной $\mathbf{Q}$, а значит и $\mathbf{S}$ инвариантен к поворотам.
@@ -33,7 +33,7 @@ $\mathcal{D} = \mathbf{S} : \dot{\mathbf{C}} - \dot{\psi}(\mathbf{C}) \geq 0$,
 
  % Необходимо установить связь деформации Лапласа $\vect{\xie}$ и второго тензора напряжений Пиолы-Кирхгофа $\vect{S}$. Применяя цепное правило дифференцирования к выражению \eqref{eq:chain-rule} и используя меру деформации Лапласа,
 
-Расписав покомпонентно уравнение \eqref{eq:chain-rule} и подставив туда известный базис $\frac{\partial \boldsymbol\xi}{\partial \mathbf{C}}$, получаем аналитические выражения для компонент второго тензора напряжений Пиолы-Кирхгофа в двумерном случае:
+Расписав покомпонентно уравнение \eqref{eq:chain-rule} и подставив туда известный базис $\frac{\partial \vect{\xi}}{\partial \mathbb{C}}$, получаем аналитические выражения для компонент второго тензора напряжений Пиолы-Кирхгофа в двумерном случае:
 
 \begin{equation}
 \begin{aligned}
@@ -67,7 +67,7 @@ $\mathcal{D} = \mathbf{S} : \dot{\mathbf{C}} - \dot{\psi}(\mathbf{C}) \geq 0$,
   \textit{Бесконечный рост (коэрцитивность)}. Неограниченный рост меры деформации физически недостижим при конечной работе
   \begin{equation}
     \psi(\vect{\xi}) \to \infty\ \text{при}\ \lVert\vect{\xi}\rVert\to\infty,\qquad
-    \vect{S} \to \infty\ \text{при}\ J\to\infty \text{ или } J\to 0^{+},\qquad
+    \mathbb{S} \to \infty\ \text{при}\ J\to\infty \text{ или } J\to 0^{+},\qquad
     J=\det\vect F,
     \label{eq:energy_constraints}
   \end{equation}

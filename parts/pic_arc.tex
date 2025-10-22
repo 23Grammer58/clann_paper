@@ -21,7 +21,7 @@
 \node[pin, below=6mm of x1] (x2) {$\xi_2$};
 \node[pin, below=6mm of x2] (x3) {$\xi_3$};
 % Блок правее Cauchy–Green тензора C
-\node[cblk, left=14mm of x2] (C) {$\mathbf{C}$};
+\node[cblk, left=14mm of x2] (C) {$\mathbb{C}$};
 \draw[->] (C.east) -- (x1.west);
 \draw[->] (C.east) -- (x2.west);
 \draw[->] (C.east) -- (x3.west);
@@ -61,14 +61,14 @@
 % \node[block, above=2mm of h1, text width=36mm] (soft) {$z_i = \mathrm{softplus}(\beta (W_1\,\xi + b_1)/\beta$};
 
 % Линейный выход (неотрицательные веса), центрирован относительно столбца нейронов
-\node[readblk, right=22mm of h12, yshift=-11mm] (readout) {$\psi(\boldsymbol{\xi}) = \mathbf{W}_2^{\top}\big(z - z_0\big) - \mathbf{r}_0^{\top}\boldsymbol{\xi}$};
+\node[readblk, right=22mm of h12, yshift=-11mm] (readout) {$\psi(\vect{\xi}) = \vect{W}_2^{\top}\big(z - z_0\big) - \vect{r}_0^{\top}\vect{\xi}$};
 \draw[->] (h11.east) -- (readout.west);
 \draw[->] (h12.east) -- (readout.west);
 \draw[->] (h13.east) -- (readout.west);
 \draw[->] (h14.east) -- (readout.west);
 
 % Производная: второй тензор Пиолы–Кирхгофа
-\node[gradblk, below=8mm of readout] (Sblock) {$\mathbf{S} = \frac{\partial \psi}{\partial \boldsymbol{\xi}}\, \frac{\partial \boldsymbol{\xi}}{\partial \mathbf{C}}$};
+\node[gradblk, below=8mm of readout] (Sblock) {$\mathbb{S} = \frac{\partial \psi}{\partial \vect{\xi}}\, \frac{\partial \vect{\xi}}{\partial \mathbb{C}}$};
 \draw[->] (readout.south) -- (Sblock.north);
 
 % % Центрирование \to физическая энергия
