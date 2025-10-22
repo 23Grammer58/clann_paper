@@ -57,16 +57,16 @@
 а правый тензор Коши—Грина \(\vect C = C_{\alpha\beta} \;\vect{e}_{\alpha} \otimes \vect{e}_{\beta} = \vect F^{\top} \vect F\). 
 Для определения меры деформации мы используем меру Лапласа \(\vect{\xi} = (\xi_1 , \xi_2 , \xi_3)^T\) \cite{xi2023},
 которая может быть вычислена двумя эквивалентными способами: 
-либо через QR-разложение градиента деформации \(\vect F = \vect Q \vect R\) с \(\vect U = \vect R\) , 
-либо через разложение Холецкого правого тензора Коши-Грина \(\vect C = \vect U^{\top}\vect U\) (Приложение \ref{app:cholesky}).
+либо через QR-разложение градиента деформации \(\vect F = \vect Q \vect R\) с \(\tilde{\vect F} = \vect R\) , 
+либо через разложение Холецкого правого тензора Коши-Грина \(\vect C = \tilde{\vect F}^{\top}\tilde{\vect F}\) (Приложение \ref{app:cholesky}).
 В этом случае гиперупругий потенциал является функцией от деформации Лапласа \(\psi = \psi(\vect{\xi})\).
 
 
 \textbf{Мера деформации Лапласа}
 В двумерном случае вводятся характеристики
 \begin{equation}
-\xi_1 = \ln(u_{11}),\quad \xi_2 = \ln(u_{22}),\quad \xi_3 = \frac{u_{12}}{u_{11}}, 
-\quad \vect{U} = u_{\alpha\beta} \; \vect{e}_{\alpha} \otimes \vect{e}_{\beta}.
+\xi_1 = \ln(\tilde f_{11}),\quad \xi_2 = \ln(\tilde f_{22}),\quad \xi_3 = \frac{\tilde f_{12}}{\tilde f_{11}}, 
+\quad \tilde{\vect F} = \tilde f_{\alpha\beta} \; \vect{e}_{\alpha} \otimes \vect{e}_{\beta}.
 \label{eq:laplace_coords}
 \end{equation}
 
@@ -716,12 +716,12 @@ kNN & 993 & -- \\
 \begin{itemize}
   \item $\vect F \in \mathbb{R}^{2 \times 2}$ — градиент деформации, $\det \vect F > 0$,
   \item $\vect C = \vect F^{\top}\vect F$ — правый тензор Коши–Грина (симметричный положительно определённый, SPD),
-  \item Холецкий: $\vect C = \vect U^{\top}\vect U$, где $\vect U$ — верхнетреугольная и $\text{diag}(\vect U) > 0$,
+  \item Холецкий: $\vect C = \tilde{\vect F}^{\top}\tilde{\vect F}$, где $\tilde{\vect F}$ — верхнетреугольная и $\text{diag}(\tilde{\vect F}) > 0$,
   \item Логарифмические координаты:
     $\boldsymbol{\xi} = (\xi_1, \xi_2, \xi_3) = (\ln u_{11}, \ln u_{22}, u_{12}/u_{11})$.
 \end{itemize}
 
-Цель: показать, что при наличии $\vect F$ можно заменить вычисление $\vect U = \text{chol}(\vect C)$ на $\vect U = \vect R$ из тонкого QR($\vect F$) = $\vect Q \vect R$ (с $\text{diag}(\vect R) > 0$), и получить те же $\boldsymbol{\xi}$.
+Цель: показать, что при наличии $\vect F$ можно заменить вычисление $\tilde{\vect F} = \text{chol}(\vect C)$ на $\tilde{\vect F} = \vect R$ из тонкого QR($\vect F$) = $\vect Q \vect R$ (с $\text{diag}(\vect R) > 0$), и получить те же $\boldsymbol{\xi}$.
 
 \section{Теорема (эквивалентность U и R)}
 
@@ -740,14 +740,14 @@ kNN & 993 & -- \\
 \end{equation}
 Так как $\vect C$ — SPD и $\vect R$ — верхнетреугольная с положительной диагональю, то представление $\vect C = \vect R^{\top}\vect R$ единственно. По единственности фактора Холецкого (с $\text{diag} > 0$) следует $\vect R = \text{chol}(\vect C)$. $\square$
 
-\textbf{Следствие.} Логарифмические координаты $\boldsymbol{\xi}$, определённые через $\vect U = \text{chol}(\vect C)$, можно эквивалентно вычислять из $\vect U = \vect R$ в QR($\vect F$), при условии $\text{diag}(\vect R) > 0$.
+\textbf{Следствие.} Логарифмические координаты $\boldsymbol{\xi}$, определённые через $\tilde{\vect F} = \text{chol}(\vect C)$, можно эквивалентно вычислять из $\tilde{\vect F} = \vect R$ в QR($\vect F$), при условии $\text{diag}(\vect R) > 0$.
 
-\section{Координаты $\vect{\xi}$ через $\vect{U}$}
+\section{Координаты $\vect{\xi}$ через $\tilde{\vect F}$}
 
-Для $\vect U = \begin{bmatrix} u_{11} & u_{12} \\ 0 & u_{22} \end{bmatrix}$, $\text{diag}(\vect U) > 0$,
+Для $\tilde{\vect F} = \begin{bmatrix} \tilde f_{11} & \tilde f_{12} \\ 0 & \tilde f_{22} \end{bmatrix}$, $\text{diag}(\tilde{\vect F}) > 0$,
 \begin{equation}
-\boldsymbol{\xi} = (\xi_1, \xi_2, \xi_3) = (\ln u_{11}, \ln u_{22}, u_{12}/u_{11}).
+\boldsymbol{\xi} = (\xi_1, \xi_2, \xi_3) = (\ln \tilde f_{11}, \ln \tilde f_{22}, \tilde f_{12}/\tilde f_{11}).
 \end{equation}
-Тем самым, $\boldsymbol{\xi}(\vect F) := \boldsymbol{\xi}(\vect R(\vect F)) = \boldsymbol{\xi}(\vect U(\vect C))$.
+Тем самым, $\boldsymbol{\xi}(\vect F) := \boldsymbol{\xi}(\vect R(\vect F)) = $ $\boldsymbol{\xi}(\tilde{\vect F}(\vect C))$.
 
 

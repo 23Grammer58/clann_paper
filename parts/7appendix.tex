@@ -9,12 +9,12 @@
 \begin{itemize}
   \item $\vect F \in \mathbb{R}^{2 \times 2}$ — градиент деформации, $\det \vect F > 0$,
   \item $\vect C = \vect F^{\top}\vect F$ — правый тензор Коши–Грина (симметричный положительно определённый, SPD),
-  \item Холецкий: $\vect C = \vect U^{\top}\vect U$, где $\vect U$ — верхнетреугольная и $\text{diag}(\vect U) > 0$,
+  \item Холецкий: $\vect C = \tilde{\vect F}^{\top}\tilde{\vect F}$, где $\tilde{\vect F}$ — верхнетреугольная и $\text{diag}(\tilde{\vect F}) > 0$,
   \item Логарифмические координаты:
     $\boldsymbol{\xi} = (\xi_1, \xi_2, \xi_3) = (\ln u_{11}, \ln u_{22}, u_{12}/u_{11})$.
 \end{itemize}
 
-Цель: показать, что при наличии $\vect F$ можно заменить вычисление $\vect U = \text{chol}(\vect C)$ на $\vect U = \vect R$ из тонкого QR($\vect F$) = $\vect Q \vect R$ (с $\text{diag}(\vect R) > 0$), и получить те же $\boldsymbol{\xi}$.
+Цель: показать, что при наличии $\vect F$ можно заменить вычисление $\tilde{\vect F} = \text{chol}(\vect C)$ на $\tilde{\vect F} = \vect R$ из тонкого QR($\vect F$) = $\vect Q \vect R$ (с $\text{diag}(\vect R) > 0$), и получить те же $\boldsymbol{\xi}$.
 
 \section{Теорема (эквивалентность U и R)}
 
@@ -33,14 +33,14 @@
 \end{equation}
 Так как $\vect C$ — SPD и $\vect R$ — верхнетреугольная с положительной диагональю, то представление $\vect C = \vect R^{\top}\vect R$ единственно. По единственности фактора Холецкого (с $\text{diag} > 0$) следует $\vect R = \text{chol}(\vect C)$. $\square$
 
-\textbf{Следствие.} Логарифмические координаты $\boldsymbol{\xi}$, определённые через $\vect U = \text{chol}(\vect C)$, можно эквивалентно вычислять из $\vect U = \vect R$ в QR($\vect F$), при условии $\text{diag}(\vect R) > 0$.
+\textbf{Следствие.} Логарифмические координаты $\boldsymbol{\xi}$, определённые через $\tilde{\vect F} = \text{chol}(\vect C)$, можно эквивалентно вычислять из $\tilde{\vect F} = \vect R$ в QR($\vect F$), при условии $\text{diag}(\vect R) > 0$.
 
-\section{Координаты $\vect{\xi}$ через $\vect{U}$}
+\section{Координаты $\vect{\xi}$ через $\tilde{\vect F}$}
 
-Для $\vect U = \begin{bmatrix} u_{11} & u_{12} \\ 0 & u_{22} \end{bmatrix}$, $\text{diag}(\vect U) > 0$,
+Для $\tilde{\vect F} = \begin{bmatrix} \tilde f_{11} & \tilde f_{12} \\ 0 & \tilde f_{22} \end{bmatrix}$, $\text{diag}(\tilde{\vect F}) > 0$,
 \begin{equation}
-\boldsymbol{\xi} = (\xi_1, \xi_2, \xi_3) = (\ln u_{11}, \ln u_{22}, u_{12}/u_{11}).
+\boldsymbol{\xi} = (\xi_1, \xi_2, \xi_3) = (\ln \tilde f_{11}, \ln \tilde f_{22}, \tilde f_{12}/\tilde f_{11}).
 \end{equation}
-Тем самым, $\boldsymbol{\xi}(\vect F) := \boldsymbol{\xi}(\vect R(\vect F)) = \boldsymbol{\xi}(\vect U(\vect C))$.
+Тем самым, $\boldsymbol{\xi}(\vect F) := \boldsymbol{\xi}(\vect R(\vect F)) = \boldsymbol{\xi}(\tilde{\vect F}(\vect C))$.
 
 
