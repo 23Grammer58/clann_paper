@@ -1,0 +1,46 @@
+\appendix
+
+\chapter{\texorpdfstring{Equivalence of QR factorization of $\vect F$ and Cholesky factorization of $\vect C=\vect F^{\top}\vect F$ for computing logarithmic coordinates $\boldsymbol{\xi}$}{Equivalence of QR and Cholesky}}
+\label{app:cholesky}
+
+\section{Problem statement and notation}
+
+We consider two-dimensional hyperelastic kinematics. Let:
+\begin{itemize}
+  \item $\vect F \in \mathbb{R}^{2 \times 2}$ is the deformation gradient, $\det \vect F > 0$,
+  \item $\vect C = \vect F^{\top}\vect F$ is the right Cauchy–Green tensor (symmetric positive definite, SPD),
+  \item Cholesky: $\vect C = \tilde{\vect F}^{\top}\tilde{\vect F}$, where $\tilde{\vect F}$ is upper triangular and $\text{diag}(\tilde{\vect F}) > 0$,
+  \item Logarithmic coordinates:
+    $\boldsymbol{\xi} = (\xi_1, \xi_2, \xi_3) = (\ln u_{11}, \ln u_{22}, u_{12}/u_{11})$.
+\end{itemize}
+
+Goal: to show that given $\vect F$, one can replace the computation $\tilde{\vect F} = \text{chol}(\vect C)$ by $\tilde{\vect F} = \vect R$ from the thin QR($\vect F$) = $\vect Q \vect R$ (with $\text{diag}(\vect R) > 0$), and obtain the same $\boldsymbol{\xi}$.
+
+\section{Theorem (equivalence of U and R)}
+
+Let $\vect F \in \mathbb{R}^{2 \times 2}$ be nonsingular ($\det \vect F > 0$). Consider the thin QR factorization
+\begin{equation}
+\vect F = \vect Q \vect R,
+\end{equation}
+where $\vect Q \in \mathbb{R}^{2 \times 2}$ is orthogonal ($\vect Q^{\top}\vect Q = \vect I$), $\vect R \in \mathbb{R}^{2 \times 2}$ is upper triangular. Choose the standard normalization $\text{diag}(\vect R) > 0$. Then $\vect R$ coincides with the Cholesky factor of $\vect C$:
+\begin{equation}
+\vect R = \text{chol}(\vect C), \quad \text{with} \quad \vect C = \vect F^{\top}\vect F.
+\end{equation}
+
+\textbf{Proof.}
+\begin{equation}
+\vect C = \vect F^{\top}\vect F = (\vect Q \vect R)^{\top}(\vect Q \vect R) = \vect R^{\top} \vect Q^{\top} \vect Q \vect R = \vect R^{\top} \vect R.
+\end{equation}
+Since $\vect C$ is SPD and $\vect R$ is upper triangular with positive diagonal, the representation $\vect C = \vect R^{\top}\vect R$ is unique. By uniqueness of the Cholesky factor (with $\text{diag} > 0$) it follows that $\vect R = \text{chol}(\vect C)$. $\square$
+
+\textbf{Corollary.} The logarithmic coordinates $\boldsymbol{\xi}$ defined via $\tilde{\vect F} = \text{chol}(\vect C)$ can equivalently be computed from $\tilde{\vect F} = \vect R$ in QR($\vect F$), provided $\text{diag}(\vect R) > 0$.
+
+\section{Coordinates $\vect{\xi}$ via $\tilde{\vect F}$}
+
+For $\tilde{\vect F} = \begin{bmatrix} \tilde f_{11} & \tilde f_{12} \\ 0 & \tilde f_{22} \end{bmatrix}$ with $\operatorname{diag}(\tilde{\vect F}) > 0$,
+\begin{equation}
+\boldsymbol{\xi} = (\xi_1, \xi_2, \xi_3) = (\ln \tilde f_{11}, \ln \tilde f_{22}, \tilde f_{12}/\tilde f_{11}).
+\end{equation}
+Thus, $\boldsymbol{\xi}(\vect F) := \boldsymbol{\xi}(\vect R(\vect F)) = \boldsymbol{\xi}(\tilde{\vect F}(\vect C))$.
+
+

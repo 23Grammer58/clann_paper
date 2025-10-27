@@ -1,0 +1,74 @@
+%  LaTeX support: latex@mdpi.com 
+%  For support, please attach all files needed for compiling as well as the log file, and specify your operating system, LaTeX version, and LaTeX editor.
+
+%=================================================================
+\documentclass[journal,article,submit,pdftex,moreauthors]{Definitions/mdpi} 
+
+% MDPI counters
+\firstpage{1} 
+\makeatletter \setcounter{page}{\@firstpage} \makeatother
+\pubvolume{1}
+\issuenum{1}
+\articlenumber{0}
+\pubyear{2025}
+\copyrightyear{2025}
+\datereceived{ } \daterevised{ } \dateaccepted{ } \datepublished{ } 
+\hreflink{https://doi.org/}
+
+% Custom macros
+\newcommand{\vect}[1]{\boldsymbol{#1}}
+\newcommand{\tr}{\operatorname{tr}}
+
+% Title and metadata
+\Title{Data-Driven Hyperelastic Constitutive Neural Network Model with Laplace Parameterization}
+\TitleCitation{CLANN (Convex Laplace Artificial Neural Network)}
+
+\newcommand{\orcidauthorA}{0000-0002-5860-4419}
+\Author{Dits D. $^{1}$\orcidA{}, Ovsepyan A., Lyogkiy A., Salamatova V. }
+\AuthorNames{Dits D., et al.}
+\isAPAStyle{\AuthorCitation{Dits D., et al.}}{\isChicagoStyle{\AuthorCitation{Dits D., et al.}}{\AuthorCitation{Dits D., et al.}}}
+\address{$^{1}$ \quad Affiliation; e-mail@e-mail.com}
+\corres{Correspondence: e-mail@e-mail.com}
+
+\abstract{This paper presents a mathematical description of CLANN (Convex Laplace Artificial Neural Network), a neural model for hyperelastic materials in nonlinear continuum mechanics. The model is built on hyperelasticity, convexity, and frame invariance. A Cholesky-based logarithmic parameterization of the right Cauchy--Green tensor ensures convexity and enables stable differentiation. An input convex neural network (ICNN) with nonnegative output weights defines a strictly convex stored-energy density. Second Piola--Kirchhoff stresses are obtained by differentiating the energy with respect to the strain measure via the chain rule, which guarantees thermodynamic consistency and objective, conservative stresses. We provide explicit 2D formulas for stresses and an analytic Hessian used in Newton's method, together with a training loss that augments data misfit with anchors at the undeformed state to enforce zero energy and zero stress. The convexity of the energy yields positive-definite tangent moduli and robust convergence, while the logarithmic parameterization handles large strains. The approach integrates efficiently with finite element solvers and recovers linear elasticity in the small-strain limit.}
+\keyword{hyperelasticity; convex neural networks; continuum mechanics; thermodynamics; finite elements}
+
+\begin{document}
+
+% Introduction
+\section{Introduction}
+\input{parts_en/1intro}
+
+% Kinematics
+\section{Kinematics}
+\input{parts_en/2kinematics}
+
+% Stress and consistency
+\section{Stress and Thermodynamic Consistency}
+\input{parts_en/3stress}
+
+% Architecture
+\section{CLANN architecture and its derivatives}
+\input{parts_en/4architecture}
+
+% Virtual experiment / Results
+\section{Virtual Experiment}
+\input{parts_en/5results}
+
+% Conclusions
+\section{Conclusion}
+\input{parts_en/6conclusion}
+
+% Appendix
+\appendixtitles{yes}
+\appendixstart
+\appendix
+\input{parts_en/7appendix}
+
+% Minimal references section placeholder
+\reftitle{References}
+\isAPAandChicago{}{\begin{thebibliography}{999}\bibitem[Author1(year)]{ref-journal}Author~1, T. The title of the cited article. {\em Journal Abbreviation} {\bf 2008}, {\em 10}, 142--149.\end{thebibliography}}
+
+\end{document}
+
+

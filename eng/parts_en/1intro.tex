@@ -1,0 +1,46 @@
+\section{Introduction}
+
+
+\section{Introduction}
+
+% Mathematical models capable of predicting the nonlinear mechanical behavior of soft materials under large deformations are required across a wide range of engineering domains—from polymer processing to robotics and personalized medicine \cite{
+% Mechanical characterization and FE modelling of a hyperelastic material
+% Quantifying the uncertainty in a hyperelastic soft tissue model with stochastic parameters
+% Control-oriented models for hyperelastic soft robots through differential geometry of curves
+% }.
+% The foundation of such models is nonlinear elasticity \cite{A Comparative Study of Several Material Models for Prediction of Hyperelastic Properties: Application to Silicone-Rubber and Soft Tissues}, where
+% the dependence of the stress tensor on variables characterizing the kinematics of the material is described by constitutive relations (equations of state) \cite{Nonlinear solid mechanics: a continuum approach for engineering science}.
+% In modeling the stress–strain state of polymers and biological tissues, hyperelastic constitutive relations are widely used \cite{
+% Hyperelastic structures: A review on the mechanics and biomechanics}.
+
+% In the hyperelastic setting, one postulates the existence of a strain energy potential $\psi$ depending on a chosen strain measure, which fully specifies the mechanical response. It must satisfy a number of requirements: reflect material symmetry, be frame-indifferent, and possess polyconvexity properties \cite{Convexity conditions and existence theorems in nonlinear elasticity}, which are sufficient for the existence of solutions to boundary-value problems in hyperelasticity \cite{Mathematical elasticity: Three-dimensional elasticity
+% Hyperelastic membrane modelling based on data-driven constitutive relations}.
+
+% Numerous hyperelastic models have been proposed for soft materials \cite{Hyperelastic energy densities for soft biological tissues: a review}, most of which satisfy material symmetry, objectivity, and polyconvexity requirements via the invariant approach. This means that for a chosen strain measure a set of invariants is introduced and the strain energy is expressed as a function of these invariants. A common practice is to use the invariants of the right/left Cauchy–Green tensors. For isotropic materials, the strain energy can be written as a function of the three invariants of the right Cauchy–Green tensor, $\psi = \psi_{vol}(J) + \psi_{iso}(I_1,I_2,I_3)$, where $J$ is the Jacobian describing volume change, and $I_1, I_2, I_3$ are invariants of the right Cauchy–Green tensor.
+% A further extension of the invariant approach introduces pseudo-invariants of the right Cauchy–Green tensor $I_4,\ldots,I_8$ to describe classes of transversely isotropic and orthotropic materials \cite{Nonlinear solid mechanics: a continuum approach for engineering science}.
+% %For an incompressible transversely isotropic material the strain energy is given by $\psi = \psi_{iso}(I_1,I_2,I_3) + \psi_{aniso}(I_4,I_5)$.
+% % where $I_4 = \mathbf{a_0} (\mathbf{F}^{\mathrm{T}} \mathbf{F})\mathbf{a_0}$, $I_5 = \mathbf{a_0} (\mathbf{F}^{\mathrm{T}} \mathbf{F})^2 \mathbf{a_0}$
+% This approach requires an a priori analytic specification of the strain energy with parameters identified from experimental data. Its main drawbacks are: non-uniqueness of the optimal parameter set; lack of direct physical meaning of the invariants in terms of strain \cite{On the use of the upper triangular (or QR) decomposition for developing constitutive equations for Green-elastic materials}, which entails demanding experimental requirements (namely, achieving homogeneous strain and stress fields); and subjectivity in selecting a potential form from the multitude of expert-constructed models \cite{Interpretable data-driven modeling of hyperelastic membranes}.
+
+% To some extent, these drawbacks are alleviated by constructing the best hyperelastic model using regression over a set of a priori specified invariant-based monomials \cite{A new family of Constitutive Artificial Neural Networks towards automated model discovery}, or by reducing generalized models using information criteria on experimental data \cite{On the AIC-based model reduction for the general Holzapfel–Ogden myocardial constitutive law}. In conjunction with full-field strain measurement methods (digital image correlation, DIC \cite{High-speed 3D digital image correlation vibration measurement: Recent advancements and noted limitations}), the virtual fields method (VFM) \cite{VFM}, and inverse FE \cite{NN-Euclid}, this becomes a powerful tool for modeling material mechanics within hyperelasticity. However, such approaches remain phenomenological and still require expert model selection.
+
+% An important advantage of the hyperelastic formulation is that it does not require knowing the analytical form of the strain energy. To specify a constitutive relation for a hyperelastic material, it suffices to know the derivatives of the strain energy with respect to a chosen strain measure, the so-called response functions \cite{Nonlinear solid mechanics: a continuum approach for engineering science}. With full-field methods for estimating experimental strains (DIC) and stresses \cite{Numerical_study_of_stress_estimation_methods_for_membrane_inflation
+% In vitro analysis of localized aneurysm rupture}, the response functions can be constructed directly from experimental data obtained under a wide range of deformation modes. This motivates research into data-driven hyperelastic modeling \cite{Data-driven computational mechanics}.
+
+% The works \cite{Interpretable data-driven modeling of hyperelastic membranes
+% Data-Driven Anisotropic Biomembrane Simulation Based on the Laplace Stretch} propose a data-driven approach to direct modeling of the mechanics of isotropic and anisotropic materials using response functions based on the physically interpretable Laplace strain measure \cite{On the use of the upper triangular (or QR) decomposition for developing constitutive equations for Green-elastic materials
+% Laplace stretch: Eulerian and Lagrangian formulations}, which circumvents issues of invariant formulations by directly constructing response functions from experimental data. No prior knowledge of material symmetry is required. The collection of response functions forms a tabulated constitutive relation.
+% The resulting nonlinear algebraic system for virtual quasi-static stretching and inflation is solved by a simple relaxation method, where inverse-distance-weighted interpolation evaluates the needed response values at each iteration at any point in the Laplace strain space.
+% Limitations of this approach include the requirement for “rich” data and the inability to apply gradient-based solvers due to the discrete, tabulated nature of the constitutive relation.
+
+% In parallel, physics-informed neural approaches are being developed, in particular input convex neural networks (ICNN) \cite{Input Convex Neural Networks}, which embed objectivity, monotonicity, and input convexity (serving as a proxy for polyconvexity) into the network architecture, thereby satisfying requirements for hyperelastic strain energies \cite{Benchmarking physics-informed frameworks for data-driven hyperelasticity}. The work \cite{NEURAL NETWORKS MEET ANISOTROPIC HYPERELASTICITY: A FRAMEWORK BASED ON GENERALIZED STRUCTURE TENSORS AND ISOTROPIC TENSOR FUNCTIONS} presents an invariant, physics-informed neural architecture compatible with finite element packages. Despite interpretability and thermodynamic consistency, the architecture includes a set of assumptions—generalized structure tensors \cite{Ebbing Phd}—which effectively fix the material symmetry class.
+
+% In this work we propose an approach that combines the advantages of a tabulated constitutive relation in Laplace strain measures \cite{Data-Driven Anisotropic Biomembrane Simulation Based on the Laplace Stretch} with physics-informed neural networks \cite{Input Convex Neural Networks} that meet the requirements for hyperelastic material models. We formulate a thermodynamically consistent, objective-by-construction, input-convex, symmetry-agnostic hyperelastic strain energy. %%with anisotropy recoverable directly from data.
+% Smoothness of the approximation ensures compatibility with gradient-based solvers for nonlinear algebraic systems. Compared with tabulated constitutive laws, CLaNN removes limitations associated with discretization, while retaining interpretability of strain measures and improving extrapolation robustness.
+
+\paragraph{Scope and limitations}
+quasi-statics, membrane formulation,
+
+\paragraph{Organization of the paper}
+
+

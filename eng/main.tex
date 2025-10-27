@@ -71,13 +71,17 @@
 % Add packages and commands here. The following packages are loaded in our class file: fontenc, inputenc, calc, indentfirst, fancyhdr, graphicx, epstopdf, lastpage, ifthen, float, amsmath, amssymb, lineno, setspace, enumitem, mathpazo, booktabs, titlesec, etoolbox, tabto, xcolor, colortbl, soul, multirow, microtype, tikz, totcount, changepage, attrib, upgreek, array, tabularx, pbox, ragged2e, tocloft, marginnote, marginfix, enotez, amsthm, natbib, hyperref, cleveref, scrextend, url, geometry, newfloat, caption, draftwatermark, seqsplit
 % cleveref: load \crefname definitions after \begin{document}
 
+% Custom macros used in the translated content
+\newcommand{\vect}[1]{\boldsymbol{#1}}
+\newcommand{\tr}{\operatorname{tr}}
+
 %=================================================================
 % Please use the following mathematics environments: Theorem, Lemma, Corollary, Proposition, Characterization, Property, Problem, Example, ExamplesandDefinitions, Hypothesis, Remark, Definition, Notation, Assumption
 %% For proofs, please use the proof environment (the amsthm package is loaded by the MDPI class).
 
 %=================================================================
 % Full title of the paper (Capitalized)
-\Title{Data-driven hyperelastic constitutive neural network model with Laplase parameterisation}
+\Title{Data-Driven Hyperelastic Constitutive Neural Network Model with Laplace Parameterization}
 
 % MDPI internal command: Title for citation in the left column
 \TitleCitation{CLANN (Convex Laplace Artificial Neural Network)}
@@ -190,42 +194,88 @@ $^{1}$ \quad Affiliation; e-mail@e-mail.com}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
-We introduce CLANN (Convex Laplace Artificial Neural Network), a data-driven hyperelastic constitutive model for nonlinear continuum mechanics. CLANN is built on three principles: (i) hyperelasticity, where stresses are derived from a scalar stored-energy potential \(\psi\); (ii) strict convexity, which guarantees uniqueness, stability, and positive-definite tangent moduli; and (iii) frame invariance, achieved by defining \(\psi\) in terms of the right Cauchy--Green tensor \(C=F^{\top}F\). We parameterize \(C\) through its upper Cholesky factor and use logarithmic coordinates, which enable an input convex neural network (ICNN) to represent a strictly convex energy. Second Piola--Kirchhoff stresses and the consistent tangent are obtained by analytic differentiation via the chain rule, ensuring thermodynamic consistency and efficient finite element (FE) integration. The model handles large strains robustly and reduces to linear elasticity in the small-strain limit.
+We present CLANN (Convex Laplace Artificial Neural Network), a physics-informed architecture for hyperelastic materials based on a convex stored-energy function and a log–Laplace parameterization of kinematics. CLANN ensures thermodynamic consistency; due to convexity, the equilibrium problem is solved as a smooth convex minimization with predictable convergence of gradient-based and quasi-Newton methods. The architecture for computing the second Piola–Kirchhoff stress does not explicitly assume compressibility/incompressibility or material symmetry (isotropy/anisotropy), which allows deployment across different classes of materials. In interpolation tests, CLANN attains low errors given representative training data; under extrapolation, it preserves stability and physical plausibility where locally interpolatory data-driven models (kNN/IDW) may exhibit artifacts outside the training window.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Materials and Methods}
+\section{Kinematics}
 
-\subsection{Kinematics and Parameterization}
-Let \(F\) denote the deformation gradient and \(C=F^{\top}F\) the right Cauchy--Green tensor. We use the upper-triangular Cholesky factor \(U\) such that \(C=U^{\top}U\). In 2D, introduce logarithmic coordinates
-\begin{equation}
-\xi_1=\ln(u_{11}),\quad \xi_2=\ln(u_{22}),\quad \xi_3=\frac{u_{12}}{u_{11}},
-\end{equation}
-which improve conditioning at large strains and support convex modeling in \(\xi\).
+% (Formerly: Materials and Methods → Kinematics)
+We consider the equilibrium of a thin incompressible hyperelastic membrane of thickness $H$ under prescribed loading. The deformation is described by the mapping $\vect{x}=\vect{x}(\vect{X})$ between the reference mid-surface $\Omega_0\subset\mathbb{R}^2$ and the current mid-surface $\Omega_t\subset\mathbb{R}^2$. The surface deformation gradient is $\mathbb F=\vect{e}_{\alpha}\otimes\vect{E}^{\alpha}$, and the right Cauchy–Green tensor is $\mathbb C=\mathbb F^{\top}\mathbb F= C_{\alpha\beta}\,\vect{e}_{\alpha}\otimes\vect{e}_{\beta}$.
 
-\subsection{Convex Neural Energy}
-An input convex neural network defines a strictly convex energy \(\psi(\xi)\):
-\begin{equation}
-z=\frac{\operatorname{softplus}(\beta W_1\xi)}{\beta},\qquad \psi=W_2^{\top}z+b_2,
-\end{equation}
-with nonnegative output weights \(W_2\ge 0\) to preserve convexity. As a consequence, the Hessian \(H=\partial^2\psi/\partial\xi^2\) is positive definite.
+As a strain measure we use the Laplace strain $\vect{\xi}=(\xi_1,\xi_2,\xi_3)^{\top}$, which can be computed in two equivalent ways: either via the thin QR factorization of $\mathbb F=\vect Q\,\vect R$ with the upper-triangular factor $\tilde{\mathbb F}=\vect R$ (with positive diagonal), or via the Cholesky factorization of the right Cauchy–Green tensor $\mathbb C=\tilde{\mathbb F}^{\top}\tilde{\mathbb F}$ (see Appendix~\ref{app:cholesky}). In this parameterization the hyperelastic energy is a function of the Laplace strain, $\psi=\psi(\vect{\xi})$.
 
-\subsection{Stresses and Consistent Tangent}
-Hyperelastic stresses follow from the chain rule:
+In two dimensions we introduce
 \begin{equation}
-S=\frac{\partial\psi}{\partial C}=\frac{\partial\psi}{\partial \xi}\,\frac{\partial\xi}{\partial C},\qquad g=\frac{\partial\psi}{\partial\xi}.
+\xi_1=\ln(\tilde f_{11}),\quad \xi_2=\ln(\tilde f_{22}),\quad \xi_3=\frac{\tilde f_{12}}{\tilde f_{11}},\qquad \tilde{\mathbb F}=\tilde f_{\alpha\beta}\, \vect{e}_{\alpha}\otimes\vect{e}_{\beta}.
+\label{eq:laplace_coords_eng}
 \end{equation}
-In 2D the components admit explicit expressions
+
+\section{Stress and Thermodynamic Consistency}
+We use the second Piola–Kirchhoff stress as the stress measure. It is obtained by differentiating the energy $\psi$ with respect to the right Cauchy–Green tensor $\mathbb C$ via the chain rule:
+\begin{equation}
+  \mathbb S \,=\, 2\,\frac{\partial \psi}{\partial \mathbb C}
+  \,=\, 2\,\frac{\partial \psi}{\partial \vect{\xi}} : \frac{\partial \vect{\xi}}{\partial \mathbb C}
+  \,=\, 2\,\vect r(\vect{\xi}) : \frac{\partial \vect{\xi}}{\partial \mathbb C},\qquad \vect r := \frac{\partial \psi}{\partial \vect{\xi}}.
+  \label{eq:chain-rule-eng}
+\end{equation}
+This construction has key implications: (i) objectivity, since $\psi(\mathbb C)=\psi(\mathbb Q^{\top}\mathbb C\,\mathbb Q)$ for any orthogonal $\mathbb Q$; (ii) symmetry of $\mathbb S$; and (iii) thermodynamic consistency via the Clausius–Duhem inequality $\mathcal D=\mathbb S: \dot{\mathbb C} - \dot{\psi}(\mathbb C)\ge 0$ in the hyperelastic setting.
+
+Expanding \eqref{eq:chain-rule-eng} componentwise using the analytic basis $\partial \vect{\xi}/\partial \mathbb C$ yields the explicit 2D formulas
 \begin{equation}
 \begin{aligned}
-S_{11}&=e^{-2\xi_1}(g_1-2\xi_3 g_3)+e^{-2\xi_2}g_2\,\xi_3^2,\\
-S_{22}&=e^{-2\xi_2}g_2,\\
-S_{12}&=-e^{-2\xi_2}g_2\,\xi_3+e^{-2\xi_1}g_3.
+  S_{11} &= e^{-2\xi_1}\big(r_1-2\xi_3 r_3\big) + e^{-2\xi_2} \, r_2\,\xi_3^2,\\
+  S_{22} &= e^{-2\xi_2} \, r_2,\\
+  S_{12} &= -e^{-2\xi_2} \, r_2\,\xi_3 + e^{-2\xi_1} \, r_3.
 \end{aligned}
+\label{eq:stress_components_2d_eng}
 \end{equation}
-The analytic Hessian used in Newton's method is
+
+The hyperelastic potential should satisfy standard physical restrictions: non-negativity $\psi(\vect{\xi})\ge 0$; zero energy and stress in the natural state $\psi(\vect 0)=0$, $\mathbb S(\mathbb I)=\mathbb 0$; and coercivity/growth under extreme strains.
+
+\section{CLANN Architecture and Derivatives}
+Within CLANN, the energy $\psi(\vect{\xi})$ is approximated by an input convex neural network (ICNN). A function $\psi:\,\mathbb R^3\to\mathbb R$ is convex if for all $\vect{\xi}_1,\vect{\xi}_2\in\mathbb R^3$ and $\lambda\in[0,1]$,
 \begin{equation}
-H_{ij}=\frac{\partial^2\psi}{\partial\xi_i\,\partial\xi_j}=\sum_h \sigma'_h\,w_{2,h}\,W_{h,i}W_{h,j},\quad \sigma'=\beta\,\sigma(1-\sigma),\ \sigma=\operatorname{sigmoid}(\beta s),\ s=W_1\xi+b_1.
+\psi(\lambda \,\vect{\xi}_1 + (1-\lambda) \,\vect{\xi}_2) \le \lambda\,\psi(\vect{\xi}_1) + (1-\lambda)\,\psi(\vect{\xi}_2).
+\label{eq:convexity_definition_eng}
 \end{equation}
+Key ICNN conditions: (i) elementwise convex, nondecreasing activation $\varphi$; (ii) nonnegative weights on $z\to z$ connections, $\mathbf W_z^{(\ell)}\ge 0$; (iii) each layer has a direct affine connection from the input $\boldsymbol{\xi}$; and (iv) a nonnegative linear readout.
+
+For a one-hidden-layer ICNN we use
+\begin{equation}
+  s = \mathbf W_1 \, \boldsymbol{\xi} + \mathbf b_1,\qquad
+  z = \varphi_{\beta}(s),\qquad
+  \tilde{\psi} = \mathbf W_2^{\top} \, z + b_2,\qquad \mathbf W_2 \ge 0,
+  \label{eq:icnn_onelayer_eng}
+\end{equation}
+with the smoothed activation
+\begin{equation}
+  \varphi_{\beta}(x) = \frac{\operatorname{softplus}(\beta x)}{\beta}.
+  \label{eq:softplus_activation_eng}
+\end{equation}
+
+To enforce $\psi(\mathbf 0)=0$ we center the energy at the natural state,
+\begin{equation}
+  z_0 = \varphi_{\beta}(\mathbf b_1),\qquad
+  \psi(\boldsymbol{\xi}) = \mathbf W_2^{\top}\big(z - z_0\big),\qquad (b_2 \equiv 0).
+  \label{eq:center_psi_eng}
+\end{equation}
+To also enforce $\vect r(\mathbf 0)=\mathbf 0$ and thus $\mathbb S(\mathbb I)=\mathbb 0$, we subtract the linear response at $\boldsymbol{\xi}=\mathbf 0$:
+\begin{equation}
+  \mathbf r_0 := \frac{\partial \psi}{\partial \boldsymbol{\xi}}\bigg|_{\boldsymbol{\xi}=\mathbf 0},\qquad
+  \psi_{\mathrm{phys}}(\boldsymbol{\xi}) = \psi(\boldsymbol{\xi}) - \mathbf r_0^{\top}\boldsymbol{\xi}.
+  \label{eq:phys_energy_eng}
+\end{equation}
+
+Analytic derivatives used for deployment:
+\begin{equation}
+  \vect r = \nabla_{\xi} \psi_{\mathrm{phys}} = \mathbf W_1^{\top} \Big( \mathbf W_2 \odot \sigma\big(\beta (\mathbf W_1 \, \boldsymbol{\xi} + \mathbf b_1)\big) \Big) - \vect r_0,
+  \label{eq:energy_gradient_eng}
+\end{equation}
+\begin{equation}
+  H_{ij} = \sum_h \sigma'_h \, W_{2,h} \, W_{h,i} W_{h,j},\qquad \sigma' = \beta\,\sigma(1-\sigma),\ \sigma=\operatorname{sigmoid}(\beta s),\ s=\mathbf W_1\boldsymbol{\xi}+\mathbf b_1.
+  \label{eq:energy_hessian_eng}
+\end{equation}
+Strict convexity implies $\partial^2\psi/\partial\xi^2 \succ 0$, yielding positive-definite consistent tangents through the chain rule.
 
 \subsection{Training Objective}
 Given stress data \(S^{(i)}_{\text{exp}}\), the loss combines data misfit and anchors at the undeformed state:
@@ -233,16 +283,116 @@ Given stress data \(S^{(i)}_{\text{exp}}\), the loss combines data misfit and an
 L=\frac{1}{N}\sum_{i=1}^N\lVert S^{(i)}_{\text{pred}}-S^{(i)}_{\text{exp}}\rVert^2+\lambda_{SI}\,\lVert S(I)\rVert^2+\lambda_{d\psi}\,\lVert\nabla_{\xi}\psi(0)\rVert^2+\lambda_{\psi}\,\lVert\psi(0)\rVert^2.
 \end{equation}
 
+\section{Virtual Experiment}
+\subsection{Experimental Protocol and Datasets}
+We train and test CLANN using synthetic data from biaxial stretching and membrane inflation. Training relies on numerical experiments on a Maltese-cross specimen of thickness $H=0.53$ mm (Figure~\ref{fig:malt_geometry}), using a hyperelastic nodal-force method. The material is Neo-Hookean with
+\begin{align}\label{eq:neohook_eng}
+  \widetilde{\psi} &= \frac{\mu\,H(\vect X)}{2}\,\big(I_1 + J^{-2} -3\big), &
+  I_1 &= e^{2\xi_1}\,(1+\xi_3^2) + e^{2\xi_2}, & J &= e^{\xi_1+\xi_2},
+\end{align}
+with $\mu=0.43\cdot 10^6$ Pa. The loading scheme prescribes displacements $w_i\in[0,1]$ on the four arms; by varying $w_i$ we realize different biaxial protocols. We extract $(\mathbb C,\mathbb S)$ for all triangles within a chosen observation window in the reference domain (single element, $5\,\times\,5$ mm, $10\,\times\,10$ mm, or full field).
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.4\textwidth]{../img/malt_geom.png}
+  \caption{Geometry of the Maltese-cross specimen. The notch radius is identical for all cuts.}
+  \label{fig:malt_geometry}
+\end{figure}
+
+\subsubsection{Data selection rules}
+An observation window $\mathcal W_w\subset\Omega_0$ is defined around the geometric center and aligned with the mesh axes: a single central triangle (1-element), a $5\,\times\,5$ mm square, a $10\,\times\,10$ mm square, or the full field. At each load step $n=1,\dots,N$ and for each triangle $T$ with barycenter in $\mathcal W_w$, we record the pair $(\mathbb C_T^{(n)},\,\mathbb S_T^{(n)})$. Units: window sizes in mm; $\mathbb C$ dimensionless; $\mathbb S$ in MPa. Typical counts of elements in the observation window: 1 (1-element), 252 ($5\,\times\,5$ mm), 954 ($10\,\times\,10$ mm), and 5404 (full field).
+
+\paragraph{Training/validation splits.}
+For fixed protocol $p$ and window $w$, the base dataset $D(p,w)$ is split into training $D_{\mathrm{tr}}(p,w)$ and validation $D_{\mathrm{val}}(p,w)$. Because data collected from the central element yield axial components orders of magnitude larger than shear, expanding $w$ improves shear observability and reduces shear-prediction errors downstream.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.0\textwidth]{../img/all_stress_plots.png}
+  \caption{Example training dataset: stress components across load steps and protocols.}
+  \label{fig:training_data}
+\end{figure}
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Results}
+% (Results section removed; content below belongs to Virtual Experiment)
 
-We report theoretical properties and implementation outcomes. First, strict convexity of \(\psi\) implies positive-definite tangent moduli, which enhances robustness of Newton iterations. Second, the chain-rule construction ensures objective and conservative stresses, i.e., for any closed deformation cycle the stress work vanishes. Third, the logarithmic parameterization provides symmetric behavior under tension/compression and robust handling of large strains. In the small-strain regime, CLANN reduces to linear elasticity with Lam\'e parameters emerging from the local quadratic approximation of \(\psi\).
+% (Thermodynamic Consistency and Numerical Aspects paragraphs moved to earlier sections)
 
-\subsection{Thermodynamic Consistency}
-Because stresses derive from an energy potential, CLANN satisfies the first law in the hyperelastic setting (no dissipation) and meets the second-law requirements for quasi-static, reversible processes. Anchors enforce \(\psi(0)=0\) and \(S(I)=0\), making the undeformed configuration an energy minimum with zero stress and vanishing gradient in \(\xi\).
+\subsection{Interpolation and Extrapolation of Loading Curves}
+On biaxial loading of the Maltese-cross specimen, CLANN accurately interpolates and extrapolates axial stress components across load paths using small training subsets; shear components require richer data due to their small magnitudes in central regions. For quantitative evaluation we use: (i) the coefficient of determination $R^2$,
+\begin{equation}\label{eq:r_squared_eng}
+  R^2 = 1 - \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{\sum_{i=1}^n (y_i - \bar{y})^2},
+\end{equation}
+(ii) the pointwise relative error,
+\begin{equation}\label{eq:rel_error_eng}
+  \epsilon = \frac{\| \, \mathbb S - \mathbb S_{\text{ref}} \, \|}{\| \, \mathbb S_{\text{ref}} \, \|},
+\end{equation}
+and (iii) the P1-error combining absolute and relative contributions,
+\begin{equation}\label{eq:p1_error_eng}
+  \epsilon_{\mathrm{P1}} = \frac{\| \, \mathbb S - \mathbb S_{\text{ref}} \, \|}{s_0 + \| \, \mathbb S_{\text{ref}} \, \|},\qquad s_0 = \max(\mathbb S_{\text{pred}}).
+\end{equation}
+The following integral metrics (Frobenius norm) are also used on cell data: the absolute $L^2$-error,
+\begin{equation}\label{eq:l2_abs_stress_cell_eng}
+  \|e\|_{L^2} = \Bigg( \sum_{K} \| \, \mathbb S_{\text{ref},K} - \mathbb S_{\text{pred},K} \, \|_F^{2}\, |K| \Bigg)^{\tfrac12},
+\end{equation}
+and the relative $L^2$-error,
+\begin{equation}\label{eq:l2_rel_stress_eng}
+  \|e\|_{L^2,\,\mathrm{rel}}\;=\; \frac{\Big( \sum\limits_{K} 
+  \| \, \mathbb S_{\mathrm{ref},K} - \mathbb S_{\mathrm{pred},K} \, \|_F^{2}\, |K| \Big)^{\tfrac12}}
+  {\Big( \sum\limits_{K} \| \, \mathbb S_{\mathrm{ref},K} \, \|_F^{2}\, |K| \Big)^{\tfrac12}}\,.
+\end{equation}
+Representative curves are shown in Figure~\ref{fig:interp_extrap}.
 
-\subsection{Numerical Aspects}
-The analytic Hessian enables consistent tangents for FE assembly and improves convergence of Newton's method. For deployment, automatic differentiation can compute \(g=\partial\psi/\partial\xi\), while closed-form expressions supply \(S\) and the tangent via \(\partial\xi/\partial C\). The model can be exported to inference formats by wrapping gradient and Hessian evaluations.
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.48\textwidth]{../img/interpolation.png}\hfill
+  \includegraphics[width=0.48\textwidth]{../img/extrapolation.png}
+  \caption{Interpolation (left) and extrapolation (right) of loading curves for selected protocols.}
+  \label{fig:interp_extrap}
+\end{figure}
+
+\subsection{Membrane Inflation}
+We evaluate CLANN in inflation of a clamped circular membrane ($R=25$ mm) under uniform pressure for (i) homogeneous thickness $T=0.54$ mm and (ii) heterogeneous thickness with two thickened sectors. Predicted PK2 stress fields agree with the reference hyperelastic solution for normal components; shear errors reduce as the observation window used for training increases, reflecting improved shear coverage.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.6\textwidth]{../img/Numerical/ref_stress.png}
+  \caption{Reference PK2 stress field in the inflated membrane (example).}
+  \label{fig:inflation_ref}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.9\textwidth]{../img/Numerical/errs.png}
+  \caption{Error fields between predicted and reference stresses for representative cases.}
+  \label{fig:inflation_errs}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.5\textwidth]{../img/integral_errors.png}
+  \caption{Integral stress errors vs. observation window size used for training.}
+  \label{fig:integral_errors}
+\end{figure}
+
+\subsection{Computational Efficiency}
+Due to convexity and availability of analytic Hessians, CLANN enables robust Newton-type solvers with predictable convergence. In our setup, CLANN outperforms local, table-driven data-driven baselines (e.g., kNN/IDW over Laplace strain space) by avoiding repeated nearest-neighbor queries and projection steps, while remaining competitive with classical hyperelastic forms in iteration counts. Runtime is primarily impacted by the efficiency of the model–solver interface.
+
+\begin{table}[H]
+\centering
+\caption{Runtime (s) on membrane inflation: homogeneous vs. heterogeneous thickness}
+\label{tab:experiments_summary_eng}
+\begin{tabular}{|l|c|c|}
+\hline
+\textbf{Method} & \textbf{Homogeneous} & \textbf{Heterogeneous} \\
+\hline
+CLANN & 512 & 329 \\
+\hline
+Neo-Hooke & 13 & 16 \\
+\hline
+kNN & 993 & -- \\
+\hline
+\end{tabular}
+\end{table}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Discussion}
@@ -326,28 +476,27 @@ PK2 & Second Piola--Kirchhoff (stress)\\
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Optional
-\appendixtitles{no} % Leave argument "no" if all appendix headings stay EMPTY (then no dot is printed after "Appendix A"). If the appendix sections contain a heading then change the argument to "yes".
+\appendixtitles{yes}
 \appendixstart
 \appendix
-\section[\appendixname~\thesection]{}
-\subsection[\appendixname~\thesubsection]{}
-The appendix is an optional section that can contain details and data supplemental to the main text---for example, explanations of experimental details that would disrupt the flow of the main text but nonetheless remain crucial to understanding and reproducing the research shown; figures of replicates for experiments of which representative data are shown in the main text can be added here if brief, or as Supplementary Data. Mathematical proofs of results not central to the paper can be added as an appendix.
+\section{Equivalence of QR factorization of F and Cholesky of C=F$^{\top}$F for computing xi}
+\label{app:cholesky}
 
-\begin{table}[H] 
-\caption{This is a table caption.\label{tab5}}
-%\newcolumntype{C}{>{\centering\arraybackslash}X}
-\begin{tabularx}{\textwidth}{CCC}
-\toprule
-\textbf{Title 1}	& \textbf{Title 2}	& \textbf{Title 3}\\
-\midrule
-Entry 1		& Data			& Data\\
-Entry 2		& Data			& Data\\
-\bottomrule
-\end{tabularx}
-\end{table}
+\subsection{Setting and notation}
+We consider two-dimensional hyperelastic kinematics. Let $\vect F\in\mathbb R^{2\times 2}$ with $\det\vect F>0$, $\vect C=\vect F^{\top}\vect F$ (SPD), and the Cholesky factorization $\vect C=\tilde{\vect F}^{\top}\tilde{\vect F}$ with $\tilde{\vect F}$ upper triangular and $\operatorname{diag}(\tilde{\vect F})>0$. Define the logarithmic coordinates $\boldsymbol{\xi}=(\ln u_{11},\ln u_{22}, u_{12}/u_{11})$ for $\tilde{\vect F}=[u_{ij}]$.
 
-\section[\appendixname~\thesection]{}
-All appendix sections must be cited in the main text. In the appendices, Figures, Tables, etc. should be labeled, starting with ``A''---e.g., Figure A1, Figure A2, etc.
+\subsection{Theorem (equivalence of $\vect U$ and $\vect R$)}
+Let $\vect F\in\mathbb R^{2\times 2}$ be nonsingular with thin QR factorization $\vect F=\vect Q\vect R$, where $\vect Q$ is orthogonal and $\vect R$ is upper triangular with positive diagonal. Then $\vect R$ coincides with the Cholesky factor of $\vect C$:
+\begin{equation}
+\vect R = \operatorname{chol}(\vect C),\qquad \vect C=\vect F^{\top}\vect F.
+\end{equation}
+Proof: $\vect C=\vect F^{\top}\vect F=(\vect Q\vect R)^{\top}(\vect Q\vect R)=\vect R^{\top}\vect R$. Since $\vect C$ is SPD and $\vect R$ is upper triangular with positive diagonal, the representation $\vect C=\vect R^{\top}\vect R$ is unique, hence $\vect R=\operatorname{chol}(\vect C)$.
+
+\subsection{Coordinates $\boldsymbol{\xi}$ via $\tilde{\vect F}$}
+For $\tilde{\vect F}=\begin{bmatrix} \tilde f_{11} & \tilde f_{12} \\ 0 & \tilde f_{22} \end{bmatrix}$ with $\operatorname{diag}(\tilde{\vect F})>0$,
+\begin{equation}
+\boldsymbol{\xi}=(\xi_1,\xi_2,\xi_3)=(\ln\tilde f_{11}, \ln\tilde f_{22}, \tilde f_{12}/\tilde f_{11}).
+\end{equation}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %\isPreprints{}{% This command is only used for ``preprints''.

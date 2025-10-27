@@ -1,0 +1,32 @@
+\section{Conclusion}
+
+We proposed a physics-informed CLaNN architecture for hyperelastic materials, based on a convex
+strain energy potential and log\textendash Laplace kinematic parametrization.
+
+The architecture ensures thermodynamic consistency; thanks to
+convexity, the problem is solved as a smooth convex minimization with predictable convergence of gradient and
+quasi-Newton methods.
+At the same time, the architecture for stress computation does not explicitly use information about compressibility/incompressibility or isotropy/anisotropy
+of the material, which allows CLaNN to be applied to problems with different material types.
+
+In interpolation tests CLaNN achieves small errors given representative training data; in the extrapolation regime it maintains stability and physically plausible response,
+whereas locally interpolatory DD models (k\textendash NN/IDW) exhibit artifacts outside the training window.
+
+In numerical experiments of inflating a clamped circular membrane (homogeneous and heterogeneous thickness), CLaNN accurately
+reproduces displacement and stress fields and exhibits fast, predictable convergence within a unified
+FE formulation for all models compared.
+
+In terms of computational efficiency, CLaNN outperforms the kNN\textendash based DD model: on the homogeneous case the gain is
+about $\times 1.9$ due to the absence of costly k\textendash NN/IDW queries and external projections onto data at each iteration.
+We note that the obtained speedup can be even higher with improved coupling between the solver and CLaNN, as well as optimal hyperparameter tuning.
+For heterogeneous thickness CLaNN remains operational without special heuristics,
+whereas the DD model requires additional regularization and/or data interpolation near small strains.
+Also, the lack of a residual-based stopping criterion in relaxation methods for equilibrium problems can lead to a difficult-to-estimate increase in runtime
+relative to Newton-type methods supported by CLaNN.
+
+In summary, CLaNN combines mechanical soundness with the efficiency of neural networks: convex energy and differentiability provide stable 
+solutions to variational problems and accelerate computation compared with classical DD approaches, and show high approximation capability for hyperelastic materials
+on small datasets.
+Future work: test anisotropic materials and real experimental data.
+
+
