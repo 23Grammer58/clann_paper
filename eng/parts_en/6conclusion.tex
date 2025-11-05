@@ -1,7 +1,7 @@
 \section{Conclusion}
 
 We proposed a physics-informed CLaNN architecture for hyperelastic materials, based on a convex
-strain energy potential and log\textendash Laplace kinematic parametrization.
+strain energy potential and log\textendash Laplace kinematic parameterization.
 
 The architecture ensures thermodynamic consistency; thanks to
 convexity, the problem is solved as a smooth convex minimization with predictable convergence of gradient and
@@ -16,7 +16,7 @@ In numerical experiments of inflating a clamped circular membrane (homogeneous a
 reproduces displacement and stress fields and exhibits fast, predictable convergence within a unified
 FE formulation for all models compared.
 
-In terms of computational efficiency, CLaNN outperforms the kNN\textendash based DD model: on the homogeneous case the gain is
+In terms of computational efficiency, CLaNN outperforms the kNN\textendash based DD model: in the homogeneous case the speedup is
 about $\times 1.9$ due to the absence of costly k\textendash NN/IDW queries and external projections onto data at each iteration.
 We note that the obtained speedup can be even higher with improved coupling between the solver and CLaNN, as well as optimal hyperparameter tuning.
 For heterogeneous thickness CLaNN remains operational without special heuristics,
@@ -27,6 +27,6 @@ relative to Newton-type methods supported by CLaNN.
 In summary, CLaNN combines mechanical soundness with the efficiency of neural networks: convex energy and differentiability provide stable 
 solutions to variational problems and accelerate computation compared with classical DD approaches, and show high approximation capability for hyperelastic materials
 on small datasets.
-Future work: test anisotropic materials and real experimental data.
+Future work includes testing on anisotropic materials and real experimental data.
 
 

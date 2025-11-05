@@ -1,0 +1,94 @@
+Data-Driven Hyperelastic Constitutive Neural Network Model with Laplace Parameterization
+
+Abstract
+This paper presents a mathematical description of CLANN (Convex Laplace Artificial Neural Network), a neural model for hyperelastic materials in nonlinear continuum mechanics. The model is built on hyperelasticity, convexity, and frame invariance. A Cholesky-based logarithmic parameterization of the right Cauchy–Green tensor ensures convexity and enables stable differentiation. An input convex neural network (ICNN) with nonnegative output weights defines a strictly convex stored-energy density. Second Piola–Kirchhoff stresses are obtained by differentiating the energy with respect to the strain measure via the chain rule, which guarantees thermodynamic consistency and objective, conservative stresses. We provide explicit 2D formulas for stresses and an analytic Hessian used in Newton's method, together with a training loss that augments data misfit with anchors at the undeformed state to enforce zero energy and zero stress. The convexity of the energy yields positive-definite tangent moduli and robust convergence, while the logarithmic parameterization handles large strains. The approach integrates efficiently with finite element solvers and recovers linear elasticity in the small-strain limit.
+
+Introduction
+Scope and limitations
+quasi-statics, membrane formulation,
+
+Organization of the paper
+
+Kinematics
+Basic relations
+We consider the equilibrium of a thin incompressible hyperelastic membrane of thickness H under prescribed loads. The membrane deformation is characterized by the deformation of its midsurface. Let the reference (undeformed) and current (deformed) configurations of the membrane midsurface be denoted by Omega_0 and Omega_t, respectively. The deformation is defined by a mapping from the reference to the current configuration. The surface deformation gradient and the right Cauchy–Green tensor are introduced accordingly. To define the strain measure we use the Laplace measure xi = (xi1, xi2, xi3), which may be computed in two equivalent ways: either via the QR decomposition of the deformation gradient with the upper-triangular factor, or via the Cholesky factorization of the right Cauchy–Green tensor (see Appendix). In this case the hyperelastic strain energy is a function of the Laplace strain.
+
+Laplace strain measure
+In two dimensions we introduce logarithmic coordinates based on the upper-triangular factor: xi1 = ln(tilde f11), xi2 = ln(tilde f22), xi3 = tilde f12 / tilde f11. These serve as the Laplace strain coordinates.
+
+Stress and thermodynamic consistency
+We use the second Piola–Kirchhoff stress as the stress measure and compute it by differentiating the energy with respect to the right Cauchy–Green tensor via the chain rule. This yields objectivity, symmetry of the stress tensor, and compliance with the Clausius–Duhem inequality in the hyperelastic (non-dissipative) setting. In two dimensions, explicit component expressions exist.
+
+The hyperelastic potential must satisfy: (i) non-negativity; (ii) zero energy and stress in the undeformed state; and (iii) coercivity/growth for large deformations. The basis for the Laplace strain measure is a known analytical expression depending on the chosen strain measure; the response function r = d psi / d xi is the quantity learned when training the data-driven constitutive relation.
+
+This construction has key consequences: objectivity (invariance with respect to rotations), stress symmetry (due to the symmetry of the right Cauchy–Green tensor and the chain rule), and thermodynamic consistency (as expressed by the Clausius–Duhem inequality for mechanical processes). These properties are commonly written via the deformation gradient and the right Cauchy–Green tensor, but they are equivalent for the Laplace strain measure as well.
+
+CLANN architecture and its derivatives
+Within CLANN the energy psi(xi) is approximated by an input convex neural network (ICNN). For a one-hidden-layer ICNN, a convex nondecreasing activation is used; centering at the natural state enforces psi(0) = 0, and subtracting the linear term at the origin enforces r(0) = 0. Analytic derivatives (gradient and Hessian) are available; strict convexity ensures positive-definite consistent tangents.
+
+CLaNN architecture and its derivatives
+Within the proposed CLaNN (Convex Laplace Neural Network) framework, the strain energy with the Laplace strain measure is approximated by an input convex neural network, and the second Piola–Kirchhoff stress is computed using the explicit relation from the chain rule. 
+
+General ICNN architecture
+ICNN is a class of neural networks that guarantees convexity of the output with respect to the input variables. In our case, the strain energy function psi: R^3 -> R is convex in the sense of Jensen’s inequality. 
+
+Key ICNN conditions include: (i) elementwise convex, monotonically nondecreasing activation; (ii) nonnegative weights on the z→z connections for all layers; (iii) a direct affine connection from inputs to each hidden layer; and (iv) a nonnegative-weighted scalar output.
+
+Step 1. One-layer ICNN and activation choice.
+A one-hidden-layer ICNN with a smooth convex activation (softplus family) is used to approximate the strain energy. Nonnegative output weights preserve convexity. Dimensions are standard: W1 in R^{h×3}, b1 in R^h, W2 in R^h_{≥0}, with h the hidden width.
+
+Step 2. Centering the energy at the natural state.
+To satisfy psi(0) = 0, we subtract the nonlinear part evaluated at xi = 0. Since this offset does not depend on xi, the gradient and Hessian coincide with those of the uncentered network, preserving convexity and smoothness.
+
+Step 3. Centering the response at the natural configuration.
+To satisfy S(I) = 0, we subtract the linear response at xi = 0, which yields r(0) = 0. This does not change the Hessian and preserves convexity; the origin becomes a minimizer, hence the centered energy is nonnegative.
+
+After constructing psi_phys, the derivative with respect to xi is computed by autodiff in modern ML libraries, after which the stress tensor S is obtained using the explicit 2D stress expression and the relation psi(C) = psi(xi(C)). Centering psi_phys and r at the natural state guarantees the natural-state conditions and avoids additional constraints on network parameters.
+
+Analytical expressions for energy derivatives
+Gradient and Hessian of the energy with respect to xi have closed forms depending on the activation derivative and network weights. Strict convexity implies a positive-definite Hessian and, via the chain rule, positive-definite consistent tangents. This improves numerical stability and Newton convergence in finite element computations.
+
+Physical and numerical properties
+The CLaNN architecture ensures all necessary physical properties of the hyperelastic model: thermodynamic consistency (conservative stresses and consistency with thermodynamics), material stability (strict convexity of the energy), objectivity (invariance with respect to rotations and stress symmetry), and strict non-negativity and coercivity of the energy through architectural calibration (centering of psi and r, convex activation, nonnegative output weights). The physical constraints are satisfied by design.
+
+Virtual experiment
+For training and testing CLaNN we used synthetic data of biaxial stretching and inflation of a hyperelastic membrane. Model training was performed on numerical experimental data obtained for biaxial stretching of a specimen with a Maltese cross geometry and thickness H using the hyperelastic nodal force method. The membrane material was specified by a Neo-Hookean model with a given parameter.
+
+The specimen loading scheme varies displacement fractions on specimen arms to obtain different biaxial loading scenarios. In the virtual experiments the arms are displaced sequentially by fixed increments; at each step tensors C and S were extracted for all triangles within the observation window. The triangulation was initially flat, quasi-uniform, and unstructured, with a specified mesh size and number of triangles. Maximum arm displacement and increment are reported.
+
+Our testing protocol comprises nine experiments with different combinations of arm displacement fractions. We consider several observation windows: a single central element, 5×5 mm, 10×10 mm, and full field.
+
+Data selection rules
+Central window w. The window is defined in the reference configuration as the central region around the geometric center, aligned with the mesh axes. Observations include all triangles whose barycenters lie within the chosen window. Typical counts increase with window size.
+
+Composition of observations (data). At each load step and for each triangle within the window we record the pair (C_T^{(n)}, S_T^{(n)}). Units: window sizes in mm; C dimensionless; S in MPa. For example counts: 1 (1-element), 252 (5×5 mm), 954 (10×10 mm), and 5404 (full field).
+
+Dataset formation. For fixed protocol and window, all pairs (C, S) form the base dataset D(p, w), which is split into training and validation sets. For example, using protocols 1..10 and the 1-element window yields 90 points of (C, S). Because data from a single central mesh element produce axial components much larger than shear (2–3 orders), expanding the window improves shear observability.
+
+Metrics and quality criteria
+We use integral and pointwise metrics consistent with variational elasticity norms. These include: the coefficient of determination R^2; pointwise relative error; a P1-type error combining absolute and relative error and sensitive to small values; and mesh L2 integral errors in absolute and relative form, based on Frobenius norms and cell measures. The purpose is to obtain mesh-invariant, comparable scalar measures of error.
+
+Optimization hyperparameters
+Learning rate: 0.001; batch size: 4 (90-point set) and 128 (other sets); architecture: 16 hidden neurons; smoothing parameter beta: 10. Optimization reduces loss by five orders within fewer than 5000 epochs, reflecting both architectural suitability and hyperparameter choice; strict convexity ensures a unique minimum and avoids local traps.
+
+Interpolation and extrapolation of loading curves
+We evaluate on training and validation sets at fixed window size, tracking R^2 for components xx, yy, and xy. Interpolation on equi-biaxial loading achieves R^2_xx ≈ 0.999 and R^2_yy ≈ 0.999, while R^2_xy ≈ 0 without richer shear coverage. Extrapolation from protocol 1 to protocol 9 yields R^2_xx ≈ 0.993, R^2_yy ≈ 1.0, and R^2_xy ≈ 0 on the 1-element window. Thus, axial components are learned accurately; shear prediction remains limited without additional shear data.
+
+Membrane inflation
+We test inflation of a clamped circular membrane (radius 25 mm) under 5 MPa pressure, comparing CLaNN to a Neo-Hookean reference with the same shear parameter as used in training-data generation. Two thickness fields are used: homogeneous (0.54 mm) and heterogeneous (two parabolic sectors within a 0.54 mm membrane). As pointwise metric we use relative error; for shear comparison we also consider the P1 error. Using the small 1-element training set, we obtain PK2 stress fields for both thickness scenarios and compare to the reference; error maps are analyzed. Shear errors are largest for the heterogeneous case; expanding the window to 5×5 mm, 10×10 mm, and full field reduces absolute and relative integral errors.
+
+Computational efficiency comparison
+By strict convexity of psi(xi), equilibrium is a smooth convex minimization amenable to gradient and Newton-type solvers with predictable complexity. Near the minimizer, strong convexity and Lipschitz Hessians yield locally quadratic Newton convergence, while L-BFGS gives superlinear rates. In tabulated/interpolatory data-driven models (kNN/IDW), energy convexity is typically not guaranteed and responses may be nonsmooth, yielding nonconvex optimization with many stationary points; quasi-static/relaxation strategies are used in practice at the cost of more steps and repeated neighbor/interpolation queries.
+
+Runtime comparison for inflation (homogeneous vs heterogeneous thickness) shows, for example: CLANN 512 s / 329 s; Neo-Hookean 13 s / 16 s; kNN 993 s / not available in heterogeneous. With identical meshes and tolerances, CLANN matches Neo-Hookean in global iterations but can be slower overall due to model–solver interface overhead. It notably outperforms the table-driven data-driven baseline by avoiding repeated kNN/IDW queries and data projections. The baseline further struggles on heterogeneous thickness without linear interpolation near zero, likely due to data scarcity near small strains.
+
+Conclusion
+We proposed a physics-informed CLaNN architecture for hyperelastic materials, based on a convex strain energy potential and log–Laplace kinematic parametrization. The architecture ensures thermodynamic consistency; thanks to convexity, the problem is solved as a smooth convex minimization with predictable convergence of gradient and quasi-Newton methods. The stress-computation architecture does not explicitly impose compressibility/incompressibility or isotropy/anisotropy, enabling application to different material types. In interpolation tests CLaNN achieves small errors given representative training data; in extrapolation it maintains stability and a physically plausible response, whereas locally interpolatory data-driven models exhibit artifacts outside the training window. In numerical experiments of inflating a clamped circular membrane (homogeneous and heterogeneous thickness), CLaNN accurately reproduces displacement and stress fields and exhibits fast, predictable convergence within a unified finite element formulation. In terms of computational efficiency, CLaNN outperforms a kNN-based data-driven model; further speedups are possible with improved coupling and hyperparameter tuning. For heterogeneous thickness CLaNN remains operational without special heuristics, whereas the baseline requires additional regularization or interpolation near small strains. Relaxation methods without residual-based stopping may further inflate runtime relative to Newton-type methods supported by CLaNN.
+
+Appendix
+Equivalence of QR factorization of F and Cholesky factorization of C = F^T F for computing logarithmic coordinates xi
+Problem statement and notation. Two-dimensional hyperelastic kinematics are considered. The deformation gradient F has positive determinant; C = F^T F is symmetric positive definite. Cholesky and QR factorizations are used to obtain an upper-triangular factor with positive diagonal, from which logarithmic coordinates (xi1, xi2, xi3) are defined.
+
+Theorem (equivalence of U and R). For nonsingular F, the upper-triangular factor R in the thin QR factorization with positive diagonal coincides with the Cholesky factor of C. Consequently, logarithmic coordinates computed from Cholesky or from QR coincide.
+
+Coordinates xi via the upper-triangular factor. For an upper-triangular factor with positive diagonal, the logarithmic coordinates are defined by the diagonal entries and the upper off-diagonal entry normalized by the leading diagonal entry.
