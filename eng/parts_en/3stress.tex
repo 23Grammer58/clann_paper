@@ -5,60 +5,41 @@ We use the second Piola--Kirchhoff stress as the stress measure and compute it b
   \mathbb S \,=\, 2\,\frac{\partial \psi}{\partial \mathbb C}
   \,=\, 2\,\frac{\partial \psi}{\partial \vect{\xi}} : \frac{\partial \vect{\xi}}{\partial \mathbb C}
   \,=\, 2\,\vect r(\vect{\xi}) : \frac{\partial \vect{\xi}}{\partial \mathbb C},\qquad \vect r := \frac{\partial \psi}{\partial \vect{\xi}}.
-  \label{eq:chain-rule-en}
+  \label{eq:chain-rule}
 \end{equation}
-This yields objectivity, symmetry of $\mathbb S$, and compliance with the Clausius--Duhem inequality in the hyperelastic (non-dissipative) setting. In 2D, the components read
+The Jacobian $\frac{\partial \vect{\xi}}{\partial \mathbb C}$ is referred to as the basis, 
+it is a known analytical tensor determined by the chosen strain measure; 
+whereas $\vect r=(r_1,r_2,r_3)$ is the response function learned from data during training of the 
+data-driven constitutive relation.  
+
+Writing equation \eqref{eq:chain-rule} componentwise and substituting the known basis 
+$\frac{\partial \vect{\xi}}{\partial \mathbb{C}}$ yields analytical expressions for the components of the second 
+Piola--Kirchhoff stress in the two-dimensional case:
 \begin{equation}
 \begin{aligned}
   S_{11} &= e^{-2\xi_1}\big(r_1-2\xi_3 r_3\big) + e^{-2\xi_2} \, r_2\,\xi_3^2,\\
   S_{22} &= e^{-2\xi_2} \, r_2,\\
   S_{12} &= -e^{-2\xi_2} \, r_2\,\xi_3 + e^{-2\xi_1} \, r_3.
 \end{aligned}
-\label{eq:stress_components_2d-en}
+\label{eq:stress_components_2d}
 \end{equation}
 
-The hyperelastic potential must satisfy: (i) non-negativity $\psi(\vect{\xi})\ge 0$; (ii) zero energy and stress in the undeformed state, $\psi(\vect 0)=0$, $\mathbb S(\mathbb I)=\mathbb 0$; and (iii) coercivity/growth for large deformations.
 
 % (Russian duplicate section removed)
-The vector $\frac{\partial \boldsymbol\xi}{\partial \mathbf{C}}$ is called the basis; it is a known analytical expression depending on the chosen strain measure; $\vect{r} = (r_1, r_2, r_3)$ is the response function, which is the ultimate \textit{quantity sought} in training the \textit{data-driven} constitutive relation.  
 
-This construction has key consequences:
+
+This construction has several key consequences:
 \newline
 \textit{Objectivity:} $\psi(\mathbb{C})=\psi(\mathbb{Q}^\top\mathbb{C}\mathbb{Q})$ for any orthogonal $\mathbb{Q}$; hence $\mathbb{S}$ is invariant under rotations.
 \newline
 \textit{Stress symmetry:} $\mathbb{S}=\mathbb{S}^\top$ due to the symmetry of $\mathbb{C}$ and proper application of the chain rule.
 \newline
-\textit{Thermodynamic consistency:} identity \eqref{eq:chain-rule-en} follows from the Clausius--Duhem inequality
+\textit{Thermodynamic consistency:} the identity \eqref{eq:chain-rule} follows from the Clausius--Duhem inequality
 $\mathcal{D} = \mathbb{S} : \dot{\mathbb{C}} - \dot{\psi}(\mathbb{C}) \geq 0$,
 which expresses the second law of thermodynamics for mechanical processes \cite{truesdell1984historical,truesdell2004nonlinear}.
-% \begin{itemize}
-%   \item \textbf{Объективность:} $\psi(\mathbf{C})=\psi(\mathbf{Q}^\top\mathbf{C}\mathbf{Q})$ для любой ортогональной $\mathbf{Q}$, а значит и $\mathbf{S}$ инвариантен к поворотам.
-%   \item \textbf{Симметрия напряжений:} $\mathbf{S}=\mathbf{S}^\top$ вследствие симметрии $\mathbf{C}$ и корректного применения цепного правила.
-%   \item \textbf{Термодинамическая корректность:} равенство \eqref{eq:chain-rule} является следствием неравенства Клаузиуса-Дюгема 
-%   $\mathcal{D} = \mathbf{S} : \dot{\mathbf{C}} - \dot{\psi}(\mathbf{C}) \geq 0$, 
-%   выражающее второе начало термодинамики для механических процессов \cite{truesdell1984historical,truesdell2004nonlinear}.
-% \end{itemize}
 
-% \textbf{Связь тензора Лапласа и второго тензора напряжений Пиолы-Кирхгофа}
 
- % Необходимо установить связь деформации Лапласа $\vect{\xie}$ и второго тензора напряжений Пиолы-Кирхгофа $\vect{S}$. Применяя цепное правило дифференцирования к выражению \eqref{eq:chain-rule} и используя меру деформации Лапласа,
-
-% Link between Laplace strain tensor and the second Piola–Kirchhoff stress tensor
-
-% Establishing the relation using the chain rule with the Laplace strain measure
-Writing equation \eqref{eq:chain-rule} componentwise and substituting the known basis $\frac{\partial \vect{\xi}}{\partial \mathbb{C}}$ yields analytical expressions for the components of the second Piola--Kirchhoff stress in the two-dimensional case:
-
-\begin{equation}
-\begin{aligned}
-  S_{11} &= e^{-2\xi_1}\big(r_1-2\xi_3 r_3\big) + e^{-2\xi_2} r_2\,\xi_3^2,\\
-  S_{22} &= e^{-2\xi_2} r_2,\\
-  S_{12} &= -e^{-2\xi_2} r_2\,\xi_3 + e^{-2\xi_1} r_3,
-\end{aligned}
-\label{eq:stress_components_2d}
-\end{equation}
-% r1, r2, r3 are components of the response function r = d psi / d xi
-
-\textbf{Constraints on the hyperelastic model}
+\textbf{Hyperelastic constraints}
 
 In accordance with the principles of thermodynamics and continuum mechanics,
 the hyperelastic model $\psi$ must satisfy a set of fundamental constraints ensuring physical correctness and
@@ -71,9 +52,9 @@ material stability:
   \end{equation}
   % (omitted)
 \newline  
- \textit{Zero values for $\psi$ and $\vect S$ in the natural state} mean that the undeformed (initial) configuration has no residual stresses
+ \textit{Zero values for} $\psi$ \textit{and} $\mathbb{S}$ \textit{in the natural state} mean that the undeformed (initial) configuration has no residual stresses
   \begin{equation}
-    \psi(\vect 0)=0,\qquad \vect S(\vect I)=\vect 0,
+    \psi(\vect{0})=0,\qquad \mathbb{S}(\mathbb{I})=\mathbf{0},
     \label{eq:natural_state_stress}
   \end{equation}
 \newline
@@ -81,12 +62,13 @@ material stability:
   \begin{equation}
     \psi(\vect{\xi}) \to \infty\ \text{as}\ \lVert\vect{\xi}\rVert\to\infty,\qquad
     \mathbb{S} \to \infty\ \text{as}\ J\to\infty \text{ or } J\to 0^{+},\qquad
-    J=\det\vect F,
+    J=\det\mathbb{F},
     \label{eq:energy_constraints}
   \end{equation}
   % Coercivity remark (omitted in English build)
 
-Properties \eqref{eq:non_negativity}--\eqref{eq:energy_constraints} are commonly written via the deformation gradient \(\vect{F}\) and the right Cauchy--Green tensor \(\vect{C}\)
+Properties \eqref{eq:non_negativity}--\eqref{eq:energy_constraints} are commonly written via the deformation 
+gradient \(\mathbb{F}\) and the right Cauchy--Green tensor \(\mathbb{C}\)
 \cite{antman2005nonlin,green1839laws,kirchhoff1850gleichgewicht}, but they are equivalent for the Laplace strain measure \(\vect{\xi}\) as well.
 
 % Properties \eqref{eq:non_negativity}--\eqref{eq:energy_constraints}

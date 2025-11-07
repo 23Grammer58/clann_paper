@@ -1,37 +1,3 @@
-\section{CLANN architecture and its derivatives}
-
-Within CLANN the energy $\psi(\vect{\xi})$ is approximated by an input convex neural network (ICNN). For a one-hidden-layer ICNN:
-\begin{equation}
-  s = \mathbf W_1 \, \boldsymbol{\xi} + \mathbf b_1,\quad
-  z = \varphi_{\beta}(s),\quad
-  \tilde{\psi} = \mathbf W_2^{\top} \, z + b_2,\quad \mathbf W_2 \ge 0,
-  \label{eq:icnn_onelayer-en}
-\end{equation}
-with $\varphi_{\beta}(x)=\operatorname{softplus}(\beta x)/\beta$. Centering at the natural state enforces $\psi(\mathbf 0)=0$:
-\begin{equation}
-  z_0 = \varphi_{\beta}(\mathbf b_1),\qquad
-  \psi(\boldsymbol{\xi}) = \mathbf W_2^{\top}\big(z - z_0\big),\qquad (b_2 \equiv 0),
-  \label{eq:center_psi-en}
-\end{equation}
-and subtracting the linear term at $\boldsymbol{\xi}=\mathbf 0$ enforces $\vect r(\mathbf 0)=\mathbf 0$:
-\begin{equation}
-  \mathbf r_0 := \frac{\partial \psi}{\partial \boldsymbol{\xi}}\bigg|_{\boldsymbol{\xi}=\mathbf 0},\qquad
-  \psi_{\mathrm{phys}}(\boldsymbol{\xi}) = \psi(\boldsymbol{\xi}) - \mathbf r_0^{\top}\boldsymbol{\xi}.
-  \label{eq:phys_energy-en}
-\end{equation}
-
-Analytic derivatives:
-\begin{equation}
-  \vect r = \nabla_{\xi} \psi_{\mathrm{phys}} = \mathbf W_1^{\top} \Big( \mathbf W_2 \odot \sigma\big(\beta (\mathbf W_1 \, \boldsymbol{\xi} + \mathbf b_1)\big) \Big) - \vect r_0,
-  \label{eq:energy_gradient-en}
-\end{equation}
-\begin{equation}
-  H_{ij} = \sum_h \sigma'_h \, W_{2,h} \, W_{h,i} W_{h,j},\qquad \sigma' = \beta\,\sigma(1-\sigma),\ \sigma=\operatorname{sigmoid}(\beta s),\ s=\mathbf W_1\boldsymbol{\xi}+\mathbf b_1.
-  \label{eq:energy_hessian-en}
-\end{equation}
-
-Strict convexity ensures $\partial^2\psi/\partial\xi^2\succ 0$ and hence positive-definite consistent tangents.
-
 \section{CLaNN architecture and its derivatives}
 
 Within the proposed CLaNN (Convex Laplace Neural Network) framework,
@@ -50,7 +16,7 @@ if for all $\vect{\xi}_1, \vect{\xi}_2 \in \mathbb{R}^3$ and $\lambda \in [0,1]$
 \end{equation}
 
 Key ICNN conditions \cite{icnn2017}:
-(i) elementwise convex, monotonically nondecreasing activation $\varphi$;
+(i) convex, monotonically nondecreasing activation $\varphi$ applied elementwise;
 (ii) $\mathbf{W}_z^{(\ell)}\!\ge\!0$ for all layers
 (only on $z\!\to\!z$ connections; $\mathbf{W}_x^{(\ell)}$ and $\mathbf{b}^{(\ell)}$ have no sign constraints);
 (iii) each layer has a direct affine connection to the input
@@ -75,7 +41,7 @@ Here $\varphi_{\beta}$ is a convex nondecreasing activation \cite{dugas2001incor
 which smoothly approximates ReLU and for finite $\beta$ is strictly convex; $\varphi_{\infty}(x)=\max(0,x)$.
 The constraint $\mathbf{W}_2\!\ge 0$ preserves convexity of the linear combination. 
 Dimensions: $\mathbf{W}_1\!\in\mathbb{R}^{h\times 3}$, $\mathbf{b}_1\!\in\mathbb{R}^{h}$, 
-$\mathbf{W}_2\!\in\mathbb{R}^{h}_{\ge 0}$, $h$ is the hidden width.
+$\mathbf{W}_2\!\in\mathbb{R}^{h}_{\ge 0}$, $h$ is the hidden layer width.
 
 \textbf{Step 2. Centering the energy $\psi$ at the natural state.}
 To satisfy $\psi(\mathbf{0})=0$, we center the energy by
@@ -90,7 +56,7 @@ the gradient $\partial\psi/\partial\boldsymbol{\xi}$ and the Hessian $\partial^2
 coincide with those of $\tilde{\psi}$, preserving convexity and smoothness.
 
 \textbf{Step 3. Centering the response $\mathbf{r}$ at the natural configuration.}
-To satisfy $\vect S(\vect I)=\vect 0$, we set the linear response to zero at 
+To satisfy $\mathbb S(\mathbb I)=\vect 0$, we set the linear response to zero at 
 $\boldsymbol{\xi}=\mathbf{0}$:
 \begin{equation}
   \mathbf{r}_0 := \frac{\partial \psi}{\partial \boldsymbol{\xi}}\bigg|_{\boldsymbol{\xi}=\mathbf{0}},\qquad
@@ -105,12 +71,12 @@ Since $\mathbf{r}(\mathbf{0})=\mathbf{0}$, the point $\boldsymbol{\xi}=\mathbf{0
 $\psi_{\mathrm{phys}}$, hence $\psi_{\mathrm{phys}}\ge 0$.
 
 After constructing $\psi_{\mathrm{phys}}$, 
-$\partial\psi/\partial\boldsymbol{\xi}$ is computed automatically by autodiff as implemented in modern machine learning libraries 
+$\partial\psi/\partial\boldsymbol{\xi}$ is computed by automatic differentiation (autodiff) implemented in modern machine learning libraries (e.g., PyTorch, TensorFlow, JAX) 
 \cite{pytorch2019,tensorflow2016,jax2018}, 
 after which the stress tensor $\mathbf{S}$ is obtained via \eqref{eq:stress_components_2d} using the relation $\psi(\vect C)=\psi\big(\boldsymbol{\xi}(\vect C)\big)$.
 
 Centering $\psi_{\mathrm{phys}}$ and $\mathbf{r}$ at the natural state 
-guarantees \eqref{eq:natural_state_stress} and avoids additional constraints on network parameters
+guarantees \eqref{eq:natural_state_stress} and avoids additional constraints on network parameters.
 
 % (заменено на TikZ-схему в рис.~\ref{fig:clann_arc})
 
@@ -155,27 +121,27 @@ as it improves Newton convergence in practice and prevents singularities in the 
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=\textwidth]{../img/clann_arc.png}
+  \resizebox{\textwidth}{!}{\input{../parts/pic_arc}}
   \caption{Schematic of the CLaNN architecture.}
   \label{fig:clann_arc}
   \label{fig:clann_icnn1_nn}
 \end{figure}
 
-% \begin{figure}[H]
-%   \centering
-%   \resizebox{\textwidth}{!}{\input{../parts/pic_pipeline}}
-%   \caption{Schematic of the CLaNN computational loop.}
-%   \label{fig:clann_pipeline}
-% \end{figure}
+\begin{figure}[H]
+  \centering
+  \resizebox{\textwidth}{!}{\input{../parts/pic_pipeline}}
+  \caption{Schematic of the CLaNN computational loop.}
+  \label{fig:clann_pipeline}
+\end{figure}
 
 This CLaNN architecture ensures all necessary physical properties of the hyperelastic model: 
 \textbf{thermodynamic consistency} is achieved through strict compliance with \eqref{eq:chain-rule}, 
-which guarantees conservative stresses $\oint \vect{S}:\mathrm{d}\vect{C} = 0$ and consistency with the laws of 
+which guarantees conservative stresses $\oint \mathbb{S}:\mathrm{d}\mathbb{C} = 0$ and consistency with the laws of 
 thermodynamics; 
 \textbf{material stability} is ensured and significantly enhanced due to strict convexity of the energy 
 $\psi(\boldsymbol{\xi})$, guaranteed by the ICNN architecture ($\vect{W}_2 \ge 0$, convex nondecreasing activation); 
 \textbf{objectivity} holds automatically thanks to the parametrization via the 
-Cauchy--Green tensor $\vect{C} = \vect{F}^{\top}\vect{F}$, ensuring invariance with respect to rotations and stress symmetry; 
+Cauchy--Green tensor $\mathbb{C} = \mathbb{F}^{\top}\mathbb{F}$, ensuring invariance with respect to rotations and stress symmetry; 
 \textbf{strict non-negativity and coercivity of the energy} are provided by the architectural calibration 
 $\psi_{\mathrm{phys}}(\boldsymbol{\xi}) = \mathbf{W}_2^{\top}(z - z_0) - \mathbf{r}_0^{\top}\boldsymbol{\xi}$,
 yielding $\psi_{\mathrm{phys}}(\mathbf{0})=0$, $\psi_{\mathrm{phys}}(\boldsymbol{\xi})>0$ for $\boldsymbol{\xi}\ne\mathbf{0}$ and 

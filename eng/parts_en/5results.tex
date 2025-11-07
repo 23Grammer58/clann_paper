@@ -6,7 +6,7 @@ Model training was performed on numerical experimental data,
 obtained for biaxial stretching of a specimen with a "Maltese cross" geometry and thickness $H=0.53$ mm (Figure \ref{fig:malt_geometry}) using the hyperelastic nodal force method \cite{ddaniso2024}. 
 The membrane material was specified by a neo-Hookean model \cite{ogden1997nonlinear}:
 \begin{align} \label{eq:neohook}
-        \widetilde{\psi} &= \dfrac{\mu H(X)}{2} (I_1 +J^{-2}-3),
+        \psi &= \dfrac{\mu H(X)}{2} (I_1 +J^{-2}-3),
         \quad     I_1 = e^{2\xi_1} (1+\xi_3^2)+e^{2\xi_2},\quad J = e^{\xi_1+\xi_2}
 \end{align}
 with $\mu=0.43\cdot 10^6$ Pa.
@@ -36,8 +36,6 @@ $u_{\max} = 2$ mm and $\Delta s = 0.2$ mm.
 At each step, $\mathbb{C}, \mathbb{S}$ were extracted for all triangles belonging to the selected observation window. 
 % Using linear (P1) elements, (C,S) are cellwise constants.
 
- 
- 
 Our testing protocol comprises nine experiments:
 
 \begin{figure}[H]
@@ -60,7 +58,7 @@ Our testing protocol comprises nine experiments:
     9 & 0 & 1 & 0 & 1 \\
     \hline
     \end{tabular}
-\captionof{table}{Test experiment protocols}
+\captionof{table}{Testing protocols}
     \label{tab:test_protocols}
   \end{minipage}\hfill
   \begin{minipage}[t]{0.48\textwidth}
@@ -120,7 +118,7 @@ where $y_i$ are experimental values, $\hat{y}_i$ are model predictions, $\bar{y}
   \epsilon_{\mathrm{P1}} = \frac{\| \mathbb S - \mathbb S_{\text{ref}} \|}{s_0 + \| \mathbb S_{\text{ref}} \|},\qquad s_0 = \max(\mathbb S_{\text{pred}}).
 \end{equation}
 
-\textbf{Absolute integral error (mesh L2) for stresses (Frobenius norm).}
+\textbf{Absolute integral error for stresses (Frobenius norm).}
 \begin{equation}\label{eq:l2_abs_stress}
   \|e\|_{L^2} = \Bigg( \sum_{K} \overline{\| \mathbb S_{\text{ref}} - \mathbb S_{\text{pred}} \|_F^{2}}^{\,K}\, |K| \Bigg)^{\tfrac12},
 \end{equation}
@@ -128,7 +126,7 @@ where $|K|$ is the cell measure (area). For cell data, no intra-cell averaging i
 \begin{equation}\label{eq:l2_abs_stress_cell}
   \|e\|_{L^2} = \Bigg( \sum_{K} \| \mathbb S_{\text{ref},K} - \mathbb S_{\text{pred},K} \|_F^{2}\, |K| \Bigg)^{\tfrac12}.
 \end{equation}
-Purpose: collapses the error field into a scalar and is invariant to mesh refinement \cite{BrennerScott2008,AinsworthOden2000,Verfurth2013}.
+This metric reduces the error field to a scalar and is invariant under mesh refinement \cite{BrennerScott2008,AinsworthOden2000,Verfurth2013}.
 
 \textbf{Relative integral error.}
 \begin{equation}\label{eq:l2_rel_stress}
@@ -189,7 +187,7 @@ Using 10 load levels from equi-biaxial ($p=1$), window $w=\text{1-element}$. CLA
   
   Two thickness fields $T$ are used: homogeneous (0.54 mm) and heterogeneous (two parabolic sectors of 2 mm within a 0.54 mm membrane), see Figure~\ref{fig:membrane_thickness}.
 
-  As pointwise metric we use relative error (Section \ref{sec:metrics}, Eq.~\ref{eq:rel_error}); for shear comparison — P1 error \cite{xie2024p1} (Eq.~\ref{eq:p1_error}).
+  As a pointwise metric, we use the relative error (Section \ref{sec:metrics}, Eq.~\ref{eq:rel_error}); for shear comparison, we also use the P1 error \cite{xie2024p1} (Eq.~\ref{eq:p1_error}).
 
   \begin{figure}[H]
     \centering
@@ -203,6 +201,7 @@ Using 10 load levels from equi-biaxial ($p=1$), window $w=\text{1-element}$. CLA
     \includegraphics[width=0.7\textwidth]{../img/Numerical/ref_stress.png}
     \caption{PK2 stress field $\mathbb S$ of the circular membrane (example numerical result).}
     \label{fig:numerical_experiment}
+    \label{fig:inflation_ref}
   \end{figure}
   
   Using $D(\{1..10\}, w=\text{1-element})$ for training, we obtain PK2 stress fields for both thickness scenarios and compare to the reference (Figure~\ref{fig:membrane_thickness}, Figure~\ref{fig:inflation_ref}); error maps $\epsilon$ and $\epsilon_{P1}$ are shown in Figure~\ref{fig:numerical_errors}. Shear errors are largest for the heterogeneous case; expanding the window to $5\times 5$ mm, $10\times 10$ mm, and full field reduces integral errors $\|e\|_{L^2}$ (Eq.~\ref{eq:l2_abs_stress_cell}) and $\|e\|_{L^2,\,\mathrm{rel}}$ (Eq.~\ref{eq:l2_rel_stress}) (Figure~\ref{fig:integral_errors}).
@@ -226,11 +225,13 @@ Using 10 load levels from equi-biaxial ($p=1$), window $w=\text{1-element}$. CLA
   
 \subsection{Computational efficiency comparison}
 
-  By strict convexity of $\psi(\boldsymbol\xi)$, the equilibrium is a smooth convex minimization amenable to gradient and Newton-type solvers with predictable complexity \cite{BoydVandenberghe2004,Nesterov2004,NocedalWright2006,ConnGouldToint2000}. Near the minimizer, strong convexity and Lipschitz Hessians yield locally quadratic Newton convergence, while L\textendash BFGS gives superlinear rates \cite{NocedalWright2006}.
+  By the strict convexity of $\psi(\boldsymbol\xi)$, the equilibrium problem is a smooth, convex minimization amenable to gradient and Newton-type solvers with predictable complexity \cite{BoydVandenberghe2004,Nesterov2004,NocedalWright2006,ConnGouldToint2000}. Near the minimizer, strong convexity and Lipschitz-continuous Hessians yield locally quadratic Newton convergence, while L\textendash BFGS achieves superlinear rates \cite{NocedalWright2006}.
 
   In tabulated/interpolatory DD models (kNN/IDW), energy convexity is typically not guaranteed and responses may be nonsmooth, yielding nonconvex optimization with many stationary points; quasi-static/relaxation strategies are used in practice \cite{KirchdoerferOrtiz2016,KirchdoerferOrtiz2017} at the cost of more load steps/iterations and repeated kNN/IDW queries.
 
-  We compare runtime for CLANN, Neo-Hookean, and a Laplace-space table-driven DD model \cite{xi2023} on inflation of a clamped circular membrane ($R{=}25$ mm), with homogeneous and heterogeneous $T$ (Figure~\ref{fig:membrane_thickness}). CLANN is trained on $D(\{1..10\},\,w{=}\text{1-element})$; the DD model uses kNN/IDW on $(\vect{\xi},\vect r)$ from $D(\{1..10\},\,w{=}10\times10)$ \cite{xi2023}. All runs use the same FE setting and stopping criteria.
+  We compare runtime for CLANN, Neo-Hookean, and a Laplace-space table-driven DD model \cite{xi2023} on inflation of a clamped circular membrane ($R{=}25$ mm), with homogeneous and heterogeneous $T$ (Figure~\ref{fig:membrane_thickness}). 
+  CLANN is trained on $D(\{1..10\},\,w{=}\text{1-element})$; the DD model uses kNN/IDW on $(\vect{\xi},\vect r)$ from $D(\{1..10\},\,w{=}10\times10)$ \cite{xi2023}. 
+  All runs use the same finite element (FE) setting and stopping criteria.
 
 \begin{table}[htbp]
 \centering
@@ -240,15 +241,15 @@ Using 10 load levels from equi-biaxial ($p=1$), window $w=\text{1-element}$. CLA
 \hline
 \textbf{Method} & \textbf{Homogeneous} & \textbf{Heterogeneous} \\
 \hline
-CLANN & 512 & 329  \\
+CLANN & 7 & 16  \\
 \hline
-Neo-Hooke & 13 & 16\\
+Neo-Hookean & 13 & 16\\
 \hline
 kNN & 993 & -- \\
 \hline
 \end{tabular}
 \end{table}
 
-  With identical meshes and tolerances, CLANN matches Neo-Hooke in global iterations but can be slower overall due to model–solver interface overhead \cite{xi2023}. It notably outperforms the table-driven DD baseline by avoiding repeated kNN/IDW queries and data projections. The DD model further struggles on heterogeneous thickness without linear interpolation near zero, likely due to data scarcity in that strain range.
+  With identical meshes and tolerances, CLANN matches Neo-Hookean in global iterations but can be slower overall due to model–solver interface overhead \cite{xi2023}. It notably outperforms the table-driven DD baseline by avoiding repeated kNN/IDW queries and data projections. The DD model further struggles on heterogeneous thickness without linear interpolation near zero, likely due to data scarcity in that strain range.
 
 
