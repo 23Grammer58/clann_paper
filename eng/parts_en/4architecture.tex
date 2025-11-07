@@ -41,7 +41,7 @@ Here $\varphi_{\beta}$ is a convex nondecreasing activation \cite{dugas2001incor
 which smoothly approximates ReLU and for finite $\beta$ is strictly convex; $\varphi_{\infty}(x)=\max(0,x)$.
 The constraint $\mathbf{W}_2\!\ge 0$ preserves convexity of the linear combination. 
 Dimensions: $\mathbf{W}_1\!\in\mathbb{R}^{h\times 3}$, $\mathbf{b}_1\!\in\mathbb{R}^{h}$, 
-$\mathbf{W}_2\!\in\mathbb{R}^{h}_{\ge 0}$, $h$ is the hidden width.
+$\mathbf{W}_2\!\in\mathbb{R}^{h}_{\ge 0}$, $h$ is the hidden layer width.
 
 \textbf{Step 2. Centering the energy $\psi$ at the natural state.}
 To satisfy $\psi(\mathbf{0})=0$, we center the energy by
@@ -56,7 +56,7 @@ the gradient $\partial\psi/\partial\boldsymbol{\xi}$ and the Hessian $\partial^2
 coincide with those of $\tilde{\psi}$, preserving convexity and smoothness.
 
 \textbf{Step 3. Centering the response $\mathbf{r}$ at the natural configuration.}
-To satisfy $\vect S(\vect I)=\vect 0$, we set the linear response to zero at 
+To satisfy $\mathbb S(\mathbb I)=\vect 0$, we set the linear response to zero at 
 $\boldsymbol{\xi}=\mathbf{0}$:
 \begin{equation}
   \mathbf{r}_0 := \frac{\partial \psi}{\partial \boldsymbol{\xi}}\bigg|_{\boldsymbol{\xi}=\mathbf{0}},\qquad

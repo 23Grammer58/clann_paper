@@ -21,7 +21,7 @@ Piola--Kirchhoff stress in the two-dimensional case:
   S_{22} &= e^{-2\xi_2} \, r_2,\\
   S_{12} &= -e^{-2\xi_2} \, r_2\,\xi_3 + e^{-2\xi_1} \, r_3.
 \end{aligned}
-\label{eq:stress_components_2d-en}
+\label{eq:stress_components_2d}
 \end{equation}
 
 
@@ -37,32 +37,7 @@ This construction has several key consequences:
 \textit{Thermodynamic consistency:} the identity \eqref{eq:chain-rule} follows from the Clausius--Duhem inequality
 $\mathcal{D} = \mathbb{S} : \dot{\mathbb{C}} - \dot{\psi}(\mathbb{C}) \geq 0$,
 which expresses the second law of thermodynamics for mechanical processes \cite{truesdell1984historical,truesdell2004nonlinear}.
-% \begin{itemize}
-%   \item \textbf{Объективность:} $\psi(\mathbf{C})=\psi(\mathbf{Q}^\top\mathbf{C}\mathbf{Q})$ для любой ортогональной $\mathbf{Q}$, а значит и $\mathbf{S}$ инвариантен к поворотам.
-%   \item \textbf{Симметрия напряжений:} $\mathbf{S}=\mathbf{S}^\top$ вследствие симметрии $\mathbf{C}$ и корректного применения цепного правила.
-%   \item \textbf{Термодинамическая корректность:} равенство \eqref{eq:chain-rule} является следствием неравенства Клаузиуса-Дюгема 
-%   $\mathcal{D} = \mathbf{S} : \dot{\mathbf{C}} - \dot{\psi}(\mathbf{C}) \geq 0$, 
-%   выражающее второе начало термодинамики для механических процессов \cite{truesdell1984historical,truesdell2004nonlinear}.
-% \end{itemize}
 
-% \textbf{Связь тензора Лапласа и второго тензора напряжений Пиолы-Кирхгофа}
-
- % Необходимо установить связь деформации Лапласа $\vect{\xie}$ и второго тензора напряжений Пиолы-Кирхгофа $\vect{S}$. Применяя цепное правило дифференцирования к выражению \eqref{eq:chain-rule} и используя меру деформации Лапласа,
-
-% Link between Laplace strain tensor and the second Piola–Kirchhoff stress tensor
-
-% Establishing the relation using the chain rule with the Laplace strain measure
-% Writing equation \eqref{eq:chain-rule} componentwise and substituting the known basis $\frac{\partial \vect{\xi}}{\partial \mathbb{C}}$ yields analytical expressions for the components of the second Piola--Kirchhoff stress in the two-dimensional case:
-
-% \begin{equation}
-% \begin{aligned}
-%   S_{11} &= e^{-2\xi_1}\big(r_1-2\xi_3 r_3\big) + e^{-2\xi_2} r_2\,\xi_3^2,\\
-%   S_{22} &= e^{-2\xi_2} r_2,\\
-%   S_{12} &= -e^{-2\xi_2} r_2\,\xi_3 + e^{-2\xi_1} r_3,
-% \end{aligned}
-% \label{eq:stress_components_2d}
-% \end{equation}
-% r1, r2, r3 are components of the response function r = d psi / d xi
 
 \textbf{Hyperelastic constraints}
 
@@ -77,9 +52,9 @@ material stability:
   \end{equation}
   % (omitted)
 \newline  
- \textit{Zero values for $\psi$ and $\vect S$ in the natural state} mean that the undeformed (initial) configuration has no residual stresses
+ \textit{Zero values for} $\psi$ \textit{and} $\mathbb{S}$ \textit{in the natural state} mean that the undeformed (initial) configuration has no residual stresses
   \begin{equation}
-    \psi(\vect 0)=0,\qquad \mathbb S(\vect I)=\vect 0,
+    \psi(\vect{0})=0,\qquad \mathbb{S}(\mathbb{I})=\mathbf{0},
     \label{eq:natural_state_stress}
   \end{equation}
 \newline
