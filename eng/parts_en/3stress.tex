@@ -3,18 +3,18 @@
 We use the second Piola--Kirchhoff stress as the stress measure and compute it by differentiating the energy $\psi$ via the chain rule with respect to the right Cauchy--Green tensor $\mathbb C$:
 \begin{equation}
   \mathbb S \,=\, 2\,\frac{\partial \psi}{\partial \mathbb C}
-  \,=\, 2\,\frac{\partial \psi}{\partial \vect{\xi}} : \frac{\partial \vect{\xi}}{\partial \mathbb C}
-  \,=\, 2\,\vect r(\vect{\xi}) : \frac{\partial \vect{\xi}}{\partial \mathbb C},\qquad \vect r := \frac{\partial \psi}{\partial \vect{\xi}}.
+  \,=\, 2\,\frac{\partial \psi}{\partial \vect{\xi}} \cdot \frac{\partial \vect{\xi}}{\partial \mathbb C}
+  \,=\, 2\,\vect r(\vect{\xi}) \cdot \frac{\partial \vect{\xi}}{\partial \mathbb C},\qquad \vect r := \frac{\partial \psi}{\partial \vect{\xi}}.
   \label{eq:chain-rule}
 \end{equation}
-The Jacobian $\frac{\partial \vect{\xi}}{\partial \mathbb C}$ is referred to as the basis, 
+The tensor $\frac{\partial \vect{\xi}}{\partial \mathbb C}$ is referred to as the basis, 
 it is a known analytical tensor determined by the chosen strain measure; 
 whereas $\vect r=(r_1,r_2,r_3)$ is the response function learned from data during training of the 
 data-driven constitutive relation.  
 
 Writing equation \eqref{eq:chain-rule} componentwise and substituting the known basis 
 $\frac{\partial \vect{\xi}}{\partial \mathbb{C}}$ yields analytical expressions for the components of the second 
-Piola--Kirchhoff stress in the two-dimensional case:
+Piola--Kirchhoff stress tensor $\mathbb{S}$ in the two-dimensional case:
 \begin{equation}
 \begin{aligned}
   S_{11} &= e^{-2\xi_1}\big(r_1-2\xi_3 r_3\big) + e^{-2\xi_2} \, r_2\,\xi_3^2,\\
@@ -23,6 +23,8 @@ Piola--Kirchhoff stress in the two-dimensional case:
 \end{aligned}
 \label{eq:stress_components_2d}
 \end{equation}
+Here, $S_{11}$, $S_{22}$ and $S_{12}$ in the material basis $\vect{G}^{\alpha}\otimes\vect{G}^{\beta}$, consistent with the representation of $\tilde{\mathbb{F}}$ in 
+equation~\eqref{eq:laplace_coords}.
 
 
 % (Russian duplicate section removed)

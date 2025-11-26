@@ -1,30 +1,90 @@
 \section{Кинематика}
-\textbf{Основные соотношения}
+\label{s:kinematics}
 
-Мы рассматриваем равновесие тонкой несжимаемой гиперупругой мембраны с толщиной $H$ под
-определенными нагрузками.
+Мы рассматриваем равновесие тонкой несжимаемой изотропной гиперупругой мембраны под действием внутреннего давления.
 Деформация мембраны характеризуется деформацией её срединной поверхности. 
-Обозначим через \(\vect{X}\) и \(\vect{x}\) положения точек, 
-в соответствующих базисах \(\vect{E}_{\alpha}\) и \(\vect{e}_{\alpha}\), 
-в исходной (недеформированной) \(\Omega_0 \subset \mathbb{R}^2\) и текущей (деформированной) \(\Omega_t \subset \mathbb{R}^2\)
-конфигурациях поверхности мембраны соответственно. 
-Деформация определяется отображением \(\vect{x} = \vect{x}(\vect{X})\), 
-поверхностный градиент деформации \(\mathbb{F} = \vect{e}_{\alpha}\otimes\vect{E}^{\alpha}\),
-а правый тензор Коши—Грина \(\mathbb C = C_{\alpha\beta} \,\vect{e}_{\alpha} \otimes \vect{e}_{\beta} = \mathbb F^{\top} \mathbb F\). 
-Тогда главные удлинения \(\lambda_1, \lambda_2, \lambda_3\) -- это собственные значения тензора \(\mathbb C\).
-Для определения меры деформации мы используем меру Лапласа \(\vect{\xi} = (\xi_1 , \xi_2 , \xi_3)^T\) \cite{xi2023},
-которая может быть вычислена двумя эквивалентными способами: 
-либо через QR-разложение градиента деформации \(\mathbb F = \vect Q \vect R\) с \(\tilde{\mathbb F} = \vect R\) , 
-либо через разложение Холецкого правого тензора Коши-Грина \(\mathbb C = \tilde{\mathbb F}^{\top}\tilde{\mathbb F}\) (Приложение \ref{app:cholesky}).
-В этом случае гиперупругий потенциал является функцией от деформации Лапласа \(\psi = \psi(\vect{\xi})\).
+Исходная конфигурация срединной поверхности $\Omega_0 \in \mathbb{R}^3$ плоская и определяется положением материальных точек
+$\mathbf{X} = X_1\mathbf{e}_1 + X_2\mathbf{e}_2 + 0\cdot\mathbf{e}_3$, где $\mathbf{e}_1, \mathbf{e}_2, \mathbf{e}_3$ --- базисные векторы глобальной (фиксированной) декартовой системы координат.
+Соответствующие ковариантные $\mathbf{G}_{\alpha}$ и контравариантные $\mathbf{G}^{\alpha}$ базисные векторы для $\Omega_0$ и вектор нормали $\mathbf{N}$ к $\Omega_0$ определяются соотношениями:
+\begin{align*}
+        &\mathbf{G}_{\alpha} = \dfrac{\partial \mathbf{X}}{\partial X_{\alpha}} = \mathbf{e}_{\alpha},\quad \alpha = 1, 2;\\
+        &\mathbf{G}^{\alpha} = \dfrac{\partial X_{\alpha}}{\partial \mathbf{X}} = \mathbf{e}_{\alpha}, \quad \alpha = 1, 2;\\
+        &\mathbf{N} = \dfrac{\mathbf{G}_{1} \times \mathbf{G}_{2}}{||\mathbf{G}_{1} \times \mathbf{G}_{2}||}.
+\end{align*}
 
+Деформация представляет собой взаимно-однозначное отображение $\mathbf{x} = \mathbf{x}(\mathbf{X})$.
+Текущая конфигурация срединной поверхности $\Omega_t \in \mathbb{R}^3$ определяется радиус-векторами
+\begin{align}
+        \mathbf{x} = \sum_{i=1}^3 x_i \left(X_1,X_2\right)\,\mathbf{e}_i,
+\end{align}
+где соответствующие ковариантные $\mathbf{g}_{\alpha}$ и контравариантные $\mathbf{g}^{\alpha}$ базисные векторы для $\Omega_t$ определяются соотношениями:
+\begin{align*}
+        &\mathbf{g}_{\alpha} = \dfrac{\partial \mathbf{x}}{\partial X_{\alpha}}
+        = \dfrac{\partial x_1}{\partial X_\alpha} \mathbf{e}_1 + \dfrac{\partial x_2}{\partial X_{\alpha}} \mathbf{e}_2 + \dfrac{\partial x_3}{\partial X_{\alpha}} \mathbf{e}_3,\quad \alpha = 1, 2;\\
+        &\mathbf{g}^{\alpha} = \dfrac{\partial X_{\alpha}}{\partial \mathbf{x}}
+        = \dfrac{\partial  X_{\alpha}}{\partial x_1} \mathbf{e}_1 + \dfrac{\partial  X_{\alpha}}{\partial x_2} \mathbf{e}_2 + \dfrac{\partial  X_{\alpha}}{\partial x_3} \mathbf{e}_3, \quad \alpha = 1, 2;\\
+        &\mathbf{n} = \dfrac{\mathbf{g}_{1} \times \mathbf{g}_{2}}{||\mathbf{g}_{1} \times \mathbf{g}_{2}||}.
+\end{align*}
 
-\textbf{Мера деформации Лапласа}
-В двумерном случае вводятся характеристики
-\begin{equation}
-\xi_1 = \ln(\tilde f_{11}),\quad \xi_2 = \ln(\tilde f_{22}),\quad \xi_3 = \frac{\tilde f_{12}}{\tilde f_{11}}, 
-\quad \tilde{\mathbb F} = \tilde f_{\alpha\beta} \; \vect{e}_{\alpha} \otimes \vect{e}_{\beta}.
-\label{eq:laplace_coords}
-\end{equation}
+Градиент деформации для мембраны, рассматриваемой как трёхмерная упругая структура, имеет вид \cite{tepole2015isogeometric}, \cite{lu2008inverse}:
+\begin{align*}
+        \mathbb{F} =  \mathbb{F}_{2d} +\lambda \mathbf{n}\otimes \mathbf{N}, \quad
+        \mathbb{F}_{2d} = \sum_{\alpha=1}^2 \mathbf{g}_{\alpha} \otimes \mathbf{G}^{\alpha},\quad \lambda = h/H.
+\end{align*}
+Здесь $\mathbb{F}_{2d}$ --- поверхностный градиент деформации, описывающий деформации срединной поверхности мембраны, 
+$\lambda$ характеризует изменение толщины при деформации, $h$ --- текущая толщина, $H$ --- начальная толщина, $\otimes$ обозначает тензорное произведение.
+
+Поверхностные инварианты $I_1, J$ правого тензора деформации Коши--Грина срединной поверхности
+$\mathbb{C}_{2d}  = \mathbb{F}_{2d}^T \mathbb{F}_{2d} = \sum_{\alpha,\beta=1}^2 g_{\alpha\beta} \mathbf{G}^{\alpha} \otimes \mathbf{G}^{\beta}$ имеют вид:
+\begin{align}\label{eq:I-gen}
+        I_1 = \mathrm{tr}\left(\mathbb{C}_{2d} \right) = g_{\alpha\beta} G^{\alpha\beta}, \quad J = \det \mathbb{F}_{2d} = \sqrt{\det \mathbb{C}_{2d}},
+\end{align}
+где $g_{\alpha\beta} = (\mathbf{g}_{\alpha}, \mathbf{g}_{\beta})$, $G^{\alpha\beta} = (\mathbf{G}^{\alpha}, \mathbf{G}^{\beta})$ --- метрические тензоры.
+Соотношение между поверхностными инвариантами и их трёхмерными аналогами рассмотрено в \cite{tepole2015isogeometric}, \cite{lu2008inverse}.
+
+Поскольку мембрана изначально плоская, имеем
+\begin{align*}
+        \mathbf{G}_1=\mathbf{G}^1= \mathbf{e}_1 = (1, 0, 0)^T,\quad
+        \mathbf{G}_2=\mathbf{G}^2= \mathbf{e}_2 = (0, 1, 0)^T,
+\end{align*}
+и далее вместо $\mathbf{G}^{\alpha}, \;\mathbf{G}_{\alpha}$ будем использовать $\mathbf{e}_{\alpha}$\footnote{Для изначально неплоской мембраны см. \cite{salamatova2023interpretable}.}.
+
+Градиент деформации служит основой для построения различных мер деформации.
+В настоящей работе мы используем растяжение Лапласа \cite{freed2020laplace}, обладающее свойством ``ортогональности'' \cite{srinivasa2012use}.
+Растяжение Лапласа $\boldsymbol{\xi}=(\xi_1, \xi_2, \xi_3)^T$ основано на $QR$-разложении 
+$\mathbb{F}_{2d} =\mathbb{Q}\widetilde{\mathbb{F}}_{2d}$ \cite{srinivasa2012use}, и его компоненты определяются как
+\begin{align}\label{eq:xi-F}
+        \xi_1 =\ln \widetilde{F}_{11},\quad
+        \xi_2 =\ln \widetilde{F}_{22},\quad \xi_3 = \widetilde{F}_{12} /  \widetilde{F}_{11}.
+\end{align}
+Здесь $\widetilde{F}_{\alpha\beta}$ получаются из разложения Холецкого двумерного поверхностного правого тензора деформации Коши--Грина $\mathbb{C}_{2d}$:
+\begin{align}\label{eq:F-C}
+        &\widetilde{F}_{11} = \sqrt{C_{11}}, \quad \widetilde{F}_{12} = C_{12}/\widetilde{F}_{11}, \quad \widetilde{F}_{22} = \sqrt{C_{22} - \widetilde{F}_{12}^2 }, \\
+        & C_{\alpha\beta}=\mathbf{e}_{\alpha}\cdot\mathbb{C}_{2d}\cdot \mathbf{e}_{\beta},\quad \alpha, \beta = 1,2.
+\end{align}
+
+Отметим, что $C_{\alpha\beta}$ и $\widetilde{F}_{\alpha\beta}$ --- компоненты тензоров $\mathbb{C}_{2d}$, $\widetilde{\mathbb{F}}_{2d}$ 
+в одном и том же ортонормированном базисе:
+\begin{align*}
+        &\mathbb{C}_{2d} =  \sum_{\alpha,\beta=1}^2 C_{\alpha\beta}\,\mathbf{e}_{\alpha}\otimes\mathbf{e}_{\beta} ,\quad
+        [\mathbb{C}_{2d}]_{\mathbf{e}_{\alpha} \otimes \mathbf{e}_{\beta}} = \left(C_{\alpha\beta}\right) =
+        \begin{pmatrix}
+                C_{11} & C_{12}\\
+                C_{12} & C_{22}
+        \end{pmatrix};
+        \\[10pt]
+        &\widetilde{\mathbb{F}}_{2d} = \sum_{\alpha,\beta=1}^2 \widetilde{F}_{\alpha\beta} \mathbf{e}_{\alpha} \otimes  \mathbf{e}_{\beta}, \quad  [\widetilde{\mathbb{F}}_{2d}]_{\mathbf{e}_{\alpha} \otimes \mathbf{e}_{\beta}} = \left(\widetilde{F}_{\alpha\beta}\right) =
+        \begin{pmatrix}
+                \widetilde{F}_{11} & \widetilde{F}_{12}\\
+                0 & \widetilde{F}_{22}
+        \end{pmatrix}.
+\end{align*}
+В случае изначально плоской мембраны $C_{\alpha\beta} \equiv  g_{\alpha\beta}$ и
+поверхностные инварианты \eqref{eq:I-gen} могут быть выражены через $\xi_i$:
+\begin{align}\label{eq:I-xi}
+        I_1 = e^{2\xi_1} (1+\xi_3^2)+e^{2\xi_2},\quad J = e^{\xi_1+\xi_2}.
+\end{align}
+
+Таким образом, гиперупругий потенциал является функцией от растяжения Лапласа $\psi = \psi(\boldsymbol{\xi})$.
 
 

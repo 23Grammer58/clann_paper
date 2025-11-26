@@ -3,31 +3,59 @@
 Within the proposed CLaNN (Convex Laplace Neural Network) framework,
 the strain energy \(\psi(\vect{\xi})\) with the Laplace strain measure is approximated
 by an input convex neural network (ICNN) \cite{icnn2017}, and the second Piola--Kirchhoff
-stress \(\vect{S}\) is computed using the explicit expression \eqref{eq:stress_components_2d}. 
+stress \(\mathbb{S}\) is computed using the explicit expression \eqref{eq:stress_components_2d}. 
 
 \textbf{General ICNN architecture}
 
-ICNN is a class of neural networks that guarantees convexity of the output with respect to the input variables.
-In our case, the strain energy function $\psi: \mathbb{R}^3 \rightarrow \mathbb{R}$ is called convex
-if for all $\vect{\xi}_1, \vect{\xi}_2 \in \mathbb{R}^3$ and $\lambda \in [0,1]$ Jensen's inequality holds:
+ICNN is a class of feed-forward neural networks whose output is (jointly) convex with respect to a distinguished
+subset of inputs \cite{icnn2017}. Following \cite{icnn2017}, a function
+$f:\mathbb{R}^{n_x}\times\mathbb{R}^{n_y}\rightarrow\mathbb{R}$ represented by a neural network is called
+\emph{input-convex} in $x$ if, for all $x_1,x_2\in\mathbb{R}^{n_x}$, $y\in\mathbb{R}^{n_y}$ and $\lambda\in[0,1]$,
+it satisfies
 \begin{equation}
-\psi(\lambda \vect{\xi}_1 + (1-\lambda) \vect{\xi}_2) \leq \lambda \psi(\vect{\xi}_1) + (1-\lambda) \psi(\vect{\xi}_2).
+  f(\lambda x_1 + (1-\lambda)x_2,\,y)
+  \;\le\;
+  \lambda f(x_1,y) + (1-\lambda) f(x_2,y).
+\end{equation}
+In our setting we do not distinguish parameters $y$ and consider only the strain variables
+$\boldsymbol{\xi}\in\mathbb{R}^3$, so that the strain energy $\psi:\mathbb{R}^3\to\mathbb{R}$ is convex if for all
+$\vect{\xi}_1, \vect{\xi}_2 \in \mathbb{R}^3$ and $\lambda \in [0,1]$ Jensen's inequality holds
+\cite{BoydVandenberghe2004}:
+\begin{equation}
+  \psi(\lambda \vect{\xi}_1 + (1-\lambda) \vect{\xi}_2)
+  \;\le\;
+  \lambda \psi(\vect{\xi}_1) + (1-\lambda) \psi(\vect{\xi}_2).
 \label{eq:convexity_definition}
 \end{equation}
 
-Key ICNN conditions \cite{icnn2017}:
-(i) convex, monotonically nondecreasing activation $\varphi$ applied elementwise;
-(ii) $\mathbf{W}_z^{(\ell)}\!\ge\!0$ for all layers
-(only on $z\!\to\!z$ connections; $\mathbf{W}_x^{(\ell)}$ and $\mathbf{b}^{(\ell)}$ have no sign constraints);
-(iii) each layer has a direct affine connection to the input
-$\boldsymbol{\xi}$: $z^{(\ell+1)}=\varphi\!\big(\mathbf{W}_z^{(\ell)}z^{(\ell)}+\mathbf{W}_x^{(\ell)}\boldsymbol{\xi}+\mathbf{b}^{(\ell)}\big)$;
-(iv) scalar output as $a^{\top} z^{(L)}+c$ with $a\!\ge\!0$ (or an extra $\varphi$ layer).
+The standard ICNN architecture \cite{icnn2017} is constructed as follows.
+Let $\boldsymbol{\xi}\in\mathbb{R}^3$ be the input, $z^{(0)}=\boldsymbol{0}$ be the initial hidden state, and for
+layers $\ell=0,\dots,L-1$ define
+\begin{equation}
+  z^{(\ell+1)} =
+  \varphi\!\big(\mathbf{W}_z^{(\ell)} z^{(\ell)} + \mathbf{W}_x^{(\ell)} \boldsymbol{\xi} + \mathbf{b}^{(\ell)}\big),
+\end{equation}
+where $z^{(\ell)}\in\mathbb{R}^{h_\ell}$, $\mathbf{W}_z^{(\ell)}\in\mathbb{R}^{h_{\ell+1}\times h_\ell}$,
+$\mathbf{W}_x^{(\ell)}\in\mathbb{R}^{h_{\ell+1}\times 3}$, and $\mathbf{b}^{(\ell)}\in\mathbb{R}^{h_{\ell+1}}$.
+The scalar output is then given by an affine readout
+\begin{equation}
+  \psi(\boldsymbol{\xi}) = a^{\top} z^{(L)} + c,
+\end{equation}
+with $a\in\mathbb{R}^{h_L}$ and $c\in\mathbb{R}$. The key structural conditions guaranteeing convexity with respect
+the input $\boldsymbol{\xi}$ are \cite{icnn2017}:
+(i) elementwise convex, monotonically nondecreasing activation $\varphi$;
+(ii) nonnegative weights on the $z\!\to\!z$ connections, $\mathbf{W}_z^{(\ell)}\!\ge\!0$ for all $\ell$
+(no sign constraints on $\mathbf{W}_x^{(\ell)}$ and $\mathbf{b}^{(\ell)}$);
+(iii) a direct affine connection from the input $\boldsymbol{\xi}$ to every hidden layer as in the formula above;
+(iv) nonnegative output weights $a\!\ge\!0$ (or, equivalently, an additional nondecreasing activation layer at the
+output). Under these assumptions the network output $\psi(\boldsymbol{\xi})$ is a convex function of the strain
+variables $\boldsymbol{\xi}$.
 
 \textbf{Step 1. One-layer ICNN and activation choice.}
 Consider a one-hidden-layer ICNN for approximating $\psi(\boldsymbol{\xi})$:
 \begin{equation}
   s = \mathbf{W}_1 \,\boldsymbol{\xi} + \mathbf{b}_1,\qquad
-  z = \varphi_{\beta}(s),\qquad
+  z = \varphi_{\beta}^2(s),\qquad
   \tilde{\psi} = \mathbf{W}_2^{\top} z + b_2,\qquad \mathbf{W}_2 \ge 0.
   \label{eq:icnn_onelayer}
 \end{equation}
@@ -47,7 +75,7 @@ $\mathbf{W}_2\!\in\mathbb{R}^{h}_{\ge 0}$, $h$ is the hidden layer width.
 To satisfy $\psi(\mathbf{0})=0$, we center the energy by
 subtracting the value of the nonlinear part at $\boldsymbol{\xi}=\mathbf{0}$:
 \begin{equation}
-  z_0 = \varphi_{\beta}(\mathbf{b}_1),\qquad
+  z_0 = \varphi_{\beta}^2(\mathbf{b}_1),\qquad
   \psi(\boldsymbol{\xi}) = \mathbf{W}_2^{\top}\big(z - z_0\big),\qquad (b_2 \equiv 0).
   \label{eq:center_psi}
 \end{equation}
@@ -70,10 +98,10 @@ Subtracting the linear term does not change the Hessian and preserves convexity.
 Since $\mathbf{r}(\mathbf{0})=\mathbf{0}$, the point $\boldsymbol{\xi}=\mathbf{0}$ is a minimizer of 
 $\psi_{\mathrm{phys}}$, hence $\psi_{\mathrm{phys}}\ge 0$.
 
-After constructing $\psi_{\mathrm{phys}}$, 
+After constructing $\psi_{\mathrm{phys}}$,  
 $\partial\psi/\partial\boldsymbol{\xi}$ is computed by automatic differentiation (autodiff) implemented in modern machine learning libraries (e.g., PyTorch, TensorFlow, JAX) 
 \cite{pytorch2019,tensorflow2016,jax2018}, 
-after which the stress tensor $\mathbf{S}$ is obtained via \eqref{eq:stress_components_2d} using the relation $\psi(\vect C)=\psi\big(\boldsymbol{\xi}(\vect C)\big)$.
+after which the stress tensor $\mathbb{S}$ is obtained via \eqref{eq:stress_components_2d} using the relation $\psi(\mathbb C)=\psi\big(\boldsymbol{\xi}(\mathbb C)\big)$.
 
 Centering $\psi_{\mathrm{phys}}$ and $\mathbf{r}$ at the natural state 
 guarantees \eqref{eq:natural_state_stress} and avoids additional constraints on network parameters.
@@ -87,25 +115,32 @@ guarantees \eqref{eq:natural_state_stress} and avoids additional constraints on 
 Analytical differentiation of the energy with respect to \(\xi\) yields the gradient:
 
 \begin{equation}
- \vect{r} = \nabla_\xi \psi_{\mathrm{phys}} = \vect W_1^T \left( \vect W_2 \odot \sigma(\beta (\vect W_1 \vect \xi + \vect b_1)) \right) - \vect r_0,
+ \vect{r} = \nabla_\xi \psi_{\mathrm{phys}}
+   = \vect W_1^T \left( \vect W_2 \odot \Big( 2\,\varphi_\beta(\vect s) \odot \sigma(\beta \vect s) \Big) \right) - \vect r_0,
 \label{eq:energy_gradient}
 \end{equation}
-where $\sigma(x) = \frac{1}{1 + e^{-x}}$ is the sigmoid, 
+where $\vect s = \vect W_1 \vect \xi + \vect b_1$, $\sigma(x) = \frac{1}{1 + e^{-x}}$ is the sigmoid, 
 and $\odot$ denotes the elementwise (Hadamard) product. 
-This expression shows that the energy gradient is a linear combination of the rows of $\vect W_1^T$ with weights 
-given by the product of the output weights $\vect W_2$ and the activation values $\sigma(\beta (\vect W_1 \vect\xi + \vect b_1))$.
+Compared to the case with $z=\varphi_\beta(s)$, an additional factor $2\,\varphi_\beta(\vect s)$ appears, 
+so that the contribution of each hidden neuron to the gradient is scaled by the activation magnitude.
 
 \textbf{Hessian of the strain energy}
 
 Second derivatives of the energy with respect to \(\xi\) define the Hessian, which has the following analytical form:
 
 \begin{equation}
- H_{ij} = \sum_h \sigma'_h\,W_{2,h}\,W_{h,i}W_{h,j},
+ H_{ij} = \sum_h \eta_h\,W_{2,h}\,W_{1,h i}W_{1,h j},
 \label{eq:energy_hessian}
 \end{equation}
 
-where $\sigma' = \beta\,\sigma(1-\sigma)$ is the derivative of the sigmoid, 
-$\sigma=\operatorname{sigmoid}(\beta s)$, and $s=\vect W_1\xi+\vect b_1$.
+where, for each hidden unit $h$,
+\begin{equation}
+  \eta_h
+  = 2\Big(\sigma_h^2 + \varphi_\beta(s_h)\,\beta\,\sigma_h(1-\sigma_h)\Big),
+\end{equation}
+and we use the shorthand $\sigma_h = \sigma(\beta s_h)$, $s_h = (\vect W_1\vect \xi + \vect b_1)_h$.
+Here $\sigma' = \beta\,\sigma(1-\sigma)$ is the derivative of the sigmoid. 
+The coefficients $\eta_h\ge 0$ together with $W_{2,h}\ge 0$ ensure positive semidefiniteness of the Hessian.
 
 \textbf{Material stability and positive definiteness}
 
@@ -114,8 +149,6 @@ Strict convexity of \(\psi(\xi)\) implies positive definiteness of the Hessian:
  \vect H = \frac{\partial^2\psi}{\partial\xi^2} > 0,
 \label{eq:positive_hessian}
 \end{equation}
-which ensures positive definiteness of the tangent elasticity moduli 
-$\mathbb{C} = \partial^2\psi/\partial\vect C^2$ via the chain rule. 
 This property is important for numerical stability in finite element computations, 
 as it improves Newton convergence in practice and prevents singularities in the stiffness matrix.
 
@@ -138,9 +171,7 @@ This CLaNN architecture ensures all necessary physical properties of the hyperel
 \textbf{thermodynamic consistency} is achieved through strict compliance with \eqref{eq:chain-rule}, 
 which guarantees conservative stresses $\oint \mathbb{S}:\mathrm{d}\mathbb{C} = 0$ and consistency with the laws of 
 thermodynamics; 
-\textbf{material stability} is ensured and significantly enhanced due to strict convexity of the energy 
-$\psi(\boldsymbol{\xi})$, guaranteed by the ICNN architecture ($\vect{W}_2 \ge 0$, convex nondecreasing activation); 
-\textbf{objectivity} holds automatically thanks to the parametrization via the 
+\textbf{Stress objectivity} holds automatically thanks to the parametrization via the 
 Cauchy--Green tensor $\mathbb{C} = \mathbb{F}^{\top}\mathbb{F}$, ensuring invariance with respect to rotations and stress symmetry; 
 \textbf{strict non-negativity and coercivity of the energy} are provided by the architectural calibration 
 $\psi_{\mathrm{phys}}(\boldsymbol{\xi}) = \mathbf{W}_2^{\top}(z - z_0) - \mathbf{r}_0^{\top}\boldsymbol{\xi}$,
