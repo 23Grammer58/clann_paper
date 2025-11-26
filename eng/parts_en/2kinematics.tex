@@ -4,22 +4,21 @@
 We consider the equilibrium of a thin, incompressible hyperelastic membrane of thickness $H$ under
 prescribed loads.
 The membrane deformation is characterized by the deformation of its midsurface.
-Let \(\vect{X}\) and \(\vect{x}\) denote point positions in the corresponding bases \(\vect{E}_{\alpha}\) and \(\vect{e}_{\alpha}\) in the reference (undeformed) \(\Omega_0 \subset \mathbb{R}^2\) and current (deformed) \(\Omega_t \subset \mathbb{R}^2\) configurations of the membrane midsurface, respectively.
-The deformation is defined by the mapping \(\vect{x} = \vect{x}(\vect{X})\),
-the surface deformation gradient is \(\mathbb{F} = \vect{e}_{\alpha}\otimes\vect{E}^{\alpha}\),
-and the right Cauchy–Green tensor is \(\mathbb C = C_{\alpha\beta} \,\vect{e}_{\alpha} \otimes \vect{e}_{\beta} = \mathbb F^{\top} \mathbb F\).
+Let \(\vect{X}\) and \(\vect{x}\) denote point positions in the corresponding covariant bases \(\vect{G}_{\alpha}\) and \(\vect{g}_{\alpha}\) in the reference (undeformed) \(\Omega_0 \subset \mathbb{R}^2\) and current (deformed) \(\Omega_t \subset \mathbb{R}^2\) configurations of the membrane midsurface, respectively.  
+The deformation is defined by the one-to-one mapping \(\vect{x} = \vect{x}(\vect{X})\),
+the surface deformation gradient in Einstein notation is \(\mathbb{F} = \vect{g}_{\alpha}\otimes\vect{G}^{\alpha}\), where $\vect{G}^{\alpha}$ is a contravariant bases,
+and the right Cauchy–Green tensor is \(\mathbb C = C_{\alpha\beta} \,\vect{G}^{\alpha} \otimes \vect{G}^{\beta} = \mathbb F^{\top} \mathbb F\) with $\lambda_1, \lambda_2$ eigenvalues.
 To define the strain measure we use the Laplace measure \(\vect{\xi} = (\xi_1 , \xi_2 , \xi_3)^T\) \cite{xi2023},
 which may be computed in two equivalent ways:
 either via the QR decomposition of the deformation gradient \(\mathbb F = \mathbb Q \mathbb R\) with \(\tilde{\mathbb F} = \mathbb R\),
-or via the Cholesky factorization of the right Cauchy–Green tensor \(\mathbb C = \tilde{\mathbb F}^{\top}\tilde{\mathbb F}\) (Appendix \ref{app:cholesky}).
-In this case, the hyperelastic strain energy is a function of the Laplace strain, \(\psi = \psi(\vect{\xi})\).
-
+or via the Cholesky factorization of the right Cauchy–Green tensor \(\mathbb C = \tilde{\mathbb F}^{\top}\tilde{\mathbb F}\).
 
 In two dimensions we introduce \textbf{Laplace strain measure}
 \begin{equation}
 \xi_1 = \ln(\tilde F_{11}),\quad \xi_2 = \ln(\tilde F_{22}),\quad \xi_3 = \frac{\tilde F_{12}}{\tilde F_{11}}, 
-\quad \tilde{\mathbb F} = \tilde F_{\alpha\beta} \; \vect{e}_{\alpha} \otimes \vect{e}_{\beta}.
+\quad \tilde{\mathbb F} = \tilde F_{\alpha\beta} \; \vect{G}^{\alpha} \otimes \vect{G}^{\beta}.
 \label{eq:laplace_coords}
 \end{equation}
+In this case, the hyperelastic strain energy is a function of the Laplace strain, \(\psi = \psi(\vect{\xi})\).
 
 

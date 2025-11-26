@@ -72,8 +72,7 @@ Our testing protocol comprises nine experiments:
 
 \subsubsection{Data selection rules}
 \paragraph{Central window $w$.}
-The window is defined in the reference configuration $\Omega_0$ as the central region around the geometric center, aligned with the mesh axes. For $w=5\times5$ mm and $w=10\times10$ mm, we take squares of side 5 and 10 mm, respectively, centered at the specimen center; for $w=\text{full field}$ we take the entire $\Omega_0$. For $w=\text{1-element}$ we take the single central triangle (the minimal-index cell in the 5x5 mm window in $\Omega_0$ as shown in Figure~\ref{fig:malt_window}). Observations include all triangles whose barycenters $\mathbf{X}_T$ lie within the chosen window $\mathcal{W}_w\subset\Omega_0$.
-% TODO: window cardinality in cells
+The window is defined in the reference configuration $\Omega_0$ as the central region around the geometric center, aligned with the mesh axes. For $w=5\times5$ mm and $w=10\times10$ mm, we take squares of side 5 and 10 mm, respectively, centered at the specimen center; for $w=\text{full field}$ we take the entire $\Omega_0$. For $w=\text{1-element}$ we take the single central triangle (the minimal-index cell in the 5x5 mm window in $\Omega_0$ as shown in Figure~\ref{fig:malt_window}). For $w=\text{2-element}$ we add to the window $w=\text{1-element}$ the peripheral triangle "Shear cell" located at the specimen edge, as shown in Figure~\ref{fig:malt_window}. Observations include all triangles whose barycenters $\mathbf{X}_T$ lie within the chosen window $\mathcal{W}_w\subset\Omega_0$.
 
 \paragraph{Composition of observations (data).}
 At each load step $n=1,\dots,N$ and for each triangle $T\in\mathcal{T}_w$ (cells within the window) we record the pair $(\mathbb C_T^{(n)},\,\mathbb S_T^{(n)})$, where $\mathbb C$ is the right Cauchy--Green tensor and $\mathbb S$ is the PK2 stress. Units: window sizes in mm; $\mathbb C$ dimensionless; $\mathbb S$ in MPa. Typical counts: 1 ($w=\text{1-element}$), 252 ($5\times5$ mm), 954 ($10\times10$ mm), and 5404 (full field).
@@ -119,10 +118,6 @@ where $y_i$ are experimental values, $\hat{y}_i$ are model predictions, $\bar{y}
 \end{equation}
 
 \textbf{Absolute integral error for stresses (Frobenius norm).}
-\begin{equation}\label{eq:l2_abs_stress}
-  \|e\|_{L^2} = \Bigg( \sum_{K} \overline{\| \mathbb S_{\text{ref}} - \mathbb S_{\text{pred}} \|_F^{2}}^{\,K}\, |K| \Bigg)^{\tfrac12},
-\end{equation}
-where $|K|$ is the cell measure (area). For cell data, no intra-cell averaging is required:
 \begin{equation}\label{eq:l2_abs_stress_cell}
   \|e\|_{L^2} = \Bigg( \sum_{K} \| \mathbb S_{\text{ref},K} - \mathbb S_{\text{pred},K} \|_F^{2}\, |K| \Bigg)^{\tfrac12}.
 \end{equation}
@@ -158,29 +153,96 @@ Optimization reduces loss by five orders within $<5000$ epochs (Figure~\ref{fig:
 
 
 \subsection{Interpolation and extrapolation of loading curves}
-We evaluate on $D_{\mathrm{tr}}(p,w)$ and $D_{\mathrm{val}}(p,w)$ at fixed $w$. We track $R^2_{\alpha}$, $\alpha\in\{xx,yy,xy\}$.
+  We first examined how the CLaNN model interpolates and extrapolates loading curves using training and validation sets
+  $D_{\mathrm{tr}}(p,w)$ and $D_{\mathrm{val}}(p,w)$ for a given observation window $w$.
+  For quality assessment, we used the coefficient of determination $R^2$ (see Section~\ref{sec:metrics}, Eq.~\eqref{eq:r_squared}). The quality metric is defined as:
+\[
+  R^2_{\alpha}(D_{\mathrm{val}}),\qquad \alpha\in\{xx,yy,xy\}.
+\]
 
-\textbf{Interpolation.}
-Using 10 load levels from equi-biaxial ($p=1$), window $w=\text{1-element}$. CLANN achieves $R^2_{xx}=0.999$, $R^2_{yy}=0.999$, while $R^2_{xy}=0$ (Figure \ref{fig:interpolation}).
+  \textbf{Interpolation.}  
 
+  To test the CLaNN architecture's ability to interpolate loading curves, we used data from 
+  10 points on the loading curve of equibiaxial membrane stretching $p=1$, 
+  observation window $w=\text{1-element}$:
+  
+  $D_{in} = D(p{=}1,\,w{=}\text{1-element}),\, n = 1..10,$
+  
+  $D_{\mathrm{tr}}=\{\forall (\mathbb {C}^{n_{tr}}, \mathbb{S}^{n_{tr}}) \in D_{in}|\; n_{tr}=\{1,5,10\}\},$
+  
+  $D_{\mathrm{val}}=\{\forall (\mathbb {C}^{n_{val}}, \mathbb{S}^{n_{val}}) \in D_{in}|\; n_{val}\notin n_{tr}\}.$
+
+  CLaNN showed high interpolation accuracy for the equibiaxial membrane stretching loading curve 
+  for normal components $R^2_{xx}=0.999$, $R^2_{yy}=0.999$, and absence of reliable prediction for shear 
+  components $R^2_{xy}=0$ (Figure~\ref{fig:interpolation}).
+  
   \begin{figure}[H]
     \centering
     \includegraphics[width=1.0\textwidth]{../img/interpolation.png}
-    \caption{Loading curve for equi-biaxial stretching}
+    \caption{Loading curve for equibiaxial stretching}
     \label{fig:interpolation}
   \end{figure}
   
   \textbf{Extrapolation.}
-  Train on $p=1$, validate on $p=9$, window $w=\text{1-element}$: $R^2_{xx}=0.993$, $R^2_{yy}=1.0$, $R^2_{xy}=0$ (Figure \ref{fig:extrapolation}).
+  
+  To test CLaNN's ability to extrapolate loading curves, we used training on equibiaxial stretching ($p = 1$) and validation on non-equibiaxial stretching ($p = 9$), 
+  observation window $w=\text{1-element}$:
+  
+  $D_{\mathrm{tr}} = D(p{=}1,\,w{=}\text{1-element}),\, n = 1..10,$
+  
+  $D_{\mathrm{val}} = D(p{=}9,\,w{=}\text{1-element}),\, n = 1..10,$
+  
+  CLaNN showed high extrapolation accuracy for normal components $R^2_{xx}=0.993$, $R^2_{yy}=1.0$, and absence of reliable prediction for the shear component $R^2_{xy}=0$ (Figure~\ref{fig:extrapolation}).
+
 
   \begin{figure}[H]
     \centering
     \includegraphics[width=1.0\textwidth]{../img/extrapolation.png}
-    \caption{Loading curve for non-equi-biaxial stretching}
+    \caption{Loading curve for non-equibiaxial stretching}
     \label{fig:extrapolation}
   \end{figure}
    
-  Thus, CLANN interpolates and extrapolates axial components with high accuracy; shear prediction remains limited without richer shear coverage.
+  Thus, CLaNN is capable of interpolating and extrapolating loading curves with high accuracy, demonstrating its ability to generalize to new data.
+  However, it fails to predict shear components $\mathbb S_{xy}$, which may be due to insufficient data magnitude for the shear components.
+  
+  % Проблему недостатка данных для обучения модели CLaNN на сдвиговых компонентах деформации/напряжения мы обсудим дальше.
+  We trained CLaNN on 
+
+  $D_{\mathrm{tr}} = D(p = 1..9,w=\text{2-element})$ 
+
+  $D_{\mathrm{val}} = D(p = 1..9,w=\text{"Shear cell"})$ 
+  
+  data with large shear components of deformation/stress and obtained loading curves (Figure~\ref{fig:curves_2}) for $p = 1..9$ with high accuracy. The coefficient of determination $R^2$ for all components is summarized in Table~\ref{tab:r2_shear_cell}.
+
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=1.0\textwidth]{../img/2_clann.png}
+    \caption{Loading curves for protocols $p = 1..9$}
+    \label{fig:curves_2}
+  \end{figure}
+
+  \begin{table}[H]
+  \centering
+  \caption{Coefficient of determination $R^2$ for protocols $p = 1..9$}
+  \label{tab:r2_shear_cell}
+  \begin{tabular}{|c|c|c|c|}
+  \hline
+  \textbf{p} & $R^2_{xx}$ & $R^2_{yy}$ & $R^2_{xy}$ \\
+  \hline
+  1 & 0.893 & 0.970 & 0.980 \\
+  2 & 0.943 & 0.984 & 0.976 \\
+  3 & 0.946 & 0.984 & 0.977 \\
+  4 & 0.972 & 0.992 & 0.971 \\
+  5 & 0.974 & 0.993 & 0.971 \\
+  6 & 0.981 & 0.995 & 0.965 \\
+  7 & 0.978 & 0.996 & 0.965 \\
+  8 & 0.979 & 0.992 & 0.953 \\
+  9 & 0.969 & 0.999 & 0.946 \\
+  \hline
+  \end{tabular}
+  \end{table}
+
+  
 \subsection{Membrane inflation}
 
   We test inflation of a clamped circular membrane (radius 25 mm) under 5 MPa pressure, comparing CLANN to a Neo-Hookean reference with the same shear parameter as used in training-data generation.
