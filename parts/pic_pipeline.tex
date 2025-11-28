@@ -18,17 +18,17 @@
 % LEFT COLUMN
 \node[boxL, minimum width=46mm, minimum height=32mm] (fe) {FE stretching\\ \scriptsize protocols $p$\\[2pt]
   \includegraphics[width=0.3\linewidth]{../img/Numerical/malt_stress.png}};
-\node[boxL, below=8mm of fe, minimum width=46mm] (data) {Data collection\\ $D(p,w)=\{(C,S)\}$};
+\node[boxL, below=8mm of fe, minimum width=46mm] (data) {Data collection\\ $D(p,w)=\{(\mathbb{C},\mathbb{S})\}$};
 
 % MIDDLE COLUMN
-\node[boxM, right=28mm of fe, minimum width=54mm] (xi) {Laplace strain\\ $\boldsymbol{\xi}=\boldsymbol{\xi}(C)$};
+\node[boxM, right=28mm of fe, minimum width=54mm] (xi) {Laplace strain\\ $\boldsymbol{\xi}=\boldsymbol{\xi}(\mathbb{C})$};
 \node[boxM, below=8mm of xi, minimum width=54mm] (arch) {CLaNN architecture\\ $\psi_{\rm phys}(\boldsymbol{\xi})$};
-\node[boxM, below=8mm of arch, minimum width=54mm] (smap) {Autodiff \\ $S=\partial\psi/\partial C$};
-\node[trainbox, below=8mm of smap, minimum width=54mm] (train) {Training\\ $L=\|\vect S_{pred}-\vect S\|_{L2}$ (Adam)};
+\node[boxM, below=8mm of arch, minimum width=54mm] (smap) {Autodiff \\[1pt] $\displaystyle \hat{\mathbb S}=\frac{\partial\psi_{\rm phys}}{\partial \mathbb{C}}$};
+\node[trainbox, below=8mm of smap, minimum width=54mm] (train) {Training\\ $L=\|\hat{\mathbb S}-\mathbb S\|_{L2}\xrightarrow{\text{Adam}}0$};
 
 % RIGHT COLUMN
-\node[boxR, right=28mm of arch, minimum width=50mm] (gh) {Derivatives\\ $g(\xi),\ H(\xi)$};
-\node[boxR, below=8mm of gh, minimum width=50mm, minimum height=36mm] (infl) {FE inflation\\ relaxation + Newton\\[2pt]
+\node[boxR, right=28mm of arch, minimum width=50mm] (gh) {Derivatives\\ $g(\boldsymbol{\xi}),\ H(\boldsymbol{\xi})$};
+\node[boxR, below=8mm of gh, minimum width=50mm, minimum height=36mm] (infl) {FE inflation tests \\ homogeneous / heterogeneous thickness \\ Solvers: relaxation $\rightarrow$ Newton\\[2pt]
   \includegraphics[width=0.3\linewidth]{../img/Numerical/het/plane.png}};
 
 % ORTHOGONAL ARROWS

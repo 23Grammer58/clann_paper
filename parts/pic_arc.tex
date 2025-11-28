@@ -27,11 +27,11 @@
 \draw[->] (C.east) -- (x3.west);
 
 % Аффинная проекция
-\node[neur0, right=14mm of x1, yshift=12mm] (h11) {};
-\node[neur0, right=14mm of x1] (h12) {};
-\node[neur0, right=14mm of x1, yshift=-12mm] (h13) {};
+\node[neur0, right=14mm of x1, yshift=12mm] (h11) {\scriptsize 1};
+\node[neur0, right=14mm of x1] (h12) {\scriptsize 2};
+\node[neur0, right=14mm of x1, yshift=-12mm] (h13) {\scriptsize 3};
 \node[align=center, right=14mm of x1, yshift=-22mm] (vdots0) {$\vdots$};
-\node[neur0, right=14mm of x1, yshift=-34mm] (h14) {};
+\node[neur0, right=14mm of x1, yshift=-34mm] (h14) {\scriptsize h};
 \draw[->] (x1) -- (h11.west);
 \draw[->] (x2) -- (h11.west);
 \draw[->] (x3) -- (h11.west);
@@ -45,7 +45,7 @@
 \draw[->] (x2) -- (h14.west);
 \draw[->] (x3) -- (h14.west);
 % \node[block, above=2mm of h11, text width=36mm] (aff) {$s = W_1\,\xi + b_1$};
-\node[actblk, above=2mm of h11] (soft) {$z_i = \mathrm{softplus}(\beta (W_1\,\xi + b_1))/\beta$};
+\node[actblk, above=2mm of h11] (soft) {$z_i = \mathrm{softplus^2}(\beta (W_1\,\xi + b_1))/\beta^2$};
 
 % % Скрытый слой (softplus): три нейрона, троеточие и ещё один
 % \node[neur, right=14mm of h12, yshift=12mm] (h1) {};
@@ -77,6 +77,6 @@
 % \draw[->] (readout.south) -- (psiphys.north);
 
 % Рамка и заголовок
-\node[fit=(C)(x3)(soft)(readout)(Sblock), label={[title]above:{CLaNN architecture: one-layer ICNN}}] (archfit) {};
+\node[fit=(C)(h14)(soft)(readout)(Sblock), label={[title]above:{CLaNN architecture: one-layer ICNN}}] (archfit) {};
 
 \end{tikzpicture}

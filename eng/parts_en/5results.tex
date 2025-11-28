@@ -33,7 +33,8 @@ The displacement $w_i \cdot n \cdot \Delta s$ is applied to the $i$-th arm at st
 $N = u_{\max}/\Delta s$ is the number of steps. 
 The hyperelastic nodal force method was applied to the initially flat quasi-uniform unstructured triangulation with mesh size $h=0.5$ mm and size $5\,404$ triangles. The maximum arm displacement
 $u_{\max} = 2$ mm and $\Delta s = 0.2$ mm.
-At each step, $\mathbb{C}, \mathbb{S}$ were extracted for all triangles belonging to the selected observation window. 
+At each step, $\mathbb{C}, \mathbb{S}$ were extracted for all triangles belonging to the selected observation window $w$, and because we use linear (P1) elements the tensors are constant within each triangle. 
+Each loading scenario is encoded by a protocol index $p\in\{1,\dots,9\}$ that specifies the tuple $(w_1,\dots,w_4)$ according to Table~\ref{tab:test_protocols}, enabling systematic sampling of equibiaxial and non-equibiaxial load paths.
 % Using linear (P1) elements, (C,S) are cellwise constants.
 
 Our testing protocol comprises nine experiments:
@@ -58,7 +59,8 @@ Our testing protocol comprises nine experiments:
     9 & 0 & 1 & 0 & 1 \\
     \hline
     \end{tabular}
-\captionof{table}{Testing protocols}
+    \vspace{0.9em}
+\captionof{table}{Biaxial testing protocols}
     \label{tab:test_protocols}
   \end{minipage}\hfill
   \begin{minipage}[t]{0.48\textwidth}
@@ -72,7 +74,7 @@ Our testing protocol comprises nine experiments:
 
 \subsubsection{Data selection rules}
 \paragraph{Central window $w$.}
-The window is defined in the reference configuration $\Omega_0$ as the central region around the geometric center, aligned with the mesh axes. For $w=5\times5$ mm and $w=10\times10$ mm, we take squares of side 5 and 10 mm, respectively, centered at the specimen center; for $w=\text{full field}$ we take the entire $\Omega_0$. For $w=\text{1-element}$ we take the single central triangle (the minimal-index cell in the 5x5 mm window in $\Omega_0$ as shown in Figure~\ref{fig:malt_window}). For $w=\text{2-element}$ we add to the window $w=\text{1-element}$ the peripheral triangle "Shear cell" located at the specimen edge, as shown in Figure~\ref{fig:malt_window}. Observations include all triangles whose barycenters $\mathbf{X}_T$ lie within the chosen window $\mathcal{W}_w\subset\Omega_0$.
+The window $w$ is defined in the reference configuration $\Omega_0$ as the central region around the geometric center, aligned with the mesh axes. For $w=5\times5$ mm and $w=10\times10$ mm, we take squares of side 5 and 10 mm, respectively, centered at the specimen center; for $w=\text{full field}$ we take the entire $\Omega_0$. For $w=\text{1-element}$ we take the single central triangle (the minimal-index cell in the 5x5 mm window in $\Omega_0$ as shown in Figure~\ref{fig:malt_window}). For $w=\text{2-element}$ we add to the window $w=\text{1-element}$ the peripheral triangle "Shear cell" located at the specimen edge, as shown in Figure~\ref{fig:malt_window}. Observations include all triangles whose barycenters $\mathbf{X}_T$ lie within the chosen window $\mathcal{W}_w\subset\Omega_0$.
 
 \paragraph{Composition of observations (data).}
 At each load step $n=1,\dots,N$ and for each triangle $T\in\mathcal{T}_w$ (cells within the window) we record the pair $(\mathbb C_T^{(n)},\,\mathbb S_T^{(n)})$, where $\mathbb C$ is the right Cauchy--Green tensor and $\mathbb S$ is the PK2 stress. Units: window sizes in mm; $\mathbb C$ dimensionless; $\mathbb S$ in MPa. Typical counts: 1 ($w=\text{1-element}$), 252 ($5\times5$ mm), 954 ($10\times10$ mm), and 5404 (full field).
@@ -102,9 +104,10 @@ We use integral and pointwise metrics consistent with variational elasticity nor
 
 \textbf{Coefficient of determination $R^2$.}
 \begin{equation}\label{eq:r_squared}
-  R^2 = 1 - \frac{\sum_{i=1}^n (y_i - \hat{y}_i)^2}{\sum_{i=1}^n (y_i - \bar{y})^2},
+  R^2 = 1 - \frac{\sum_{i=1}^N (\mathbb{S}_i - \hat{\mathbb{S}}_i)^2}{\sum_{i=1}^N (\mathbb{S}_i - \bar{\mathbb{S}})^2},
+  \qquad R^2_{\alpha}(D_{\mathrm{val}}),\quad \alpha\in\{xx,yy,xy\}.
 \end{equation}
-where $y_i$ are experimental values, $\hat{y}_i$ are model predictions, $\bar{y}$ is the mean, and $n$ is the number of points.
+where $\mathbb{S}_i$ are experimental values, $\hat{\mathbb{S}}_i$ are model predictions, $\bar{\mathbb{S}}$ is the mean, and $N$ is the number of points.
 
 \textbf{Pointwise relative error.}
 \begin{equation}\label{eq:rel_error}
@@ -146,7 +149,7 @@ Optimization reduces loss by five orders within $<5000$ epochs (Figure~\ref{fig:
 
 \begin{figure}[H]
   \centering
-\includegraphics[width=0.7\textwidth]{../img/loss_curve.png}
+\includegraphics[width=0.5\textwidth]{../img/loss_curve.png}
   \caption{Loss curve when training on 90 data points}
   \label{fig:loss_curve}
 \end{figure}
@@ -155,10 +158,8 @@ Optimization reduces loss by five orders within $<5000$ epochs (Figure~\ref{fig:
 \subsection{Interpolation and extrapolation of loading curves}
   We first examined how the CLaNN model interpolates and extrapolates loading curves using training and validation sets
   $D_{\mathrm{tr}}(p,w)$ and $D_{\mathrm{val}}(p,w)$ for a given observation window $w$.
-  For quality assessment, we used the coefficient of determination $R^2$ (see Section~\ref{sec:metrics}, Eq.~\eqref{eq:r_squared}). The quality metric is defined as:
-\[
-  R^2_{\alpha}(D_{\mathrm{val}}),\qquad \alpha\in\{xx,yy,xy\}.
-\]
+  For quality assessment, we used the coefficient of determination $R^2$.
+
 
   \textbf{Interpolation.}  
 
@@ -179,7 +180,7 @@ Optimization reduces loss by five orders within $<5000$ epochs (Figure~\ref{fig:
   \begin{figure}[H]
     \centering
     \includegraphics[width=1.0\textwidth]{../img/interpolation.png}
-    \caption{Loading curve for equibiaxial stretching}
+    \caption{Interpolation of the equibiaxial loading curve from three anchor points ($n=\{1,5,10\}$)}
     \label{fig:interpolation}
   \end{figure}
   
@@ -198,7 +199,7 @@ Optimization reduces loss by five orders within $<5000$ epochs (Figure~\ref{fig:
   \begin{figure}[H]
     \centering
     \includegraphics[width=1.0\textwidth]{../img/extrapolation.png}
-    \caption{Loading curve for non-equibiaxial stretching}
+    \caption{Extrapolation: prediction of the $p = 9$ loading curve using a model trained on the $p = 1$}
     \label{fig:extrapolation}
   \end{figure}
    
@@ -211,13 +212,12 @@ Optimization reduces loss by five orders within $<5000$ epochs (Figure~\ref{fig:
   $D_{\mathrm{tr}} = D(p = 1..9,w=\text{2-element})$ 
 
   $D_{\mathrm{val}} = D(p = 1..9,w=\text{"Shear cell"})$ 
-  
   data with large shear components of deformation/stress and obtained loading curves (Figure~\ref{fig:curves_2}) for $p = 1..9$ with high accuracy. The coefficient of determination $R^2$ for all components is summarized in Table~\ref{tab:r2_shear_cell}.
 
   \begin{figure}[H]
     \centering
     \includegraphics[width=1.0\textwidth]{../img/2_clann.png}
-    \caption{Loading curves for protocols $p = 1..9$}
+    \caption{Predicted loading curves for window $w = \text{2-element}$ for protocols $p = 1..9$}
     \label{fig:curves_2}
   \end{figure}
 

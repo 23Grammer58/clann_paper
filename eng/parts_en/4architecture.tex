@@ -55,8 +55,8 @@ variables $\boldsymbol{\xi}$.
 Consider a one-hidden-layer ICNN for approximating $\psi(\boldsymbol{\xi})$:
 \begin{equation}
   s = \mathbf{W}_1 \,\boldsymbol{\xi} + \mathbf{b}_1,\qquad
-  z = \varphi_{\beta}^2(s),\qquad
-  \tilde{\psi} = \mathbf{W}_2^{\top} z + b_2,\qquad \mathbf{W}_2 \ge 0.
+  \vect z = \varphi_{\beta}^2(s),\qquad
+  \tilde{\psi} = \mathbf{W}_2^{\top} \vect z + b_2,\qquad \mathbf{W}_2 \ge 0.
   \label{eq:icnn_onelayer}
 \end{equation}
 
@@ -75,8 +75,8 @@ $\mathbf{W}_2\!\in\mathbb{R}^{h}_{\ge 0}$, $h$ is the hidden layer width.
 To satisfy $\psi(\mathbf{0})=0$, we center the energy by
 subtracting the value of the nonlinear part at $\boldsymbol{\xi}=\mathbf{0}$:
 \begin{equation}
-  z_0 = \varphi_{\beta}^2(\mathbf{b}_1),\qquad
-  \psi(\boldsymbol{\xi}) = \mathbf{W}_2^{\top}\big(z - z_0\big),\qquad (b_2 \equiv 0).
+  \vect z_0 = \varphi_{\beta}^2(\mathbf{b}_1),\qquad
+  \psi(\boldsymbol{\xi}) = \mathbf{W}_2^{\top}\big(\vect z - \vect z_0\big),\qquad (b_2 \equiv 0).
   \label{eq:center_psi}
 \end{equation}
 Then $\psi(\mathbf{0})=0$. Since $z_0$ does not depend on $\boldsymbol{\xi}$, 
@@ -121,7 +121,7 @@ Analytical differentiation of the energy with respect to \(\xi\) yields the grad
 \end{equation}
 where $\vect s = \vect W_1 \vect \xi + \vect b_1$, $\sigma(x) = \frac{1}{1 + e^{-x}}$ is the sigmoid, 
 and $\odot$ denotes the elementwise (Hadamard) product. 
-Compared to the case with $z=\varphi_\beta(s)$, an additional factor $2\,\varphi_\beta(\vect s)$ appears, 
+Compared to the case with $\vect z=\varphi_\beta(\vect s)$, an additional factor $2\,\varphi_\beta(\vect s)$ appears, 
 so that the contribution of each hidden neuron to the gradient is scaled by the activation magnitude.
 
 \textbf{Hessian of the strain energy}
