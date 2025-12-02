@@ -24,14 +24,14 @@
 \usetikzlibrary{arrows.meta,positioning,fit}
 
 % Title and metadata
-\Title{Convex Neural Network with Laplace Strain for Data-Driven Hyperelasticity}
+\Title{Convex Neural Network based on Laplace Stretch for Data-Driven Hyperelasticity}
 \TitleCitation{CLaNN (Convex Laplace Neural Network)}
 
 \newcommand{\orcidauthorA}{0000-0002-5860-4419}
 \newcommand{\orcidauthorD}{0000-0001-8324-6695}
 \newcommand{\orcidauthorC}{0000-0002-9936-8379}
 \newcommand{\orcidauthorB}{0000-0002-4050-214X}
-\Author{Dits D. $^{1}$\orcidA{}, Salamatova V.$^{2, *}$ \orcidD{}, Liogky A.$^{2,3}$\orcidC{} , Ovsepyan A.$^{1, 2}$\orcidB{}}
+\Author{Dits D. $^{1, *}$\orcidA{}, Salamatova V.$^{2}$ \orcidD{}, Liogky A.$^{3}$\orcidC{} , Ovsepyan A.$^{1, 2}$\orcidB{}}
 \AuthorNames{Dits D., et al.}
 \isAPAStyle{\AuthorCitation{Dits D., et al.}}{\isChicagoStyle{\AuthorCitation{Dits D., et al.}}{\AuthorCitation{Dits D., et al.}}}
 \address{$^{1}$ \quad Scientific Center for Information Technology and Artificial Intelligence, Sirius University of Science and Technology, 1 Olympiyskii pr., Sochi 354340, Russia; daniil.dits@gmail.com; 
@@ -45,14 +45,15 @@ $^{3}$ \quad Marchuk Institute of Numerical Mathematics of the Russian Academy o
 \corres{Correspondence: Author to whom correspondence should be addressed}
 
 \abstract{%
-Background: Accurate data-driven hyperelastic models must honor mechanical constraints while delivering competitive runtimes for large-strain simulations.%
- Methods: We introduce CLaNN, an input-convex neural network formulated in Laplace strain measure. 
-The architecture is trained on synthetic biaxial tests of a Maltese-cross membrane generated with a Neo-Hookean reference model. Training datasets are assembled by extracting $(\mathbb{C},\mathbb{S})$ pairs from windows of increasing size to control the amount of shear data.%
- Results: We tested CLaNN for interpolates and extrapolate stresses with small data size; 
-In membrane-inflation benchmarks (homogeneous and heterogeneous thickness) the predicted Second Piola--Kirchhoff stresses match the Neo-Hookean reference with sub-5\% relative $L^2$ error once the training window exceeds $5{\times}5$ mm, while the strictly convex energy enables Newton-type solves that converge in the same number of global iterations as the analytic Neo-Hookean law, demonstrating faithful prediction of stress fields on independent tests. 
-Overall runtime is comparable to the calibrated Neo-Hookean solver and $\sim\!10^2$ faster than a Laplace-space kNN/DD baseline that lacks smoothness.%
-Conclusions: CLaNN blends interpretable Laplace kinematics with ICNN-based convex potentials, delivering thermodynamically consistent, smooth constitutive responses that extrapolate across biaxial load paths and accelerate finite-element simulations.}
-%  A Cholesky-based logarithmic parameterization of the right Cauchy--Green tensor ensures convexity and enables stable differentiation. An input convex neural network (ICNN) with nonnegative output weights defines a strictly convex stored-energy density. Second Piola--Kirchhoff stresses are obtained by differentiating the energy with respect to the strain measure via the chain rule, which guarantees thermodynamic consistency and objective, conservative stresses. We provide explicit 2D formulas for stresses and an analytic Hessian used in Newton's method, together with a training loss that augments data misfit with anchors at the undeformed state to enforce zero energy and zero stress. The convexity of the energy yields positive-definite tangent moduli and robust convergence, while the logarithmic parameterization handles large strains. The approach integrates efficiently with finite element solvers and recovers linear elasticity in the small-strain limit.
+Background: Accurate data-driven hyperelastic models must satisfy mechanical constraints while achieving competitive runtimes for large-deformation simulations.%
+Methods: We introduce CLaNN, an input-convex neural network formulated in the Laplace stretch measure.
+The architecture is trained using synthetic biaxial tests on a Maltese-cross membrane generated with a Neo-Hookean reference model. 
+Results: We tested CLaNN for interpolating and extrapolating stresses with a small data size. 
+For membrane-inflation benchmarks—both homogeneous and heterogeneous thickness—CLaNN predicts $\mathbb{S}$ stresses that closely match the Neo-Hookean reference, achieving under 5\% relative $L^2$ error with sufficient training data. 
+The network's strict convexity allows Newton-type solvers to converge in as few global iterations as for the analytic Neo-Hookean law, confirming robust prediction of stress fields on independent tests. 
+Overall runtime is comparable to the Neo-Hookean solver and $\sim\!10^2$ faster than a Laplace-space kNN/DD baseline that lacks smoothness.%
+Conclusions: CLaNN combines interpretable Laplace kinematics with ICNN-based convex potentials, yielding thermodynamically consistent and smooth constitutive responses that extrapolate across biaxial load paths and accelerate finite-element simulations of inflation tests.}
+%  A Cholesky-based logarithmic parameterization of the right Cauchy--Green tensor ensures convexity and enables stable differentiation. An input convex neural network (ICNN) with nonnegative output weights defines a strictly convex stored-energy density. Second Piola--Kirchhoff stresses are obtained by differentiating the energy with respect to the stretch measure via the chain rule, which guarantees thermodynamic consistency and objective, conservative stresses. We provide explicit 2D formulas for stresses and an analytic Hessian used in Newton's method, together with a training loss that augments data misfit with anchors at the undeformed state to enforce zero energy and zero stress. The convexity of the energy yields positive-definite tangent moduli and robust convergence, while the logarithmic parameterization handles large stretches. The approach integrates efficiently with finite element solvers and recovers linear elasticity in the small-stretch limit.
 \keyword{hyperelasticity; convex neural networks; continuum mechanics; finite elements}
 
 \begin{document}

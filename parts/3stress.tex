@@ -10,42 +10,30 @@
   \qquad \vect{r}:=\frac{\partial \psi}{\partial \vect{\xi}}.
   \label{eq:chain-rule}
 \end{equation}
-Вектор $\frac{\partial \boldsymbol\xi}{\partial \mathbf{C}}$ называют базисом, он является известным \colorbox{yellow}{В смысле расхожим, или известным из экспериментальных данных?} аналитическим выражением, зависящим от выбранной меры деформации; $\vect{r} = (r_1, r_2, r_3)$ -- функцией отклика, которая является итоговым \textit{искомым} в процессе обучения \textit{data-driven} определяющего соотношения.   
+Тензор $\frac{\partial \boldsymbol\xi}{\partial \mathbf{C}}$ называют базисом, он является известным аналитическим выражением, зависящим от выбранной меры деформации; $\vect{r} = (r_1, r_2, r_3)$ — функция отклика, которая выучивается из данных в процессе обучения data-driven модели.   
+
+Записывая уравнение \eqref{eq:chain-rule} покомпонентно и подставляя известный базис $\frac{\partial \vect{\xi}}{\partial \mathbb{C}}$, получаем аналитические выражения для компонент второго тензора напряжений Пиолы-Кирхгофа в двумерном случае:
+\begin{equation}
+\begin{aligned}
+  S_{11} &= e^{-2\xi_1}\big(r_1-2\xi_3 r_3\big) + e^{-2\xi_2} r_2\,\xi_3^2,\\
+  S_{22} &= e^{-2\xi_2} r_2,\\
+  S_{12} &= -e^{-2\xi_2} r_2\,\xi_3 + e^{-2\xi_1} r_3.
+\end{aligned}
+\label{eq:stress_components_2d}
+\end{equation}
+Здесь $S_{11}$, $S_{22}$ и $S_{12}$ — компоненты в материальном базисе $\vect{G}^{\alpha}\otimes\vect{G}^{\beta}$, согласованные с представлением $\tilde{\mathbb{F}}$ в уравнении \eqref{eq:laplace_coords}.
 
 Такое построение имеет ключевые следствия:
 \newline
-\textit{Объективность:} $\psi(\mathbb{C})=\psi(\mathbb{Q}^\top\mathbb{C}\mathbb{Q})$ для любой ортогональной $\mathbb{Q}$, а значит и $\mathbb{S}$ инвариентен к поворотам.
+\textit{Объективность:} $\psi(\mathbb{C})=\psi(\mathbb{Q}^\top\mathbb{C}\mathbb{Q})$ для любой ортогональной $\mathbb{Q}$, а значит и $\mathbb{S}$ инвариантен к поворотам.
 \newline
 \textit{Симметрия напряжений:} $\mathbb{S}=\mathbb{S}^\top$ вследствие симметрии $\mathbb{C}$ и корректного применения цепного правила.
 \newline
 \textit{Термодинамическая корректность:} равенство \eqref{eq:chain-rule} является следствием неравенства Клаузиуса-Дюгема 
 $\mathcal{D} = \mathbb{S} : \dot{\mathbb{C}} - \dot{\psi}(\mathbb{C}) \geq 0$, 
 выражающее второе начало термодинамики для механических процессов \cite{truesdell1984historical,truesdell2004nonlinear}.
-% \begin{itemize}
-%   \item \textbf{Объективность:} $\psi(\mathbf{C})=\psi(\mathbf{Q}^\top\mathbf{C}\mathbf{Q})$ для любой ортогональной $\mathbf{Q}$, а значит и $\mathbf{S}$ инвариантен к поворотам.
-%   \item \textbf{Симметрия напряжений:} $\mathbf{S}=\mathbf{S}^\top$ вследствие симметрии $\mathbf{C}$ и корректного применения цепного правила.
-%   \item \textbf{Термодинамическая корректность:} равенство \eqref{eq:chain-rule} является следствием неравенства Клаузиуса-Дюгема 
-%   $\mathcal{D} = \mathbf{S} : \dot{\mathbf{C}} - \dot{\psi}(\mathbf{C}) \geq 0$, 
-%   выражающее второе начало термодинамики для механических процессов \cite{truesdell1984historical,truesdell2004nonlinear}.
-% \end{itemize}
 
-% \textbf{Связь тензора Лапласа и второго тензора напряжений Пиолы-Кирхгофа}
-
- % Необходимо установить связь деформации Лапласа $\vect{\xie}$ и второго тензора напряжений Пиолы-Кирхгофа $\vect{S}$. Применяя цепное правило дифференцирования к выражению \eqref{eq:chain-rule} и используя меру деформации Лапласа,
-
-Расписав покомпонентно уравнение \eqref{eq:chain-rule} и подставив туда известный базис $\frac{\partial \vect{\xi}}{\partial \mathbb{C}}$, получаем аналитические выражения для компонент второго тензора напряжений Пиолы-Кирхгофа в двумерном случае:
-
-\begin{equation}
-\begin{aligned}
-  S_{11} &= e^{-2\xi_1}\big(r_1-2\xi_3 r_3\big) + e^{-2\xi_2} r_2\,\xi_3^2,\\
-  S_{22} &= e^{-2\xi_2} r_2,\\
-  S_{12} &= -e^{-2\xi_2} r_2\,\xi_3 + e^{-2\xi_1} r_3,
-\end{aligned}
-\label{eq:stress_components_2d}
-\end{equation}
-% $r_1, r_2, r_3$ — компоненты функции отклика $\mathbf{r} = \frac{\partial \psi}{\partial \boldsymbol\xi}$.
-
-\textbf{Фундаментальные ограничения\colorbox{yellow}{чего? на что? Лучше первым абзацем архитектуры, как требования к гиперупругому потенциалу}}
+\textbf{Гиперупругие ограничения}
 
 В соответствии с принципами термодинамики и механики сплошных сред, 
 гиперупругая модель $\psi$ должна удовлетворять ряду фундаментальных ограничений, обеспечивающих физическую корректность и 
@@ -56,26 +44,20 @@ $\mathcal{D} = \mathbb{S} : \dot{\mathbb{C}} - \dot{\psi}(\mathbb{C}) \geq 0$,
     \psi(\vect{\xi}) \ge 0\quad \forall\,\vect{\xi}\in\mathbb{R}^3.
     \label{eq:non_negativity}
   \end{equation}
-  % Это 
 \newline  
- \textit{Нулевые значения для $\psi$ и $\vect S$ в естественном состоянии} означают, что недеформированное (начальное) состояние среды не имеет остаточных напряжений
+ \textit{Нулевые значения для $\psi$ и $\mathbb S$ в естественном состоянии} означают, что недеформированное (начальное) состояние среды не имеет остаточных напряжений
   \begin{equation}
-    \psi(\vect 0)=0,\qquad \vect S(\vect I)=\vect 0,
+    \psi(\vect 0)=0,\qquad \mathbb S(\mathbb I)=\vect 0,
     \label{eq:natural_state_stress}
   \end{equation}
 \newline
-  \textit{Бесконечный рост (коэрцитивность)}. Неограниченный рост меры деформации физически недостижим при конечной работе \colorbox{yellow}{не совсем понятно, уместно ли говорить про $J\to\infty$ для случая несжимаемой мембраны}
+  \textit{Бесконечный рост (коэрцитивность)}. Неограниченный рост меры деформации физически недостижим при конечной работе
   \begin{equation}
     \psi(\vect{\xi}) \to \infty\ \text{при}\ \lVert\vect{\xi}\rVert\to\infty,\qquad
     \mathbb{S} \to \infty\ \text{при}\ J\to\infty \text{ или } J\to 0^{+},\qquad
-    J=\det\vect F,
+    J=\det\mathbb F,
     \label{eq:energy_constraints}
   \end{equation}
-  % Данное свойство обеспечивает коэрцивность: крайние объёмные деформации ($J\to\infty$, $J\to 0^{+}$) и неограниченный рост меры деформации физически недостижимы при конечной работе.
 
-Свойства \eqref{eq:non_negativity} -- \eqref{eq:energy_constraints} принято записывать через градиент деформации \(\vect{F}\) и правый тензор деформации Коши-Грина \(\vect{C}\) 
+Свойства \eqref{eq:non_negativity} -- \eqref{eq:energy_constraints} принято записывать через градиент деформации \(\mathbb{F}\) и правый тензор деформации Коши-Грина \(\mathbb{C}\) 
 \cite{antman2005nonlin,green1839laws,kirchhoff1850gleichgewicht}, но они эквивалентны и для меры деформации Лапласа \(\vect{\xi}\).
-
-% Свойства \eqref{eq:non_negativity} -- \eqref{eq:energy_constraints} 
-
-

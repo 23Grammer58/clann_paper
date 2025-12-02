@@ -8,7 +8,7 @@ We use the second Piola--Kirchhoff stress as the stress measure and compute it b
   \label{eq:chain-rule}
 \end{equation}
 The tensor $\frac{\partial \vect{\xi}}{\partial \mathbb C}$ is referred to as the basis, 
-it is a known analytical tensor determined by the chosen strain measure; 
+it is a known analytical tensor determined by the chosen stretch measure; 
 whereas $\vect r=(r_1,r_2,r_3)$ is the response function learned from data during training of the 
 data-driven constitutive relation.  
 
@@ -47,7 +47,7 @@ In accordance with the principles of thermodynamics and continuum mechanics,
 the hyperelastic model $\psi$ must satisfy a set of fundamental constraints ensuring physical correctness and
 material stability:
 \newline
-\textit{Non-negativity} excludes negative strain energy
+\textit{Non-negativity} excludes negative stretch energy
   \begin{equation}
     \psi(\vect{\xi}) \ge 0\quad \forall\,\vect{\xi}\in\mathbb{R}^3.
     \label{eq:non_negativity}
@@ -60,7 +60,7 @@ material stability:
     \label{eq:natural_state_stress}
   \end{equation}
 \newline
-  \textit{Unbounded growth (coercivity)}. Unbounded growth of the strain measure is physically unattainable at finite work
+  \textit{Unbounded growth (coercivity)}. Unbounded growth of the stretch measure is physically unattainable at finite work
   \begin{equation}
     \psi(\vect{\xi}) \to \infty\ \text{as}\ \lVert\vect{\xi}\rVert\to\infty,\qquad
     \mathbb{S} \to \infty\ \text{as}\ J\to\infty \text{ or } J\to 0^{+},\qquad
@@ -71,7 +71,7 @@ material stability:
 
 Properties \eqref{eq:non_negativity}--\eqref{eq:energy_constraints} are commonly written via the deformation 
 gradient \(\mathbb{F}\) and the right Cauchy--Green tensor \(\mathbb{C}\)
-\cite{antman2005nonlin,green1839laws,kirchhoff1850gleichgewicht}, but they are equivalent for the Laplace strain measure \(\vect{\xi}\) as well.
+\cite{antman2005nonlin,green1839laws,kirchhoff1850gleichgewicht}, but they are equivalent for the Laplace stretch measure \(\vect{\xi}\) as well.
 
 % Properties \eqref{eq:non_negativity}--\eqref{eq:energy_constraints}
 

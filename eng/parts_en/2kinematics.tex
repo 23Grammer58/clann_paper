@@ -8,17 +8,17 @@ Let \(\vect{X}\) and \(\vect{x}\) denote point positions in the corresponding co
 The deformation is defined by the one-to-one mapping \(\vect{x} = \vect{x}(\vect{X})\),
 the surface deformation gradient in Einstein notation is \(\mathbb{F} = \vect{g}_{\alpha}\otimes\vect{G}^{\alpha}\), where $\vect{G}^{\alpha}$ is a contravariant bases,
 and the right Cauchy–Green tensor is \(\mathbb C = C_{\alpha\beta} \,\vect{G}^{\alpha} \otimes \vect{G}^{\beta} = \mathbb F^{\top} \mathbb F\) with $\lambda_1, \lambda_2$ eigenvalues.
-To define the strain measure we use the Laplace measure \(\vect{\xi} = (\xi_1 , \xi_2 , \xi_3)^T\) \cite{xi2023},
+To define the stretch measure we use the Laplace measure \(\vect{\xi} = (\xi_1 , \xi_2 , \xi_3)^T\) \cite{xi2023},
 which may be computed in two equivalent ways:
 either via the QR decomposition of the deformation gradient \(\mathbb F = \mathbb Q \mathbb R\) with \(\tilde{\mathbb F} = \mathbb R\),
 or via the Cholesky factorization of the right Cauchy–Green tensor \(\mathbb C = \tilde{\mathbb F}^{\top}\tilde{\mathbb F}\).
 
-In two dimensions we introduce \textbf{Laplace strain measure}
+In two dimensions we introduce \textbf{Laplace stretch measure}
 \begin{equation}
 \xi_1 = \ln(\tilde F_{11}),\quad \xi_2 = \ln(\tilde F_{22}),\quad \xi_3 = \frac{\tilde F_{12}}{\tilde F_{11}}, 
 \quad \tilde{\mathbb F} = \tilde F_{\alpha\beta} \; \vect{G}^{\alpha} \otimes \vect{G}^{\beta}.
 \label{eq:laplace_coords}
 \end{equation}
-In this case, the hyperelastic strain energy is a function of the Laplace strain, \(\psi = \psi(\vect{\xi})\).
+In this case, the hyperelastic stretch energy is a function of the Laplace stretch, \(\psi = \psi(\vect{\xi})\).
 
 

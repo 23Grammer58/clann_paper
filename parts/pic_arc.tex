@@ -27,11 +27,11 @@
 \draw[->] (C.east) -- (x3.west);
 
 % Аффинная проекция
-\node[neur0, right=14mm of x1, yshift=12mm] (h11) {\scriptsize 1};
-\node[neur0, right=14mm of x1] (h12) {\scriptsize 2};
-\node[neur0, right=14mm of x1, yshift=-12mm] (h13) {\scriptsize 3};
+\node[neur0, right=14mm of x1, yshift=12mm] (h11) {\scriptsize $z_1$};
+\node[neur0, right=14mm of x1] (h12) {\scriptsize $z_2$};
+\node[neur0, right=14mm of x1, yshift=-12mm] (h13) {\scriptsize $z_3$};
 \node[align=center, right=14mm of x1, yshift=-22mm] (vdots0) {$\vdots$};
-\node[neur0, right=14mm of x1, yshift=-34mm] (h14) {\scriptsize h};
+\node[neur0, right=14mm of x1, yshift=-34mm] (h14) {\scriptsize $z_h$};
 \draw[->] (x1) -- (h11.west);
 \draw[->] (x2) -- (h11.west);
 \draw[->] (x3) -- (h11.west);
@@ -45,7 +45,7 @@
 \draw[->] (x2) -- (h14.west);
 \draw[->] (x3) -- (h14.west);
 % \node[block, above=2mm of h11, text width=36mm] (aff) {$s = W_1\,\xi + b_1$};
-\node[actblk, above=2mm of h11] (soft) {$z_i = \mathrm{softplus^2}(\beta (W_1\,\xi + b_1))/\beta^2$};
+\node[actblk, above=2mm of h11] (soft) {$z_i = \mathrm{softplus^2}(\beta (\vect W_1\,\vect \xi + b_1))/\beta^2, \; \; i = 1..h$};
 
 % % Скрытый слой (softplus): три нейрона, троеточие и ещё один
 % \node[neur, right=14mm of h12, yshift=12mm] (h1) {};
@@ -61,14 +61,14 @@
 % \node[block, above=2mm of h1, text width=36mm] (soft) {$z_i = \mathrm{softplus}(\beta (W_1\,\xi + b_1)/\beta$};
 
 % Линейный выход (неотрицательные веса), центрирован относительно столбца нейронов
-\node[readblk, right=22mm of h12, yshift=-11mm] (readout) {$\psi(\vect{\xi}) = \vect{W}_2^{\top}\big(z - z_0\big) - \vect{r}_0^{\top}\vect{\xi}$};
+\node[readblk, right=22mm of h12, yshift=-11mm] (readout) {$\psi(\vect{\xi}) = \vect{W}_2^{\top}\big(\vect z - \vect z_0\big) - \vect{r}_0^{\top}\vect{\xi}$};
 \draw[->] (h11.east) -- (readout.west);
 \draw[->] (h12.east) -- (readout.west);
 \draw[->] (h13.east) -- (readout.west);
 \draw[->] (h14.east) -- (readout.west);
 
 % Производная: второй тензор Пиолы–Кирхгофа
-\node[gradblk, below=8mm of readout] (Sblock) {$\mathbb{S} = \frac{\partial \psi}{\partial \vect{\xi}}\, \frac{\partial \vect{\xi}}{\partial \mathbb{C}}$};
+\node[gradblk, below=8mm of readout] (Sblock) {$\mathbb{S} = \frac{\partial \psi}{\partial \vect{\xi}} \cdot \frac{\partial \vect{\xi}}{\partial \mathbb{C}}$};
 \draw[->] (readout.south) -- (Sblock.north);
 
 % % Центрирование \to физическая энергия

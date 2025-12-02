@@ -1,21 +1,21 @@
 \section{Архитектура CLaNN и её производные}
 
 В рамках предложенного подхода CLaNN (Convex Laplace Neural Network)
-энергия деформации \(\psi(\vect{\xi})\) с мерой деформации Лапласа аппроксимириуется посредством 
-выпуклой по входу нейронной сетью (Input Convex Neural Network, ICNN) \cite{icnn2017}
-и вычисления 2 тензора напряжения Пиолы-Кирхгофа \(\vect{S}\), используя явное выражение \eqref{eq:stress_components_2d}. 
+энергия деформации \(\psi(\vect{\xi})\) в мере деформации Лапласа аппроксимируется 
+входо-выпуклой нейронной сетью (Input Convex Neural Network, ICNN) \cite{icnn2017},
+а второй тензор напряжений Пиолы-Кирхгофа \(\vect{S}\) вычисляется по явным формулам \eqref{eq:stress_components_2d}. 
 
-\textbf{Обобщенная архитектура ICNN}
+\textbf{Обобщённая архитектура ICNN}
 
-ICNN представляет собой класс нейронных сетей, гарантирующих выпуклость выходной функции относительно входных переменных. 
-В нашем случае, функция энергии деформации $\psi: \mathbb{R}^3 \rightarrow \mathbb{R}$ называется выпуклой, 
-если $\forall \vect{\xi}_1, \vect{\xi}_2 \in \mathbb{R}^3$ и $\lambda \in [0,1]$ выполняется неравенство Йенсена:
+ICNN представляет собой класс многослойных нейронных сетей, у которых выходная скалярная функция является (совместно) выпуклой по выделенному подмножеству входов \cite{icnn2017}. 
+В нашем случае функция энергии деформации $\psi: \mathbb{R}^3 \rightarrow \mathbb{R}$ считается выпуклой, 
+если для любых $\vect{\xi}_1, \vect{\xi}_2 \in \mathbb{R}^3$ и $\lambda \in [0,1]$ выполняется неравенство Йенсена \cite{BoydVandenberghe2004}:
 \begin{equation}
 \psi(\lambda \vect{\xi}_1 + (1-\lambda) \vect{\xi}_2) \leq \lambda \psi(\vect{\xi}_1) + (1-\lambda) \psi(\vect{\xi}_2).
 \label{eq:convexity_definition}
 \end{equation}
 
-Ключевые условия ICNN \cite{icnn2017}: 
+Классическая архитектура ICNN \cite{icnn2017} задаётся следующими условиями: 
 (i) поэлементно выпуклая, монотонно неубывающая активация $\varphi$; 
 (ii) $\mathbf{W}_z^{(\ell)}\!\ge\!0$ для всех слоёв 
 (только на связях $z\!\to\!z$; $\mathbf{W}_x^{(\ell)}$, $\mathbf{b}^{(\ell)}$ без ограничений по знаку); 
@@ -24,11 +24,12 @@ $\boldsymbol{\xi}$: $z^{(\ell+1)}=\varphi\!\big(\mathbf{W}_z^{(\ell)}z^{(\ell)}+
 (iv) скалярный выход как $a^{\top} z^{(L)}+c$ с $a\!\ge\!0$ (или ещё один слой $\varphi$).
 
 \textbf{Шаг 1. Однослойный ICNN и выбор активации.}
+
 Рассмотрим однослойный вариант ICNN (с одним скрытым слоем) для аппроксимации $\psi(\boldsymbol{\xi})$:
 \begin{equation}
   s = \mathbf{W}_1 \,\boldsymbol{\xi} + \mathbf{b}_1,\qquad
-  z = \varphi_{\beta}(s),\qquad
-  \tilde{\psi} = \mathbf{W}_2^{\top} z + b_2,\qquad \mathbf{W}_2 \ge 0.
+  z = \varphi_{\beta}^2(s),\qquad
+  \tilde{\psi} = \mathbf{W}_2^{\top} z + b_2,\qquad \mathbf{W}_2 \ge 0,
   \label{eq:icnn_onelayer}
 \end{equation}
 
@@ -44,10 +45,11 @@ $\boldsymbol{\xi}$: $z^{(\ell+1)}=\varphi\!\big(\mathbf{W}_z^{(\ell)}z^{(\ell)}+
 $\mathbf{W}_2\!\in\mathbb{R}^{h}_{\ge 0}$, $h$ — размерность скрытого слоя.
 
 \textbf{Шаг 2. Центрирование энергии $\psi$ в естественном состоянии.}
+
 Для выполнения условия $\psi(\mathbf{0})=0$ центрируем энергию, 
 вычитая значение нелинейной части при $\boldsymbol{\xi}=\mathbf{0}$:
 \begin{equation}
-  z_0 = \varphi_{\beta}(\mathbf{b}_1),\qquad
+  z_0 = \varphi_{\beta}^2(\mathbf{b}_1),\qquad
   \psi(\boldsymbol{\xi}) = \mathbf{W}_2^{\top}\big(z - z_0\big),\qquad (b_2 \equiv 0).
   \label{eq:center_psi}
 \end{equation}
@@ -70,54 +72,56 @@ $\boldsymbol{\xi}=\mathbf{0}$:
 Так как $\mathbf{r}(\mathbf{0})=\mathbf{0}$, точка $\boldsymbol{\xi}=\mathbf{0}$ является минимумом 
 $\psi_{\mathrm{phys}}$, и значит $\psi_{\mathrm{phys}}\ge 0$.
 
-После получения $\psi_{\mathrm{phys}}$ автоматически вычисляются 
-$\partial\psi/\partial\boldsymbol{\xi}$ средствами autodiff, реализованными в современных библиотеках для машинного обучения 
-\cite{pytorch2019}, \cite{tensorflow2016}, \cite{jax2018}, 
-после чего тензор напряжений $\mathbf{S}$ находится по формуле \eqref{eq:stress_components_2d} с 
+После получения $\psi_{\mathrm{phys}}$ градиент 
+$\partial\psi/\partial\boldsymbol{\xi}$ может вычисляться как аналитически, так и средствами autodiff, реализованными в современных библиотеках машинного обучения 
+\cite{pytorch2019,tensorflow2016,jax2018}; 
+далее тензор напряжений $\mathbf{S}$ находится по формуле \eqref{eq:stress_components_2d} с 
 использованием связи $\psi(\vect C)=\psi\big(\boldsymbol{\xi}(\vect C)\big)$.
 
 Центрирование $\psi_{\mathrm{phys}}$ и $\mathbf{r}$ в естественном состоянии 
-дает возможность гарантирования выполнения \eqref{eq:natural_state_stress} и
-позволяет избежать дополнительных ограничений на параметры сети
-
-% (заменено на TikZ-схему в рис.~\ref{fig:clann_arc})
+гарантирует выполнение условия \eqref{eq:natural_state_stress} и
+позволяет избежать дополнительных ограничений на параметры сети.
 
 \textbf{Аналитические выражения для производных энергии}
 
 \textbf{Градиент энергии деформации}
 
-Аналитическое дифференцирование функции энергии по переменным \(\xi\) даёт выражение для градиента:
-
+Аналитическое дифференцирование функции энергии по переменным \(\boldsymbol\xi\) даёт выражение для градиента:
 \begin{equation}
- \vect{r} = \nabla_\xi \psi_{\mathrm{phys}} = \vect W_1^T \left( \vect W_2 \odot \sigma(\beta (\vect W_1 \vect \xi + \vect b_1)) \right) - \vect r_0,
+ \vect{r} = \nabla_\xi \psi_{\mathrm{phys}}
+   = \vect W_1^{\top} \left( \vect W_2 \odot \Big( 2\,\varphi_\beta(\vect s) \odot \sigma(\beta \vect s) \Big) \right) - \vect r_0,
 \label{eq:energy_gradient}
 \end{equation}
-где $\sigma(x) = \frac{1}{1 + e^{-x}}$ - сигмоида, 
+где $\vect s = \vect W_1 \boldsymbol\xi + \vect b_1$, $\sigma(x) = \frac{1}{1 + e^{-x}}$ — сигмоида, 
 а операция $\odot$ обозначает поэлементное произведение (Hadamard product). 
-Указанное выражение демонстрирует, что градиент энергии является линейной комбинацией строк матрицы $\vect W_1^T$ с весами, 
-определяемыми произведением выходных весов $\vect W_2$ и значений функции активации $\sigma(\beta (\vect W_1 \vect\xi + \vect b_1))$.
+По сравнению со случаем $z=\varphi_\beta(\vect s)$ появляется дополнительный множитель $2\,\varphi_\beta(\vect s)$, 
+так что вклад каждого скрытого нейрона в градиент масштабируется величиной его активации.
 
 \textbf{Гессиан энергии деформации}
 
-Вторые производные энергии по переменным \(\xi\) определяют гессиан, который имеет следующую аналитическую форму:
-
+Вторые производные энергии по переменным \(\boldsymbol\xi\) определяют гессиан, который имеет следующую аналитическую форму:
 \begin{equation}
- H_{ij} = \sum_h \sigma'_h\,W_{2,h}\,W_{h,i}W_{h,j},
+ H_{ij} = \sum_h \eta_h\,W_{2,h}\,W_{1,h i}W_{1,h j},
 \label{eq:energy_hessian}
 \end{equation}
-
-где $\sigma' = \beta\,\sigma(1-\sigma)$ - производная сигмоиды, 
-$\sigma=\operatorname{sigmoid}(\beta s)$, а $s=\vect W_1\xi+\vect b_1$.
+где для каждого скрытого нейрона $h$
+\begin{equation}
+  \eta_h
+  = 2\Big(\sigma_h^2 + \varphi_\beta(s_h)\,\beta\,\sigma_h(1-\sigma_h)\Big),
+\end{equation}
+а также используется обозначение $\sigma_h = \sigma(\beta s_h)$, $s_h = (\vect W_1\boldsymbol\xi + \vect b_1)_h$.
+Здесь $\sigma' = \beta\,\sigma(1-\sigma)$ — производная сигмоиды. 
+Коэффициенты $\eta_h\ge 0$ вместе с неотрицательностью весов $W_{2,h}\ge 0$ обеспечивают положительную полуопределённость гессиана.
 
 \textbf{Материальная устойчивость и положительная определённость}
 
-Из строгой выпуклости \(\psi(\xi)\) следует положительная определённость гессиана:
+Из строгой выпуклости \(\psi(\boldsymbol\xi)\) следует положительная определённость гессиана:
 \begin{equation}
- \vect H = \frac{\partial^2\psi}{\partial\xi^2} > 0,
+ \vect H = \frac{\partial^2\psi}{\partial\boldsymbol\xi^2} > 0,
 \label{eq:positive_hessian}
 \end{equation}
-Данное свойство важно для численной стабильности конечно-элементных расчётов, 
-поскольку на практике улучшает сходимость метода Ньютона и отсутствие сингулярностей в матрице жёсткости.
+что важно для численной стабильности конечно-элементных расчётов, 
+поскольку на практике улучшает сходимость метода Ньютона и предотвращает вырождение матрицы жёсткости.
 
 \begin{figure}[H]
   \centering
@@ -130,7 +134,7 @@ $\sigma=\operatorname{sigmoid}(\beta s)$, а $s=\vect W_1\xi+\vect b_1$.
 \begin{figure}[H]
   \centering
   \resizebox{\textwidth}{!}{\input{parts/pic_pipeline}}
-  \caption{\colorbox{yellow}{График с крестом нечитаемый}. Схема вычислительного контура CLaNN.}
+  \caption{Схема вычислительного контура CLaNN.}
   \label{fig:clann_pipeline}
 \end{figure}
 
@@ -138,15 +142,11 @@ $\sigma=\operatorname{sigmoid}(\beta s)$, а $s=\vect W_1\xi+\vect b_1$.
 \textbf{термодинамическая корректность} достигается через строгое соблюдение соотношения \eqref{eq:chain-rule}, 
 что гарантирует консервативность напряжений $\oint \vect{S}:\mathrm{d}\vect{C} = 0$ и согласованность с законами 
 термодинамики; 
-\textbf{материальная устойчивость} обеспечивается и существенно улучшается за счёт строгой выпуклости функции энергии 
-$\psi(\boldsymbol{\xi})$, гарантируемой архитектурой ICNN ($\vect{W}_2 \ge 0$, выпуклая неубывающая активация); 
 \textbf{объективность} автоматически выполняется благодаря параметризации через тензор 
 Коши-Грина $\vect{C} = \vect{F}^{\top}\vect{F}$, обеспечивая инвариантность относительно поворотов и симметрию напряжений; 
 \textbf{строгая неотрицательность и коэрцитивность энергии} обеспечиваются архитектурной калибровкой 
 $\psi_{\mathrm{phys}}(\boldsymbol{\xi}) = \mathbf{W}_2^{\top}(z - z_0) - \mathbf{r}_0^{\top}\boldsymbol{\xi}$,
 что даёт $\psi_{\mathrm{phys}}(\mathbf{0})=0$, $\psi_{\mathrm{phys}}(\boldsymbol{\xi})>0$ при $\boldsymbol{\xi}\ne\mathbf{0}$ и 
 $\psi_{\mathrm{phys}}(\boldsymbol{\xi})\to\infty$ при $\|\boldsymbol{\xi}\|\to\infty$; 
-наконец, \textbf{физические ограничения} \eqref{eq:energy_constraints} обеспечиваются архитектурой сети CLaNN: монотонные, выпуклые функции активации,
-неотрицательные весовые коэффициенты, центрирование энергии деформации $\psi$ и отклика $\vect r$.
-
-
+наконец, \textbf{материальная устойчивость} и \textbf{физические ограничения} \eqref{eq:energy_constraints} обеспечиваются архитектурой сети CLaNN: монотонные выпуклые функции активации,
+неотрицательные весовые коэффициенты и центрирование энергии деформации $\psi$ и отклика $\vect r$.

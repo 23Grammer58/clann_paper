@@ -1,7 +1,7 @@
 \section{CLaNN architecture and its derivatives}
 
 Within the proposed CLaNN (Convex Laplace Neural Network) framework,
-the strain energy \(\psi(\vect{\xi})\) with the Laplace strain measure is approximated
+the stretch energy \(\psi(\vect{\xi})\) with the Laplace stretch measure is approximated
 by an input convex neural network (ICNN) \cite{icnn2017}, and the second Piola--Kirchhoff
 stress \(\mathbb{S}\) is computed using the explicit expression \eqref{eq:stress_components_2d}. 
 
@@ -17,8 +17,8 @@ it satisfies
   \;\le\;
   \lambda f(x_1,y) + (1-\lambda) f(x_2,y).
 \end{equation}
-In our setting we do not distinguish parameters $y$ and consider only the strain variables
-$\boldsymbol{\xi}\in\mathbb{R}^3$, so that the strain energy $\psi:\mathbb{R}^3\to\mathbb{R}$ is convex if for all
+In our setting we do not distinguish parameters $y$ and consider only the stretch variables
+$\boldsymbol{\xi}\in\mathbb{R}^3$, so that the stretch energy $\psi:\mathbb{R}^3\to\mathbb{R}$ is convex if for all
 $\vect{\xi}_1, \vect{\xi}_2 \in \mathbb{R}^3$ and $\lambda \in [0,1]$ Jensen's inequality holds
 \cite{BoydVandenberghe2004}:
 \begin{equation}
@@ -29,26 +29,26 @@ $\vect{\xi}_1, \vect{\xi}_2 \in \mathbb{R}^3$ and $\lambda \in [0,1]$ Jensen's i
 \end{equation}
 
 The standard ICNN architecture \cite{icnn2017} is constructed as follows.
-Let $\boldsymbol{\xi}\in\mathbb{R}^3$ be the input, $z^{(0)}=\boldsymbol{0}$ be the initial hidden state, and for
+Let $\boldsymbol{\xi}\in\mathbb{R}^3$ be the input, $\vect z^{(0)}=\boldsymbol{0}$ be the initial hidden state, and for
 layers $\ell=0,\dots,L-1$ define
 \begin{equation}
-  z^{(\ell+1)} =
-  \varphi\!\big(\mathbf{W}_z^{(\ell)} z^{(\ell)} + \mathbf{W}_x^{(\ell)} \boldsymbol{\xi} + \mathbf{b}^{(\ell)}\big),
+  \vect z^{(\ell+1)} =
+  \varphi\!\big(\mathbf{W}_z^{(\ell)} \vect z^{(\ell)} + \mathbf{W}_x^{(\ell)} \boldsymbol{\xi} + \mathbf{b}^{(\ell)}\big),
 \end{equation}
-where $z^{(\ell)}\in\mathbb{R}^{h_\ell}$, $\mathbf{W}_z^{(\ell)}\in\mathbb{R}^{h_{\ell+1}\times h_\ell}$,
+where $\vect z^{(\ell)}\in\mathbb{R}^{h_\ell}$, $\mathbf{W}_z^{(\ell)}\in\mathbb{R}^{h_{\ell+1}\times h_\ell}$,
 $\mathbf{W}_x^{(\ell)}\in\mathbb{R}^{h_{\ell+1}\times 3}$, and $\mathbf{b}^{(\ell)}\in\mathbb{R}^{h_{\ell+1}}$.
 The scalar output is then given by an affine readout
 \begin{equation}
-  \psi(\boldsymbol{\xi}) = a^{\top} z^{(L)} + c,
+  \psi(\boldsymbol{\xi}) = a^{\top} \vect z^{(L)} + c,
 \end{equation}
 with $a\in\mathbb{R}^{h_L}$ and $c\in\mathbb{R}$. The key structural conditions guaranteeing convexity with respect
 the input $\boldsymbol{\xi}$ are \cite{icnn2017}:
 (i) elementwise convex, monotonically nondecreasing activation $\varphi$;
-(ii) nonnegative weights on the $z\!\to\!z$ connections, $\mathbf{W}_z^{(\ell)}\!\ge\!0$ for all $\ell$
+(ii) nonnegative weights on the $\vect z\!\to\!\vect z$ connections, $\mathbf{W}_z^{(\ell)}\!\ge\!0$ for all $\ell$
 (no sign constraints on $\mathbf{W}_x^{(\ell)}$ and $\mathbf{b}^{(\ell)}$);
 (iii) a direct affine connection from the input $\boldsymbol{\xi}$ to every hidden layer as in the formula above;
 (iv) nonnegative output weights $a\!\ge\!0$ (or, equivalently, an additional nondecreasing activation layer at the
-output). Under these assumptions the network output $\psi(\boldsymbol{\xi})$ is a convex function of the strain
+output). Under these assumptions the network output $\psi(\boldsymbol{\xi})$ is a convex function of the stretch
 variables $\boldsymbol{\xi}$.
 
 \textbf{Step 1. One-layer ICNN and activation choice.}
@@ -79,7 +79,7 @@ subtracting the value of the nonlinear part at $\boldsymbol{\xi}=\mathbf{0}$:
   \psi(\boldsymbol{\xi}) = \mathbf{W}_2^{\top}\big(\vect z - \vect z_0\big),\qquad (b_2 \equiv 0).
   \label{eq:center_psi}
 \end{equation}
-Then $\psi(\mathbf{0})=0$. Since $z_0$ does not depend on $\boldsymbol{\xi}$, 
+Then $\psi(\mathbf{0})=0$. Since $\vect z_0$ does not depend on $\boldsymbol{\xi}$, 
 the gradient $\partial\psi/\partial\boldsymbol{\xi}$ and the Hessian $\partial^2\psi/\partial\boldsymbol{\xi}^2$ 
 coincide with those of $\tilde{\psi}$, preserving convexity and smoothness.
 
@@ -110,7 +110,7 @@ guarantees \eqref{eq:natural_state_stress} and avoids additional constraints on 
 
 \textbf{Analytical expressions for energy derivatives}
 
-\textbf{Gradient of the strain energy}
+\textbf{Gradient of the stretch energy}
 
 Analytical differentiation of the energy with respect to \(\xi\) yields the gradient:
 
@@ -124,7 +124,7 @@ and $\odot$ denotes the elementwise (Hadamard) product.
 Compared to the case with $\vect z=\varphi_\beta(\vect s)$, an additional factor $2\,\varphi_\beta(\vect s)$ appears, 
 so that the contribution of each hidden neuron to the gradient is scaled by the activation magnitude.
 
-\textbf{Hessian of the strain energy}
+\textbf{Hessian of the stretch energy}
 
 Second derivatives of the energy with respect to \(\xi\) define the Hessian, which has the following analytical form:
 
@@ -174,10 +174,10 @@ thermodynamics;
 \textbf{Stress objectivity} holds automatically thanks to the parametrization via the 
 Cauchy--Green tensor $\mathbb{C} = \mathbb{F}^{\top}\mathbb{F}$, ensuring invariance with respect to rotations and stress symmetry; 
 \textbf{strict non-negativity and coercivity of the energy} are provided by the architectural calibration 
-$\psi_{\mathrm{phys}}(\boldsymbol{\xi}) = \mathbf{W}_2^{\top}(z - z_0) - \mathbf{r}_0^{\top}\boldsymbol{\xi}$,
+ $\psi_{\mathrm{phys}}(\boldsymbol{\xi}) = \mathbf{W}_2^{\top}(\vect z - \vect z_0) - \mathbf{r}_0^{\top}\boldsymbol{\xi}$,
 yielding $\psi_{\mathrm{phys}}(\mathbf{0})=0$, $\psi_{\mathrm{phys}}(\boldsymbol{\xi})>0$ for $\boldsymbol{\xi}\ne\mathbf{0}$ and 
 $\psi_{\mathrm{phys}}(\boldsymbol{\xi})\to\infty$ as $\|\boldsymbol{\xi}\|\to\infty$; 
 finally, the \textbf{physical constraints} \eqref{eq:energy_constraints} are satisfied by the CLaNN network design: monotone, convex activations,
-nonnegative output weights, and centering of the strain energy $\psi$ and the response $\vect r$.
+nonnegative output weights, and centering of the stretch energy $\psi$ and the response $\vect r$.
 
 

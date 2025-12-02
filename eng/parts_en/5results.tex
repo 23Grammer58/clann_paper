@@ -283,7 +283,6 @@ Optimization reduces loss by five orders within $<5000$ epochs (Figure~\ref{fig:
     \label{fig:integral_errors}
   \end{figure}
   
-  % integral errors vs window (omitted)
   
 \subsection{Computational efficiency comparison}
 
@@ -293,7 +292,8 @@ Optimization reduces loss by five orders within $<5000$ epochs (Figure~\ref{fig:
 
   We compare runtime for CLANN, Neo-Hookean, and a Laplace-space table-driven DD model \cite{xi2023} on inflation of a clamped circular membrane ($R{=}25$ mm), with homogeneous and heterogeneous $T$ (Figure~\ref{fig:membrane_thickness}). 
   CLANN is trained on $D(\{1..10\},\,w{=}\text{1-element})$; the DD model uses kNN/IDW on $(\vect{\xi},\vect r)$ from $D(\{1..10\},\,w{=}10\times10)$ \cite{xi2023}. 
-  All runs use the same finite element (FE) setting and stopping criteria.
+  All runs use the same finite element (FE) setting and stopping criteria. 
+  All computations were performed on a laptop with an AMD Ryzen 7 6800H processor.
 
 \begin{table}[htbp]
 \centering
@@ -312,6 +312,6 @@ kNN & 993 & -- \\
 \end{tabular}
 \end{table}
 
-  With identical meshes and tolerances, CLANN matches Neo-Hookean in global iterations but can be slower overall due to model–solver interface overhead \cite{xi2023}. It notably outperforms the table-driven DD baseline by avoiding repeated kNN/IDW queries and data projections. The DD model further struggles on heterogeneous thickness without linear interpolation near zero, likely due to data scarcity in that strain range.
+  With identical meshes and tolerances, CLANN matches Neo-Hookean in global iterations but can be slower overall due to model–solver interface overhead \cite{xi2023}. It notably outperforms the table-driven DD baseline by avoiding repeated kNN/IDW queries and data projections. The DD model further struggles on heterogeneous thickness without linear interpolation near zero, likely due to data scarcity in that stretch range.
 
 
