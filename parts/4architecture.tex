@@ -8,20 +8,39 @@
 \textbf{Обобщённая архитектура ICNN}
 
 ICNN представляет собой класс многослойных нейронных сетей, у которых выходная скалярная функция является (совместно) выпуклой по выделенному подмножеству входов \cite{icnn2017}. 
-В нашем случае функция энергии деформации $\psi: \mathbb{R}^3 \rightarrow \mathbb{R}$ считается выпуклой, 
+Согласно \cite{icnn2017}, функция $f:\mathbb{R}^{n_x}\times\mathbb{R}^{n_y}\rightarrow\mathbb{R}$, представленная нейронной сетью, называется \emph{входо-выпуклой} по $x$, если для всех $x_1,x_2\in\mathbb{R}^{n_x}$, $y\in\mathbb{R}^{n_y}$ и $\lambda\in[0,1]$ выполняется
+\begin{equation}
+  f(\lambda x_1 + (1-\lambda)x_2,\,y)
+  \;\le\;
+  \lambda f(x_1,y) + (1-\lambda) f(x_2,y).
+\end{equation}
+В нашем случае мы не выделяем параметры $y$ и рассматриваем только переменные растяжения 
+$\boldsymbol{\xi}\in\mathbb{R}^3$, так что энергия деформации $\psi:\mathbb{R}^3\to\mathbb{R}$ считается выпуклой, 
 если для любых $\vect{\xi}_1, \vect{\xi}_2 \in \mathbb{R}^3$ и $\lambda \in [0,1]$ выполняется неравенство Йенсена \cite{BoydVandenberghe2004}:
 \begin{equation}
 \psi(\lambda \vect{\xi}_1 + (1-\lambda) \vect{\xi}_2) \leq \lambda \psi(\vect{\xi}_1) + (1-\lambda) \psi(\vect{\xi}_2).
 \label{eq:convexity_definition}
 \end{equation}
 
-Классическая архитектура ICNN \cite{icnn2017} задаётся следующими условиями: 
+Классическая архитектура ICNN \cite{icnn2017} строится следующим образом.
+Пусть $\boldsymbol{\xi}\in\mathbb{R}^3$ — вход, $\vect z^{(0)}=\boldsymbol{0}$ — начальное скрытое состояние, и для слоёв $\ell=0,\dots,L-1$ определим
+\begin{equation}
+  \vect z^{(\ell+1)} =
+  \varphi\!\big(\mathbf{W}_z^{(\ell)} \vect z^{(\ell)} + \mathbf{W}_x^{(\ell)} \boldsymbol{\xi} + \mathbf{b}^{(\ell)}\big),
+\end{equation}
+где $\vect z^{(\ell)}\in\mathbb{R}^{h_\ell}$, $\mathbf{W}_z^{(\ell)}\in\mathbb{R}^{h_{\ell+1}\times h_\ell}$,
+$\mathbf{W}_x^{(\ell)}\in\mathbb{R}^{h_{\ell+1}\times 3}$, и $\mathbf{b}^{(\ell)}\in\mathbb{R}^{h_{\ell+1}}$.
+Скалярный выход задаётся аффинным считыванием
+\begin{equation}
+  \psi(\boldsymbol{\xi}) = a^{\top} \vect z^{(L)} + c,
+\end{equation}
+где $a\in\mathbb{R}^{h_L}$ и $c\in\mathbb{R}$. Ключевые структурные условия, гарантирующие выпуклость по входу $\boldsymbol{\xi}$, следующие \cite{icnn2017}:
 (i) поэлементно выпуклая, монотонно неубывающая активация $\varphi$; 
-(ii) $\mathbf{W}_z^{(\ell)}\!\ge\!0$ для всех слоёв 
-(только на связях $z\!\to\!z$; $\mathbf{W}_x^{(\ell)}$, $\mathbf{b}^{(\ell)}$ без ограничений по знаку); 
-(iii) каждый слой имеет прямую аффинную связь с входом 
-$\boldsymbol{\xi}$: $z^{(\ell+1)}=\varphi\!\big(\mathbf{W}_z^{(\ell)}z^{(\ell)}+\mathbf{W}_x^{(\ell)}\boldsymbol{\xi}+\mathbf{b}^{(\ell)}\big)$; 
-(iv) скалярный выход как $a^{\top} z^{(L)}+c$ с $a\!\ge\!0$ (или ещё один слой $\varphi$).
+(ii) неотрицательные веса на связях $\vect z\!\to\!\vect z$: $\mathbf{W}_z^{(\ell)}\!\ge\!0$ для всех $\ell$
+(ограничения по знаку на $\mathbf{W}_x^{(\ell)}$ и $\mathbf{b}^{(\ell)}$ отсутствуют); 
+(iii) прямая аффинная связь входа $\boldsymbol{\xi}$ с каждым скрытым слоем, как показано в формуле выше;
+(iv) неотрицательные выходные веса $a\!\ge\!0$ (или, эквивалентно, дополнительный слой с неубывающей активацией на выходе).
+При выполнении этих условий выход сети $\psi(\boldsymbol{\xi})$ является выпуклой функцией переменных растяжения $\boldsymbol{\xi}$.
 
 \textbf{Шаг 1. Однослойный ICNN и выбор активации.}
 

@@ -10,7 +10,7 @@
   \qquad \vect{r}:=\frac{\partial \psi}{\partial \vect{\xi}}.
   \label{eq:chain-rule}
 \end{equation}
-Тензор $\frac{\partial \boldsymbol\xi}{\partial \mathbf{C}}$ называют базисом, он является известным аналитическим выражением, зависящим от выбранной меры деформации; $\vect{r} = (r_1, r_2, r_3)$ — функция отклика, которая выучивается из данных в процессе обучения data-driven модели.   
+Тензор $\frac{\partial \boldsymbol\xi}{\partial \mathbf{C}}$ называют базисом, он является известным аналитическим выражением, зависящим от выбранной меры деформации; $\vect{r} = (r_1, r_2, r_3)$ — функция отклика, которая выучивается из данных в процессе обучения data-driven модели.
 
 Записывая уравнение \eqref{eq:chain-rule} покомпонентно и подставляя известный базис $\frac{\partial \vect{\xi}}{\partial \mathbb{C}}$, получаем аналитические выражения для компонент второго тензора напряжений Пиолы-Кирхгофа в двумерном случае:
 \begin{equation}
@@ -21,7 +21,7 @@
 \end{aligned}
 \label{eq:stress_components_2d}
 \end{equation}
-Здесь $S_{11}$, $S_{22}$ и $S_{12}$ — компоненты в материальном базисе $\vect{G}^{\alpha}\otimes\vect{G}^{\beta}$, согласованные с представлением $\tilde{\mathbb{F}}$ в уравнении \eqref{eq:laplace_coords}.
+Здесь $S_{11}$, $S_{22}$ и $S_{12}$ — компоненты в материальном базисе $\vect{G}^{\alpha}\otimes\vect{G}^{\beta}$, согласованные с представлением $\tilde{\mathbb{F}}_{2d}$ в уравнениях \eqref{eq:xi-F}--\eqref{eq:F-C}.
 
 Такое построение имеет ключевые следствия:
 \newline
@@ -32,8 +32,6 @@
 \textit{Термодинамическая корректность:} равенство \eqref{eq:chain-rule} является следствием неравенства Клаузиуса-Дюгема 
 $\mathcal{D} = \mathbb{S} : \dot{\mathbb{C}} - \dot{\psi}(\mathbb{C}) \geq 0$, 
 выражающее второе начало термодинамики для механических процессов \cite{truesdell1984historical,truesdell2004nonlinear}.
-
-\textbf{Гиперупругие ограничения}
 
 В соответствии с принципами термодинамики и механики сплошных сред, 
 гиперупругая модель $\psi$ должна удовлетворять ряду фундаментальных ограничений, обеспечивающих физическую корректность и 
@@ -51,7 +49,7 @@ $\mathcal{D} = \mathbb{S} : \dot{\mathbb{C}} - \dot{\psi}(\mathbb{C}) \geq 0$,
     \label{eq:natural_state_stress}
   \end{equation}
 \newline
-  \textit{Бесконечный рост (коэрцитивность)}. Неограниченный рост меры деформации физически недостижим при конечной работе
+  \textit{Бесконечный рост (коэрцитивность)}. 
   \begin{equation}
     \psi(\vect{\xi}) \to \infty\ \text{при}\ \lVert\vect{\xi}\rVert\to\infty,\qquad
     \mathbb{S} \to \infty\ \text{при}\ J\to\infty \text{ или } J\to 0^{+},\qquad

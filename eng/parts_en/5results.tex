@@ -72,14 +72,14 @@ Our testing protocol comprises nine experiments:
   \end{minipage}
 \end{figure}
 
-\subsubsection{Data selection rules}
-\paragraph{Central window $w$.}
+\subsection{Data selection rules}
+\subsubsection{Central window $w$.}
 The window $w$ is defined in the reference configuration $\Omega_0$ as the central region around the geometric center, aligned with the mesh axes. For $w=5\times5$ mm and $w=10\times10$ mm, we take squares of side 5 and 10 mm, respectively, centered at the specimen center; for $w=\text{full field}$ we take the entire $\Omega_0$. For $w=\text{1-element}$ we take the single central triangle (the minimal-index cell in the 5x5 mm window in $\Omega_0$ as shown in Figure~\ref{fig:malt_window}). For $w=\text{2-element}$ we add to the window $w=\text{1-element}$ the peripheral triangle "Shear cell" located at the specimen edge, as shown in Figure~\ref{fig:malt_window}. Observations include all triangles whose barycenters $\mathbf{X}_T$ lie within the chosen window $\mathcal{W}_w\subset\Omega_0$.
 
-\paragraph{Composition of observations (data).}
+\subsubsection{Composition of observations (data).}
 At each load step $n=1,\dots,N$ and for each triangle $T\in\mathcal{T}_w$ (cells within the window) we record the pair $(\mathbb C_T^{(n)},\,\mathbb S_T^{(n)})$, where $\mathbb C$ is the right Cauchy--Green tensor and $\mathbb S$ is the PK2 stress. Units: window sizes in mm; $\mathbb C$ dimensionless; $\mathbb S$ in MPa. Typical counts: 1 ($w=\text{1-element}$), 252 ($5\times5$ mm), 954 ($10\times10$ mm), and 5404 (full field).
 
-\paragraph{Dataset formation.}
+\subsubsection{Dataset formation.}
 For fixed $(p,w)$, the set of all pairs $(\mathbb C_T^{(n)},\,\mathbb S_T^{(n)})$ forms the base dataset $D(p,w)$, which is split into $D_{\mathrm{tr}}(p,w)$ and $D_{\mathrm{val}}(p,w)$. For protocols $p$ (Table~\ref{tab:test_protocols}) and windows $w\in\{\text{1-element},5\times5\,\text{mm},10\times10\,\text{mm},\text{full field}\}$, denote
 \[
   D_{\mathrm{tr}}\equiv D_{\mathrm{tr}}(p,w),\qquad D_{\mathrm{val}}\equiv D_{\mathrm{val}}(p,w),
@@ -103,34 +103,35 @@ Because data from a single central mesh element produce axial components much la
 We use integral and pointwise metrics consistent with variational elasticity norms (e.g., \cite{ciarlet1988mathematical,ogden1997nonlinear,holzapfel2000nonlinear}).
 
 \textbf{Coefficient of determination $R^2$.}
+The coefficient of determination is computed separately for each tensor component $\alpha\in\{xx,yy,xy\}$:
 \begin{equation}\label{eq:r_squared}
-  R^2 = 1 - \frac{\sum_{i=1}^N (\mathbb{S}_i - \hat{\mathbb{S}}_i)^2}{\sum_{i=1}^N (\mathbb{S}_i - \bar{\mathbb{S}})^2},
-  \qquad R^2_{\alpha}(D_{\mathrm{val}}),\quad \alpha\in\{xx,yy,xy\}.
+  R^2_{\alpha} = 1 - \frac{\sum_{i=1}^N (S_{\alpha,i} - \hat{S}_{\alpha,i})^2}{\sum_{i=1}^N (S_{\alpha,i} - \bar{S}_{\alpha})^2},
+  \qquad \alpha\in\{xx,yy,xy\},
 \end{equation}
-where $\mathbb{S}_i$ are experimental values, $\hat{\mathbb{S}}_i$ are model predictions, $\bar{\mathbb{S}}$ is the mean, and $N$ is the number of points.
+where $S_{\alpha,i}$ are experimental values of component $\alpha$, $\hat{S}_{\alpha,i}$ are model predictions, $\bar{S}_{\alpha}$ is the mean value of component $\alpha$, and $N$ is the number of data points.
 
 \textbf{Pointwise relative error.}
 \begin{equation}\label{eq:rel_error}
-  \epsilon = \frac{\| \mathbb S - \mathbb S_{\text{ref}} \|}{\| \mathbb S_{\text{ref}} \|}.
+  \epsilon = \frac{\| \hat{\mathbb S} - \mathbb S \|_{L2}}{\| \mathbb S \|_{L2}}.
 \end{equation}
 % purpose: plot error-field structure
 
 \textbf{P1 error} \cite{xie2024p1} — a combination of absolute and relative errors, sensitive to small values:
 \begin{equation}\label{eq:p1_error}
-  \epsilon_{\mathrm{P1}} = \frac{\| \mathbb S - \mathbb S_{\text{ref}} \|}{s_0 + \| \mathbb S_{\text{ref}} \|},\qquad s_0 = \max(\mathbb S_{\text{pred}}).
+  \epsilon_{\mathrm{P1}} = \frac{\|\hat{ \mathbb S_{12} }- \mathbb S_{12} \|_{L2}}{s_0 + \| \mathbb S_{12} \|_{L2}},\qquad s_0 = \max(\hat{S_{12}}).
 \end{equation}
 
 \textbf{Absolute integral error for stresses (Frobenius norm).}
 \begin{equation}\label{eq:l2_abs_stress_cell}
-  \|e\|_{L^2} = \Bigg( \sum_{K} \| \mathbb S_{\text{ref},K} - \mathbb S_{\text{pred},K} \|_F^{2}\, |K| \Bigg)^{\tfrac12}.
+  \|e\|_{L^2} = \Bigg( \sum_{T} \| \mathbb S_{T} - \hat{\mathbb S_{T}} \|_F^{2}\, |T| \Bigg)^{\tfrac12}.
 \end{equation}
 This metric reduces the error field to a scalar and is invariant under mesh refinement \cite{BrennerScott2008,AinsworthOden2000,Verfurth2013}.
 
 \textbf{Relative integral error.}
 \begin{equation}\label{eq:l2_rel_stress}
-  \|e\|_{L^2,\,\mathrm{rel}}\;=\; \frac{\Big( \sum\limits_{K} 
-  \| \mathbb S_{\mathrm{ref},K} - \mathbb S_{\mathrm{pred},K} \|_F^{2}\, |K| \Big)^{\tfrac12}}
-  {\Big( \sum\limits_{K} \| \mathbb S_{\mathrm{ref},K} \|_F^{2}\, |K| \Big)^{\tfrac12}}\,.
+  \|e\|_{L^2,\,\mathrm{rel}}\;=\; \frac{\Big( \sum\limits_{T} 
+  \| \mathbb S_{T} - \hat{\mathbb S_{T}} \|_F^{2}\, |T| \Big)^{\tfrac12}}
+  {\Big( \sum\limits_{T} \| \mathbb S_{T} \|_F^{2}\, |T| \Big)^{\tfrac12}}\,.
 \end{equation}
 % purpose: proper comparison across stress levels
 
